@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Itinerant</title>
+<title>Itinerant - Administración</title>
 </head>
 <body>
-	<h1>Bienvenidos a Itinerant</h1>
+	<h2>Página de administración</h2>
 </body>
 </html>
