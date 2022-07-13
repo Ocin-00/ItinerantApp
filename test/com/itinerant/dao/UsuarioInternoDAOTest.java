@@ -3,20 +3,16 @@ package com.itinerant.dao;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
 
 import com.google.protobuf.TextFormat.ParseException;
-import com.itinerant.entity.Localidad;
 import com.itinerant.entity.UsuarioInterno;
 
-import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -128,7 +124,7 @@ class UsuarioInternoDAOTest {
 	@Test
 	public void testAlertas() {
 		UsuarioInterno usuario = usuarioInternoDAO.get("nialcha");
-		System.out.println(usuario.getAlertas().);
+		System.out.println(usuario.getAlertas().iterator().next().getTitulo());
 		
 		assertEquals(1, usuario.getAlertas().size());
 	}
