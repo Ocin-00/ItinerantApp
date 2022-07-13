@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.itinerant.entity.Ciudadano;
 import com.itinerant.entity.UsuarioInterno;
 
 public class CiudadanoDAO extends UsuarioInternoDAO {

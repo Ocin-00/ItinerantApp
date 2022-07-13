@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.itinerant.entity.Cita;
 import com.itinerant.entity.Visita;
 
 public class VisitaDAO extends JpaDAO<Visita> implements GenericDAO<Visita> {

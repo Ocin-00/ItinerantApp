@@ -3,7 +3,6 @@ package com.itinerant.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import com.itinerant.entity.Alerta;
-import com.itinerant.entity.UsuarioInterno;
 
 public class AlertaDAO extends JpaDAO<Alerta> implements GenericDAO<Alerta> {
 	

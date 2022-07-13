@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Certificado;
 
 public class CertificadoDAO extends JpaDAO<Certificado> implements GenericDAO<Certificado> {

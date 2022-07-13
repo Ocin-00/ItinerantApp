@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.itinerant.entity.Certificado;
 import com.itinerant.entity.Cita;
 
 public class CitaDAO extends JpaDAO<Cita> implements GenericDAO<Cita> {

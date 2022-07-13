@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.itinerant.entity.Visita;
 import com.itinerant.entity.VisitaPalabraClave;
 
 public class VisitaPalabraClaveDAO extends JpaDAO<VisitaPalabraClave> implements GenericDAO<VisitaPalabraClave> {
