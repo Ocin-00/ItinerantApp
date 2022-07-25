@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "Ciudadano.findAll", query = "SELECT c FROM Ciudadano c ORDER BY c.apellidos"),
+	 @NamedQuery(name = "Ciudadano.findByEmail", query = "SELECT c FROM Ciudadano c WHERE c.email = :email"),
 	 @NamedQuery(name = "Ciudadano.countAll", query = "SELECT count(*) FROM Ciudadano c"),
 })
 @Table(name = "ciudadano", catalog = "itinerant_db")

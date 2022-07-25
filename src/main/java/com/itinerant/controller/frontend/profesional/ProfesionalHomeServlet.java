@@ -1,4 +1,4 @@
-package com.itinerant.controller.frontend;
+package com.itinerant.controller.frontend.profesional;
 
 import java.io.IOException;
 
@@ -10,21 +10,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class HomeServlet
+ * Servlet implementation class ProfesionalHomeServlet
  */
-@WebServlet("")
-public class HomeServlet extends HttpServlet {
+@WebServlet("/profesional/")
+public class ProfesionalHomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-     
-    public HomeServlet() {
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ProfesionalHomeServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String homepage = "frontend/index.jsp";
+		String homepage = "index.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
 		dispatcher.forward(request, response);
 	}

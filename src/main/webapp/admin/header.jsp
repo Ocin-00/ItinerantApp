@@ -1,8 +1,7 @@
-<link rel="stylesheet" href="css/Prueba.css">
 <div>
 	<div style="prueba.css" id="content">
 		<div id="first">
-			<img src="images/itinerant.jpg" height="162"/>
+			<img src="../images/itinerant.jpg" height="162"/>
 		</div>
 		
 		<div id="second">
@@ -11,9 +10,10 @@
 		</div>
 		
 		
+		<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   -->
 		<div id="third">
-			<a href="frontend/login.jsp">Iniciar sesión</a> |
-			<a href="register">Registrarse</a>
+			<!-- <a href="frontend/login.jsp">Iniciar sesión</a> |
+			<a href="register">Registrarse</a>  -->
 		</div>
 		
 	</div>

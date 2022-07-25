@@ -16,6 +16,7 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "Supervisor.findAll", query = "SELECT s FROM Supervisor s ORDER BY s.apellidos"),
+	 @NamedQuery(name = "Supervisor.findByEmail", query = "SELECT s FROM Supervisor s WHERE s.email = :email"),
 	 @NamedQuery(name = "Supervisor.countAll", query = "SELECT count(*) FROM Supervisor s"),
 })
 @Table(name = "supervisor", catalog = "itinerant_db")

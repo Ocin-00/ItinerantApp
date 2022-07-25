@@ -1,6 +1,8 @@
 package com.itinerant.entity;
 // Generated 5 jul 2022 14:47:27 by Hibernate Tools 4.3.6.Final
 
+import java.util.Date;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -19,6 +21,7 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "Certificado.findAll", query = "SELECT c FROM Certificado c ORDER BY c.anyo"),
+	 @NamedQuery(name = "Certificado.findAllNotValid", query = "SELECT c FROM Certificado c WHERE c.validez is not true ORDER BY c.fechaRegistro"),
 	 @NamedQuery(name = "Certificado.countAll", query = "SELECT count(*) FROM Certificado c"),
 })
 @Table(name = "certificado", catalog = "itinerant_db")
@@ -27,25 +30,20 @@ public class Certificado implements java.io.Serializable {
 	private CertificadoId id;
 	private Profesional profesional;
 	private String entidadEmisora;
+	private Date fechaRegistro;
 	private int anyo;
-	private Byte validez;
+	private boolean validez;
 
 	public Certificado() {
 	}
 
-	public Certificado(CertificadoId id, Profesional profesional, String entidadEmisora, int anyo) {
-		this.id = id;
-		this.profesional = profesional;
-		this.entidadEmisora = entidadEmisora;
-		this.anyo = anyo;
-	}
-
-	public Certificado(CertificadoId id, Profesional profesional, String entidadEmisora, int anyo, Byte validez) {
+	public Certificado(CertificadoId id, Profesional profesional, String entidadEmisora, Date fechaRegistro, int anyo, boolean validez) {
 		this.id = id;
 		this.profesional = profesional;
 		this.entidadEmisora = entidadEmisora;
 		this.anyo = anyo;
 		this.validez = validez;
+		this.fechaRegistro = fechaRegistro;
 	}
 
 	@EmbeddedId
@@ -79,6 +77,15 @@ public class Certificado implements java.io.Serializable {
 	public void setEntidadEmisora(String entidadEmisora) {
 		this.entidadEmisora = entidadEmisora;
 	}
+	
+	@Column(name = "fecha_registro", nullable = false)
+	public Date getFechaRegistro() {
+		return this.fechaRegistro;
+	}
+
+	public void setFechaRegistro(Date fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
+	}
 
 	@Column(name = "anyo", nullable = false)
 	public int getAnyo() {
@@ -89,13 +96,12 @@ public class Certificado implements java.io.Serializable {
 		this.anyo = anyo;
 	}
 
-	@Column(name = "validez")
-	public Byte getValidez() {
+	@Column(name = "validez", nullable = false)
+	public boolean getValidez() {
 		return this.validez;
 	}
 
-	public void setValidez(Byte validez) {
+	public void setValidez(boolean validez) {
 		this.validez = validez;
 	}
-
 }

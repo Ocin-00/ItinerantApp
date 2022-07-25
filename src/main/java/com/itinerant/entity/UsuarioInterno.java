@@ -24,6 +24,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "UsuarioInterno.findAll", query = "SELECT u FROM UsuarioInterno u ORDER BY u.apellidos"),
+	 @NamedQuery(name = "UsuarioInterno.findByEmail", query = "SELECT u FROM UsuarioInterno u WHERE u.email = :email"),
 	 @NamedQuery(name = "UsuarioInterno.countAll", query = "SELECT count(*) FROM UsuarioInterno u"),
 })
 @Inheritance(
@@ -161,6 +162,10 @@ public class UsuarioInterno implements java.io.Serializable {
 	
 	public void setChatsForUsuarioDestino(Set<Chat> chatsForUsuariosDestino) {
 		this.chatsForUsuarioDestino = chatsForUsuariosDestino;
+	}
+	
+	public String toString() {
+		return this.nombre + " " + this.apellidos;
 	}
 
 }

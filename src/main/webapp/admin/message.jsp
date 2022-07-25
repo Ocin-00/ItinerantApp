@@ -8,12 +8,11 @@
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
-	<h3>Administración</h3>
-	<ul class="menu">
-	  <li><a href="lista_profesionales">Profesionales</a></link>
-	  <li><a href="lista_certificados">Certificados</a></link>
-	  <li><a href="lista_supervisores">Supervisores</a></link>
-	</ul>
+	
+	<div align="center">
+		<h3>${message}</h3>
+	</div>
+	
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
 </html>

@@ -9,11 +9,11 @@
 <body>
 	<jsp:directive.include file="header.jsp"/>
 	<div align="center">
-		<h3>Por favor, inicie sesión:</h3>
+		<h2>Bienvenido:</h2>
 		<form>
 			Nombre de usuario: <input type="text" size="10"><br/>
 			Contraseña: <input type="password" size="10"><br/>
-			<input type="submit" value="Aceptar">	
+			<input type="submit" value="Iniciar sesión">	
 		</form>
 	</div>
 	<jsp:directive.include file="footer.jsp"/>

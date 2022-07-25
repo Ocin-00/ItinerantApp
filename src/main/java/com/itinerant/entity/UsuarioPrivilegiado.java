@@ -20,6 +20,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "UsuarioPrivilegiado.findAll", query = "SELECT up FROM UsuarioPrivilegiado up ORDER BY up.apellidos"),
+	 @NamedQuery(name = "UsuarioPrivilegiado.findByEmail", query = "SELECT u FROM UsuarioPrivilegiado u WHERE u.email = :email"),
 	 @NamedQuery(name = "UsuarioPrivilegiado.countAll", query = "SELECT count(*) FROM UsuarioPrivilegiado up"),
 })
 @Inheritance(

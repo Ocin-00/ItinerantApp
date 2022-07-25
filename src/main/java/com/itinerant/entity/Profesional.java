@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "Profesional.findAll", query = "SELECT p FROM Profesional p ORDER BY p.apellidos"),
+	 @NamedQuery(name = "Profesional.findAllNotValid", query = "SELECT p FROM Profesional p WHERE p.validez is not true ORDER BY p.fechaRegistro"),
+	 @NamedQuery(name = "Profesional.findByEmail", query = "SELECT p FROM Profesional p WHERE p.email = :email"),
 	 @NamedQuery(name = "Profesional.countAll", query = "SELECT count(*) FROM Profesional p"),
 })
 @Table(name = "profesional", catalog = "itinerant_db")
@@ -29,6 +31,8 @@ public class Profesional extends UsuarioInterno {
 	private String sexo;
 	private String estadoCivil;
 	private String descripcion;
+	private boolean validez;
+	private Date fechaRegistro;
 	private Set<Visita> visitas = new HashSet<Visita>(0);
 	private Set<Certificado> certificados = new HashSet<Certificado>(0);
 
@@ -36,16 +40,18 @@ public class Profesional extends UsuarioInterno {
 	}
 
 	public Profesional(String login, String password, String email, String nombre, String apellidos, Date fechaNac,
-			String localizacion, String formacion, String telefono) {
+			String localizacion, String formacion, String telefono, boolean validez, Date fechaRegistro) {
 		super(login, password, email, nombre, apellidos, fechaNac);
 		this.localizacion = localizacion;
 		this.formacion = formacion;
 		this.telefono = telefono;
+		this.validez = validez;
+		this.fechaRegistro = fechaRegistro;
 	}
 
 	public Profesional(String login, String password, String email, String nombre, String apellidos, Date fechaNac,
 			String localizacion, String formacion, String telefono, String sexo, String estadoCivil, String descripcion,
-			byte[] fotoPerfil, Set<Visita> visitas, Set<Certificado> certificados, Set<Chat> chatsForUsuarioFuente,
+			boolean validez, Date fechaRegistro, byte[] fotoPerfil, Set<Visita> visitas, Set<Certificado> certificados, Set<Chat> chatsForUsuarioFuente,
 			Set<Alerta> alertas, Set<Chat> chatsForUsuarioDestino) {
 		super(login, password, email, nombre, apellidos, fechaNac, fotoPerfil, chatsForUsuarioFuente, alertas,
 				chatsForUsuarioDestino);
@@ -55,6 +61,8 @@ public class Profesional extends UsuarioInterno {
 		this.sexo = sexo;
 		this.estadoCivil = estadoCivil;
 		this.descripcion = descripcion;
+		this.validez = validez;
+		this.fechaRegistro = fechaRegistro;
 		this.visitas = visitas;
 		this.certificados = certificados;
 	}
@@ -111,6 +119,24 @@ public class Profesional extends UsuarioInterno {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	
+	@Column(name = "validez", nullable = false)
+	public boolean getValidez() {
+		return this.validez;
+	}
+
+	public void setValidez(boolean validez) {
+		this.validez = validez;
+	}
+	
+	@Column(name = "fecha_registro", nullable = false)
+	public Date getFechaRegistro() {
+		return this.fechaRegistro;
+	}
+
+	public void setFechaRegistro(Date fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "profesional")

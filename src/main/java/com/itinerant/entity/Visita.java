@@ -36,40 +36,45 @@ public class Visita implements java.io.Serializable {
 	private Date horaInicio;
 	private Date horaFin;
 	private String descripcion;
+	private String nombre;
 	private int duracionCitas;
 	private double duracionDesplazamiento;
 	private double precio;
+	protected byte[] imagen;
 	private Set<VisitaPalabraClave> visitaPalabraClaves = new HashSet<VisitaPalabraClave>(0);
 	private Set<Cita> citas = new HashSet<Cita>(0);
 
 	public Visita() {
 	}
 
-	public Visita(VisitaId id, Localidad localidad, Profesional profesional, Date horaInicio, Date horaFin,
+	public Visita(VisitaId id, Localidad localidad, Profesional profesional, Date horaInicio, Date horaFin, String nombre,
 			String descripcion, int duracionCitas, double duracionDesplazamiento, double precio) {
 		this.id = id;
 		this.localidad = localidad;
 		this.profesional = profesional;
 		this.horaInicio = horaInicio;
 		this.horaFin = horaFin;
+		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.duracionCitas = duracionCitas;
 		this.duracionDesplazamiento = duracionDesplazamiento;
 		this.precio = precio;
 	}
 
-	public Visita(VisitaId id, Localidad localidad, Profesional profesional, Date horaInicio, Date horaFin,
-			String descripcion, int duracionCitas, double duracionDesplazamiento, double precio,
+	public Visita(VisitaId id, Localidad localidad, Profesional profesional, Date horaInicio, Date horaFin, String nombre,
+			String descripcion, int duracionCitas, double duracionDesplazamiento, double precio, byte[] imagen,
 			Set<VisitaPalabraClave> visitaPalabraClaves, Set<Cita> citas) {
 		this.id = id;
 		this.localidad = localidad;
 		this.profesional = profesional;
 		this.horaInicio = horaInicio;
 		this.horaFin = horaFin;
+		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.duracionCitas = duracionCitas;
 		this.duracionDesplazamiento = duracionDesplazamiento;
 		this.precio = precio;
+		this.imagen = imagen;
 		this.visitaPalabraClaves = visitaPalabraClaves;
 		this.citas = citas;
 	}
@@ -127,6 +132,15 @@ public class Visita implements java.io.Serializable {
 	public void setHoraFin(Date horaFin) {
 		this.horaFin = horaFin;
 	}
+	
+	@Column(name = "nombre", nullable = false, length = 200)
+	public String getnombre() {
+		return this.nombre;
+	}
+
+	public void setnombre(String nombre) {
+		this.nombre = nombre;
+	}
 
 	@Column(name = "descripcion", nullable = false, length = 200)
 	public String getDescripcion() {
@@ -162,6 +176,15 @@ public class Visita implements java.io.Serializable {
 
 	public void setPrecio(double precio) {
 		this.precio = precio;
+	}
+	
+	@Column(name = "imagen")
+	public byte[] imagen() {
+		return this.imagen;
+	}
+
+	public void setFotoPerfil(byte[] imagen) {
+		this.imagen = imagen;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "visita")

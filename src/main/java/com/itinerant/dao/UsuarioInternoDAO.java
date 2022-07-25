@@ -26,6 +26,17 @@ public class UsuarioInternoDAO extends JpaDAO<UsuarioInterno> implements Generic
 	public UsuarioInterno get(Object usuarioId) {
 		return super.find(UsuarioInterno.class, usuarioId);
 	}
+	
+	public UsuarioInterno findByEmail(String email) {
+		List<UsuarioInterno> usuario = super.findWithNamedQuery("UsuarioInterno.findByEmail", "email", email);
+		
+		if(usuario != null && usuario.size() > 0) {
+			return usuario.get(0);
+		}
+		
+		return null;
+			
+	}
 
 	@Override
 	public void delete(Object usuarioId) {

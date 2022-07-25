@@ -1,0 +1,9 @@
+@charset "ISO-8859-1";
+
+#content { width:100%; vertical-align:middle; }
+
+#first { *display:inline-block;width:25%; vertical-align:middle;float:left; }
+
+#second { *display:inline-block ;width:50%; vertical-align:middle;float:center; }
+
+#third { *display:inline-block;width:25%; vertical-align:middle;float:right; }

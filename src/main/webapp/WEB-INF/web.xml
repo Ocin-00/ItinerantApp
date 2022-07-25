@@ -9,4 +9,31 @@
     <welcome-file>default.jsp</welcome-file>
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
+  
+  <servlet>
+  	<servlet-name>ListaProfesionalesServlet</servlet-name>
+  	<servlet-class>com.itinerant.controller.admin.ListaProfesionalesServlet</servlet-class>
+  </servlet> 
+  <servlet-mapping>
+  	<servlet-name>ListaProfesionalesServlet</servlet-name>
+  	<url-pattern>/admin/lista_profesionales</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>ListaSupervisoresServlet</servlet-name>
+  	<servlet-class>com.itinerant.controller.admin.ListaSupervisoresServlet</servlet-class>
+  </servlet>  
+  <servlet-mapping>
+  	<servlet-name>ListaSupervisoresServlet</servlet-name>
+  	<url-pattern>/admin/lista_supervisores</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>ListaCertificadosServlet</servlet-name>
+  	<servlet-class>com.itinerant.controller.admin.ListaCertificadosServlet</servlet-class>
+  </servlet>  
+  <servlet-mapping>
+  	<servlet-name>ListaCertificadosServlet</servlet-name>
+  	<url-pattern>/admin/lista_certificados</url-pattern>
+  </servlet-mapping>
 </web-app>

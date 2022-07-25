@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Certificado;
+import com.itinerant.entity.Profesional;
 
 public class CertificadoDAO extends JpaDAO<Certificado> implements GenericDAO<Certificado> {
 
@@ -37,6 +38,10 @@ public class CertificadoDAO extends JpaDAO<Certificado> implements GenericDAO<Ce
 		return super.findWithNamedQuery("Certificado.findAll");
 	}
 
+	public List<Certificado> listAllNotValid() {
+		return super.findWithNamedQuery("Certificado.findAllNotValid");
+	}
+	
 	@Override
 	public long count() {
 		return super.countWithNamedQuery("Certificado.countAll");
