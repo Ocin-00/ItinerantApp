@@ -4,6 +4,7 @@ package com.itinerant.entity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -72,7 +73,6 @@ public class UsuarioInterno implements java.io.Serializable {
 	}
 
 	@Id
-
 	@Column(name = "login", unique = true, nullable = false, length = 30)
 	public String getLogin() {
 		return this.login;

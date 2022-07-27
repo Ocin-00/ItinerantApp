@@ -49,7 +49,7 @@ public class SupervisorServicios {
 		
 	}
 	
-	public void crearSupervisor() throws ServletException, IOException {
+	public Supervisor inicializarDatos() {
 		String nombre = request.getParameter("nombre");
 		String apellidos = request.getParameter("apellidos");
 		String telefono = request.getParameter("telefono");
@@ -67,23 +67,52 @@ public class SupervisorServicios {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		Supervisor supervisor = new Supervisor(login, password, email, nombre, apellidos, fechaNac, telefono, nss, orgCoord, nivelAcceso);
+		return supervisor;
+	}
+	
+	public void crearSupervisor() throws ServletException, IOException {
 		
 		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(request, response);
-		if(usuarioInternoServicios.emailRepetido(email)) {
-			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el email " + email + ".";
+		Supervisor supervisor = inicializarDatos();
+		
+		if(usuarioInternoServicios.emailRepetido(supervisor.getEmail())) {
+			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el email " + supervisor.getEmail() + ".";
 			request.setAttribute("message", message);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("message.jsp");
 			requestDispatcher.forward(request, response);
-		} else if (usuarioInternoServicios.loginRepetido(login)) {
-			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el nombre de usuario " + login + ".";
+		} else if (usuarioInternoServicios.loginRepetido(supervisor.getLogin())) {
+			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el nombre de usuario " + supervisor.getLogin() + ".";
 			request.setAttribute("message", message);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("message.jsp");
 			requestDispatcher.forward(request, response);
 		} else {
-			Supervisor supervisor = new Supervisor(login, password, email, nombre, apellidos, fechaNac, telefono, nss, orgCoord, nivelAcceso);
 			supervisorDAO.create(supervisor);
 			listarSupervisores("El supervisor ha sido creado con éxito");
 		}
 		
+	}
+
+	public void editarSupervisor() throws ServletException, IOException {
+		String supervisorId = request.getParameter("id");
+		Supervisor supervisor = supervisorDAO.get(supervisorId);
+		System.out.println(supervisor.toString());
+		
+		String editpage = "supervisor_form.jsp";
+		request.setAttribute("supervisor", supervisor);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher(editpage);
+		requestDispatcher.forward(request, response);
+	}
+
+	public void actualizarSupervisor() throws ServletException, IOException {
+		Supervisor supervisor = inicializarDatos();
+		supervisorDAO.update(supervisor);
+		listarSupervisores("El supervisor ha sido actualizado con éxito");
+	}
+
+	public void borrarSupervisor() throws ServletException, IOException {
+		String supervisorId = request.getParameter("id");
+		supervisorDAO.delete(supervisorId);
+		listarSupervisores("El usuario ha sido borrado con éxito.");
 	}
 }

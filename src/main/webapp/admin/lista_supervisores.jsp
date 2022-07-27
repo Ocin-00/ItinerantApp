@@ -47,8 +47,8 @@
 					<td>${supervisor.organismoCoordinador}</td>
 					<td>${supervisor.nivelAcceso}</td>
 					<td align="center">
-						<a href="Editar acceso">Editar acceso</a> |
-						<a href="Borrar">Borrar</a>
+						<a href="editar_supervisor?id=${supervisor.login}">Editar</a> |
+						<a href="javascript:void(0);" onclick="confirmDelete('${supervisor.login}');">Borrar</a>
 					</td>
 				</tr>
 			</c:forEach>
@@ -67,8 +67,14 @@
 				</tr>
 		</table>
 	</div>
-	
-	
 	<jsp:directive.include file="/frontend/footer.jsp"/>
+	
+	<script type="text/javascript">
+		function confirmDelete(login){
+			if(confirm("¿Desea eliminar el usuario de login " + login + "?")) {
+				window.location = "borrar_supervisor?id=" + login;
+			}
+		}
+	</script>
 </body>
 </html>
