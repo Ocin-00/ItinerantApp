@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Localidad;
 
+
 public class LocalidadDAO extends JpaDAO<Localidad> implements GenericDAO<Localidad> {
 
 	public LocalidadDAO(EntityManager entitiyManager) {

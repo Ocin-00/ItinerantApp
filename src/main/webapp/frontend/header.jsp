@@ -1,17 +1,16 @@
-<link rel="stylesheet" href="css/Prueba.css">
 <div>
-	<div style="prueba.css" id="content">
-		<div id="first">
+	<div id="headermenu">
+		<div class="left">
 			<img src="images/itinerant.jpg" height="162"/>
 		</div>
 		
-		<div id="second">
+		<div class="center">
 			<input type="search" name="keyword" size="50" height="71" width="742">
 			<input type="button" value="buscar">
 		</div>
 		
 		
-		<div id="third">
+		<div class="right">
 			<a href="frontend/login.jsp">Iniciar sesión</a> |
 			<a href="register">Registrarse</a>
 		</div>

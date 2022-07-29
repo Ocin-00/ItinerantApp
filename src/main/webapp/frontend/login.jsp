@@ -3,8 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Login</title>
+	<meta charset="ISO-8859-1">
+	<title>Login</title>
+	<link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>

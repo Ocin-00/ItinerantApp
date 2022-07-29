@@ -4,8 +4,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Itinerant - Administración</title>
+	<meta charset="ISO-8859-1">
+	<title>Itinerant - Administración</title>
+	<link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
@@ -33,7 +34,7 @@
 				<th>Email</th>
 				<th>Teléfono</th>
 				<th>Organismo Coordinador</th>
-				<th>Nive de acceso</th>
+				<th>Nivel de acceso</th>
 				<th>Acciones</th>
 			</tr>
 			<c:forEach var="supervisor" items="${supervisores}" varStatus="status">

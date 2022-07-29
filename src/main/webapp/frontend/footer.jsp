@@ -1,6 +1,6 @@
- <hr width="100%" />
+<hr width="100%" />
 
-<div align="center" >
+<div align="center" id="footermenu">
 	
 	<a href=".jsp">Quiénes somos</a> |
 	<a href=".jsp">Qué hacemos</a> |

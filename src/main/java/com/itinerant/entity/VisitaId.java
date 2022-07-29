@@ -1,5 +1,5 @@
 package com.itinerant.entity;
-// Generated 5 jul 2022 14:47:27 by Hibernate Tools 4.3.6.Final
+// Generated 28 jul 2022 13:44:30 by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import javax.persistence.Column;

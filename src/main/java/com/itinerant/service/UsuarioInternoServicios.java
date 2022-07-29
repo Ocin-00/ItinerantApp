@@ -6,7 +6,6 @@ import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.itinerant.dao.SupervisorDAO;
 import com.itinerant.dao.UsuarioInternoDAO;
 
 public class UsuarioInternoServicios {

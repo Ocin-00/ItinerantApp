@@ -1,19 +1,19 @@
 <div>
-	<div style="prueba.css" id="content">
-		<div id="first">
+	<div id="headermenu">
+		<div class="menu_item">
 			<img src="../images/itinerant.jpg" height="162"/>
 		</div>
 		
-		<div id="second">
+		<div class="menu_item">
 			<input type="search" name="keyword" size="50" height="71" width="742">
 			<input type="button" value="buscar">
 		</div>
-		
-		
-		<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   -->
-		<div id="third">
-			<!-- <a href="frontend/login.jsp">Iniciar sesión</a> |
-			<a href="register">Registrarse</a>  -->
+
+		<div class="menu_item">
+			<img src="../images/Ajustes.png" height="62"/>
+			<img src="../images/Notificaciones.png" height="62"/>
+			<img src="../images/Chat.png" height="62"/>
+			<img src="../images/Usuario.png" height="62"/>
 		</div>
 		
 	</div>

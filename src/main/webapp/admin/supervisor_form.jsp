@@ -13,19 +13,20 @@
 		Editar supervisor
 	</c:if>
 </title>
+<link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 	<jsp:directive.include file="header.jsp" />
 
-	<div align="center">
+	<div align="center" id="horizontalsplit">
 		<c:if test="${supervisor == null}">
 			<form action="crear_supervisor" method="post" onsubmit="return validateFormInput()">
 		</c:if>	
 		<c:if test="${supervisor != null}">
 			<form action="actualizar_supervisor" method="post" onsubmit="return validateFormInput()">
 		</c:if>
-			<div>
-				<table>
+			<div class="left">
+				<table align="center">
 					<tr>
 						<td>Nombre:</td>
 						<td>Apellidos:</td>
@@ -74,8 +75,8 @@
 				</table>
 			</div>
 
-			<div>
-				<table>
+			<div class="right">
+				<table align="center">
 					<tr>
 						<td>Email:</td>
 						<td>Nombre de usuario:</td>
@@ -129,24 +130,39 @@
 					</tr>
 				</table>
 	
-				<table>
+				<table align="left">
 					<tr>
 						<td>Por favor, elija el nivel de acceso:</td>
 					</tr>
 					<tr align="left">
 						<td align="left">
-							<input type="radio" id="general" name="nivelAcceso" value="General">   
-							<label for="general">General</label><br>   
-							<input type="radio" id="mancomunal" name="nivelAcceso" value="Mancomunal"> 
+							<c:if test="${supervisor.nivelAcceso == 'General'}">
+								<input type="radio" id="general" name="nivelAcceso" value="General" checked="checked">
+							</c:if>
+							<c:if test="${supervisor.nivelAcceso != 'General'}">
+								<input type="radio" id="general" name="nivelAcceso" value="General">
+							</c:if>
+							<label for="general">General</label><br>  
+							<c:if test="${supervisor.nivelAcceso == 'Mancomunal'}">
+								<input type="radio" id="mancomunal" name="nivelAcceso" value="Mancomunal" checked="checked">
+							</c:if>
+							<c:if test="${supervisor.nivelAcceso != 'Mancomunal'}">
+								<input type="radio" id="mancomunal" name="nivelAcceso" value="Mancomunal"> 
+							</c:if> 
 							<label for="mancomunal">Mancomunal</label><br>   
-							<input type="radio" id="municipal" name="nivelAcceso" value="Municipal">   
+							<c:if test="${supervisor.nivelAcceso == 'Municipal'}">
+								<input type="radio" id="municipal" name="nivelAcceso" value="Municipal" checked="checked">
+							</c:if>
+							<c:if test="${supervisor.nivelAcceso != 'Municipal'}">
+								<input type="radio" id="municipal" name="nivelAcceso" value="Municipal"> 
+							</c:if> 
 							<label for="municipal">Municipal</label>
 						</td>
 					</tr>
 				</table>
 			</div>
 			
-			<div>
+			<div align="center">
 				<input type="submit" value="Guardar">
 				&nbsp;&nbsp;
 				<input type="button" value="Cancelar" onclick="javascript:history.go(-1)">
@@ -240,5 +256,13 @@
 		}*/
 		return true;
 	}
+/*
+	function initalizeRadioButton(selectedRadio) {
+		document.querySelectorAll('input[type="radio"]').forEach(radio =>{		    
+			if ( radio.id === selectedRadio ){
+				radio.checked = true;
+			}
+		})
+	}*/
 </script>
 </html>
