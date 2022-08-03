@@ -75,7 +75,6 @@ public class SupervisorServicios {
 		
 		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(request, response);
 		Supervisor supervisor = inicializarDatos();
-		
 		if(usuarioInternoServicios.emailRepetido(supervisor.getEmail())) {
 			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el email " + supervisor.getEmail() + ".";
 			request.setAttribute("message", message);

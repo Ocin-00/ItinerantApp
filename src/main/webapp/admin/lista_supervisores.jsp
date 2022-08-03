@@ -7,6 +7,8 @@
 	<meta charset="ISO-8859-1">
 	<title>Itinerant - Administración</title>
 	<link rel="stylesheet" href="../css/style.css">
+	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
@@ -49,7 +51,7 @@
 					<td>${supervisor.nivelAcceso}</td>
 					<td align="center">
 						<a href="editar_supervisor?id=${supervisor.login}">Editar</a> |
-						<a href="javascript:void(0);" onclick="confirmDelete('${supervisor.login}');">Borrar</a>
+						<a href="javascript:void(0);" class="deleteLink" id="${supervisor.login}">Borrar</a>
 					</td>
 				</tr>
 			</c:forEach>
@@ -71,11 +73,16 @@
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 	
 	<script type="text/javascript">
-		function confirmDelete(login){
-			if(confirm("¿Desea eliminar el usuario de login " + login + "?")) {
-				window.location = "borrar_supervisor?id=" + login;
-			}
-		}
+		$(document).ready(function() {
+			$(".deleteLink").each(function() {
+				$(this).on("click", function() {
+					login = $(this).attr("id");
+					if(confirm("¿Desea eliminar el usuario de login " + login + "?")) {
+						window.location = "borrar_supervisor?id=" + login;
+					}
+				});
+			});
+		});
 	</script>
 </body>
 </html>
