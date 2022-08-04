@@ -10,11 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.itinerant.controller.BaseServlet;
 import com.itinerant.entity.Profesional;
 import com.itinerant.service.ProfesionalServicios;
 
 @WebServlet("/admin/lista_profesionales/")
-public class ListaProfesionalesServlet extends HttpServlet {
+public class ListaProfesionalesServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
        
     public ListaProfesionalesServlet() {
@@ -25,7 +26,7 @@ public class ListaProfesionalesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		ProfesionalServicios profesionalServicios = new ProfesionalServicios(request, response);
+		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
 		profesionalServicios.listarProfesionalesNoValidados();
 	}
 

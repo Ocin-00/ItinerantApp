@@ -25,8 +25,9 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "UsuarioInterno.findAll", query = "SELECT u FROM UsuarioInterno u ORDER BY u.apellidos"),
-	 @NamedQuery(name = "UsuarioInterno.findByEmail", query = "SELECT c FROM Categoria c WHERE c.nombre = :email"),
+	 @NamedQuery(name = "UsuarioInterno.findByEmail", query = "SELECT u FROM UsuarioInterno u WHERE u.email = :email"),
 	 @NamedQuery(name = "UsuarioInterno.countAll", query = "SELECT count(*) FROM UsuarioInterno u"),
+	 @NamedQuery(name = "UsuarioInterno.checkLogin", query = "SELECT u FROM UsuarioInterno u WHERE u.login = :login AND u.password = :password")
 })
 @Inheritance(
 	    strategy = InheritanceType.JOINED
@@ -39,6 +40,7 @@ public class UsuarioInterno implements java.io.Serializable {
 	protected String email;
 	protected String nombre;
 	protected String apellidos;
+	protected String rol;
 	protected Date fechaNac;
 	protected byte[] fotoPerfil;
 	protected Set<Chat> chatsForUsuarioFuente = new HashSet<Chat>(0);
@@ -48,24 +50,26 @@ public class UsuarioInterno implements java.io.Serializable {
 	public UsuarioInterno() {
 	}
 
-	public UsuarioInterno(String login, String password, String email, String nombre, String apellidos, Date fechaNac) {
+	public UsuarioInterno(String login, String password, String email, String nombre, String apellidos, String rol, Date fechaNac) {
 		this.login = login;
 		this.password = password;
 		this.email = email;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
+		this.rol = rol;
 		this.fechaNac = fechaNac;
 	}
 
-	public UsuarioInterno(String login, String password, String email, String nombre, String apellidos, Date fechaNac,
-			byte[] fotoPerfil, Set<Chat> chatsForUsuarioFuente, Set<Alerta> alertas,
-			Set<Chat> chatsForUsuarioDestino) {
+	public UsuarioInterno(String login, String password, String email, String nombre, String apellidos, String rol,
+						  Date fechaNac, byte[] fotoPerfil, Set<Chat> chatsForUsuarioFuente, Set<Alerta> alertas,
+						  Set<Chat> chatsForUsuarioDestino) {
 		this.login = login;
 		this.password = password;
 		this.email = email;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.fechaNac = fechaNac;
+		this.rol = rol;
 		this.fotoPerfil = fotoPerfil;
 		this.chatsForUsuarioFuente = chatsForUsuarioFuente;
 		this.alertas = alertas;
@@ -118,6 +122,15 @@ public class UsuarioInterno implements java.io.Serializable {
 		this.apellidos = apellidos;
 	}
 
+	@Column(name = "rol", nullable = false, length = 50)
+	public String getRol() {
+		return this.rol;
+	}
+
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "fecha_nac", nullable = false, length = 10)
 	public Date getFechaNac() {

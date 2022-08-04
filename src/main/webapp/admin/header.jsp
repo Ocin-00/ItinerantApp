@@ -14,6 +14,7 @@
 			<img src="../images/Notificaciones.png" height="62"/>
 			<img src="../images/Chat.png" height="62"/>
 			<img src="../images/Usuario.png" height="62"/>
+			<a href="../frontend/logout">logout</a>
 		</div>
 		
 	</div>

@@ -1,6 +1,8 @@
 package com.itinerant.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -53,4 +55,16 @@ public class UsuarioInternoDAO extends JpaDAO<UsuarioInterno> implements Generic
 		return super.countWithNamedQuery("UsuarioInterno.countAll");
 	}
 
+	public boolean checkLogin(String login, String password) {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("login", login);
+		parameters.put("password", password);
+		
+		List<UsuarioInterno> listaUsuarios = super.findWithNamedQuery("UsuarioInterno.checkLogin", parameters);
+		
+		if(listaUsuarios.size() == 1) {
+			return true;
+		}
+		return false;
+	}
 }

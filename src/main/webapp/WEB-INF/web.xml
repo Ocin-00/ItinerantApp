@@ -36,4 +36,5 @@
   	<servlet-name>ListaCertificadosServlet</servlet-name>
   	<url-pattern>/admin/lista_certificados</url-pattern>
   </servlet-mapping>
+ 
 </web-app>

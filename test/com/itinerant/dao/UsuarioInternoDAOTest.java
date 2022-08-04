@@ -12,6 +12,7 @@ import javax.persistence.Persistence;
 
 import com.google.protobuf.TextFormat.ParseException;
 import com.itinerant.entity.UsuarioInterno;
+import com.itinerant.enums.Rol;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,7 +36,7 @@ class UsuarioInternoDAOTest {
 		SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 		String strdate = "01-12-2000 00:00:00";		
 		Date fechaNac = dateformat.parse(strdate);
-		UsuarioInterno usuario = new UsuarioInterno("nialcha", "1234", "nialcha@ade.upv.es", "Nicolás", "Alcantarilla Chaves", fechaNac);
+		UsuarioInterno usuario = new UsuarioInterno("nialcha", "1234", "nialcha@ade.upv.es", "Nicolás", "Alcantarilla Chaves", Rol.CIUDADANO.toString(),fechaNac);
 		usuario = usuarioInternoDAO.create(usuario);
 		
 		assertTrue(true);
@@ -54,7 +55,7 @@ class UsuarioInternoDAOTest {
 		SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 		String strdate = "01-12-2000 00:00:00";		
 		Date fechaNac = dateformat.parse(strdate);
-		UsuarioInterno usuario = new UsuarioInterno("nialcha", "1234", "nialcha@ade.upv.es", "Nicolás", "Alcantarilla Chaves", fechaNac);
+		UsuarioInterno usuario = new UsuarioInterno("nialcha", "1234", "nialcha@ade.upv.es", "Nicolás", "Alcantarilla Chaves", Rol.CIUDADANO.toString(), fechaNac);
 		usuario.setPassword("4321");
 		
 		usuario = usuarioInternoDAO.update(usuario);
@@ -127,6 +128,24 @@ class UsuarioInternoDAOTest {
 		System.out.println(usuario.getAlertas().iterator().next().getTitulo());
 		
 		assertEquals(1, usuario.getAlertas().size());
+	}
+	
+	@Test
+	public void checkLoginSuccess() {
+		String login = "femargar";
+		String password = "1234";
+		
+		boolean resultado = usuarioInternoDAO.checkLogin(login, password);
+		assertTrue(resultado);
+	}
+	
+	@Test
+	public void checkLoginFail() {
+		String login = "noexiste";
+		String password = "1234";
+		
+		boolean resultado = usuarioInternoDAO.checkLogin(login, password);
+		assertFalse(resultado);
 	}
 	
 	@AfterAll

@@ -15,15 +15,13 @@ import com.itinerant.dao.CertificadoDAO;
 import com.itinerant.entity.Certificado;
 
 public class CertificadoServicios {
-	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
 	private CertificadoDAO certificadoDAO;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 
-	public CertificadoServicios(HttpServletRequest request, HttpServletResponse response) {
-		entityManagerFactory = Persistence.createEntityManagerFactory("ItinerantApp");
-		entityManager = entityManagerFactory.createEntityManager();
+	public CertificadoServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
+		this.entityManager = entityManager;
 		certificadoDAO = new CertificadoDAO(entityManager);
 		this.request = request;
 		this.response = response;

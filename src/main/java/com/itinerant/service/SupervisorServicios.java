@@ -18,15 +18,13 @@ import com.itinerant.dao.SupervisorDAO;
 import com.itinerant.entity.Supervisor;
 
 public class SupervisorServicios {
-	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
 	private SupervisorDAO supervisorDAO;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 
-	public SupervisorServicios(HttpServletRequest request, HttpServletResponse response) {
-		entityManagerFactory = Persistence.createEntityManagerFactory("ItinerantApp");
-		entityManager = entityManagerFactory.createEntityManager();
+	public SupervisorServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
+		this.entityManager = entityManager;
 		supervisorDAO = new SupervisorDAO(entityManager);
 		this.request = request;
 		this.response = response;
@@ -73,7 +71,7 @@ public class SupervisorServicios {
 	
 	public void crearSupervisor() throws ServletException, IOException {
 		
-		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(request, response);
+		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, request, response);
 		Supervisor supervisor = inicializarDatos();
 		if(usuarioInternoServicios.emailRepetido(supervisor.getEmail())) {
 			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el email " + supervisor.getEmail() + ".";

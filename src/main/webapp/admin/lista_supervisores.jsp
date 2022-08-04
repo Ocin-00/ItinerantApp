@@ -13,6 +13,7 @@
 <body>
 	<jsp:directive.include file="header.jsp"/>
 	<h4>Administración</h4>
+	
 	<ul class="menu">
 	  <li><a href="lista_profesionales">Profesionales</a></link>
 	  <li><a href="lista_certificados">Certificados</a></link>
@@ -24,7 +25,6 @@
 	<c:if test="${message != null}">
 		<div><h4>${message}</h4></div>
 	</c:if>
-	
 	
 	<div>
 		<table border="1">
