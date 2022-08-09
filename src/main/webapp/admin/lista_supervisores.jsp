@@ -15,9 +15,9 @@
 	<h4>Administración</h4>
 	
 	<ul class="menu">
-	  <li><a href="lista_profesionales">Profesionales</a></link>
-	  <li><a href="lista_certificados">Certificados</a></link>
-	  <li><a href="lista_supervisores" class="active">Supervisores</a></link>
+	  <li><a href="lista_profesionales">Profesionales</a>
+	  <li><a href="lista_certificados">Certificados</a>
+	  <li><a href="lista_supervisores" class="active">Supervisores</a>
 	</ul>
 	
 	<h3>Supervisores autorizados</h3>

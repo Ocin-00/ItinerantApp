@@ -7,14 +7,16 @@
 	<meta charset="ISO-8859-1">
 	<title>Itinerant - Administración</title>
 	<link rel="stylesheet" href="../css/style.css">
+	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
 	<h4>Administración</h4>
 	<ul class="menu">
-	  <li><a href="lista_profesionales" class="active">Profesionales</a></link>
-	  <li><a href="lista_certificados">Certificados</a></link>
-	  <li><a href="lista_supervisores">Supervisores</a></link>
+	  <li><a href="lista_profesionales" class="active">Profesionales</a>
+	  <li><a href="lista_certificados">Certificados</a>
+	  <li><a href="lista_supervisores">Supervisores</a>
 	</ul>
 	
 	<h3>Profesionales pendientes de verificación</h3>
@@ -40,8 +42,8 @@
 					<td>${profesional.telefono}</td>
 					<td>${profesional.fechaRegistro}</td>
 					<td align="center">
-						<a href="Validar">Validar</a> |
-						<a href="Anular">Anular</a>
+						<a href="javascript:void(0);" class="validateLink" id="${profesional.login}">Validar</a> |
+						<a href="javascript:void(0);" class="deleteLink" id="${profesional.login}">Anular</a>
 					</td>
 				</tr>
 			</c:forEach>
@@ -51,4 +53,24 @@
 	
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
+<script type="text/javascript">
+		$(document).ready(function() {
+			$(".deleteLink").each(function() {
+				$(this).on("click", function() {
+					login = $(this).attr("id");
+					if(confirm("¿Desea anular la cuenta del profesional de login " + login + "?")) {
+						window.location = "anular_profesional?id=" + login;
+					}
+				});
+			});
+			$(".validateLink").each(function() {
+				$(this).on("click", function() {
+					login = $(this).attr("id");
+					if(confirm("¿Desea validar la cuenta del profesional de login " + login + "?")) {
+						window.location = "validar_profesional?id=" + login;
+					}
+				});
+			});
+		});
+</script>
 </html>

@@ -12,7 +12,7 @@
   
   <servlet>
   	<servlet-name>ListaProfesionalesServlet</servlet-name>
-  	<servlet-class>com.itinerant.controller.admin.ListaProfesionalesServlet</servlet-class>
+  	<servlet-class>com.itinerant.controller.admin.profesional.ListaProfesionalesServlet</servlet-class>
   </servlet> 
   <servlet-mapping>
   	<servlet-name>ListaProfesionalesServlet</servlet-name>
@@ -21,7 +21,7 @@
   
   <servlet>
   	<servlet-name>ListaSupervisoresServlet</servlet-name>
-  	<servlet-class>com.itinerant.controller.admin.ListaSupervisoresServlet</servlet-class>
+  	<servlet-class>com.itinerant.controller.admin.supervisor.ListaSupervisoresServlet</servlet-class>
   </servlet>  
   <servlet-mapping>
   	<servlet-name>ListaSupervisoresServlet</servlet-name>
@@ -30,11 +30,21 @@
   
   <servlet>
   	<servlet-name>ListaCertificadosServlet</servlet-name>
-  	<servlet-class>com.itinerant.controller.admin.ListaCertificadosServlet</servlet-class>
+  	<servlet-class>com.itinerant.controller.admin.certificado.ListaCertificadosServlet</servlet-class>
   </servlet>  
   <servlet-mapping>
   	<servlet-name>ListaCertificadosServlet</servlet-name>
   	<url-pattern>/admin/lista_certificados</url-pattern>
   </servlet-mapping>
+ 
+<!--   <error-page> -->
+<!-- 	<error-code>404</error-code> -->
+<!-- 	<location>/error/404.jsp</location> -->
+<!--   </error-page>  -->
+ 
+<!--   <error-page> -->
+<!-- 	<error-code>500</error-code> -->
+<!-- 	<location>/error/500.jsp</location> -->
+<!--   </error-page>  -->
  
 </web-app>

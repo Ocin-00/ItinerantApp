@@ -1,4 +1,4 @@
-package com.itinerant.controller.admin;
+package com.itinerant.controller.admin.supervisor;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -11,20 +11,18 @@ import com.itinerant.controller.BaseServlet;
 import com.itinerant.service.SupervisorServicios;
 
 /**
- * Servlet implementation class EditarSupervisorServlet
+ * Servlet implementation class CrearSupervisorServlet
  */
-@WebServlet("/admin/editar_supervisor")
-public class EditarSupervisorServlet extends BaseServlet {
+@WebServlet("/admin/crear_supervisor")
+public class CrearSupervisorServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public EditarSupervisorServlet() {
-        super();
-    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		SupervisorServicios supervisorServicios = new SupervisorServicios(entityManager, request, response);
-		supervisorServicios.editarSupervisor();
+		supervisorServicios.crearSupervisor();
 	}
-
 
 }

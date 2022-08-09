@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Administrador;
-import com.itinerant.entity.UsuarioPrivilegiado;
 
 public class AdministradorDAO extends JpaDAO<Administrador> implements GenericDAO<Administrador> {
 

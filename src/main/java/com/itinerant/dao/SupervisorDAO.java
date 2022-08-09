@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Supervisor;
-import com.itinerant.entity.UsuarioPrivilegiado;
 
 public class SupervisorDAO extends JpaDAO<Supervisor> implements GenericDAO<Supervisor> {
 

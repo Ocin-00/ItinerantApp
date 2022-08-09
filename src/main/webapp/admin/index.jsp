@@ -11,9 +11,9 @@
 	<jsp:directive.include file="header.jsp"/>
 	<h3>Administración</h3>
 	<ul class="menu">
-	  <li><a href="../admin/lista_profesionales">Profesionales</a></link>
-	  <li><a href="../admin/lista_certificados">Certificados</a></link>
-	  <li><a href="../admin/lista_supervisores">Supervisores</a></link>
+	  <li><a href="../admin/lista_profesionales">Profesionales</a>
+	  <li><a href="../admin/lista_certificados">Certificados</a>
+	  <li><a href="../admin/lista_supervisores">Supervisores</a>
 	</ul>
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>

@@ -3,8 +3,6 @@ package com.itinerant.service;
 import java.io.IOException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,19 +14,16 @@ import com.itinerant.enums.Rol;
 
 public class UsuarioInternoServicios {
 	
-	private EntityManagerFactory entityManagerFactory;
-	private EntityManager entityManager;
 	private UsuarioInternoDAO usuarioInternoDAO;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 
 	public UsuarioInternoServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
-		this.entityManager = entityManager;
 		usuarioInternoDAO = new UsuarioInternoDAO(entityManager);
 		this.request = request;
 		this.response = response;
 	}
-	
+
 	public boolean emailRepetido(String email) {
 		return usuarioInternoDAO.findByEmail(email) != null;		
 	}
@@ -66,6 +61,11 @@ public class UsuarioInternoServicios {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");
 			requestDispatcher.forward(request, response);
 		}
+	}
+
+	public String getRol(String login) {
+		UsuarioInterno usuario = usuarioInternoDAO.get(login);
+		return usuario.getRol();
 	}
 
 }

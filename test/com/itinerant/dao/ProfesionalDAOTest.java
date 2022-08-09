@@ -50,7 +50,7 @@ class ProfesionalDAOTest {
 	
 	@Test
 	public void testUpdateProfesional() throws java.text.ParseException {
-		SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+		new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 		Date fechaRegistro = new Date(System.currentTimeMillis());
 		Profesional usuario = profesionalDAO.get("femargar");
 		usuario.setFechaRegistro(fechaRegistro);
@@ -65,7 +65,7 @@ class ProfesionalDAOTest {
 	@Test
 	public void testCreateCertificado() throws java.text.ParseException {
 		Profesional usuario = profesionalDAO.get("femargar");
-		SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+		new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 		Date fechaRegistro = new Date(System.currentTimeMillis());
 		CertificadoId id = new CertificadoId("femargar", "Diploma");
 		Certificado certificado = new Certificado(id, usuario, "Escuela", fechaRegistro, 2005, false);

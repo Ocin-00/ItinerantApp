@@ -1,10 +1,6 @@
-package com.itinerant.controller.admin;
+package com.itinerant.controller.admin.profesional;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,14 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.itinerant.controller.BaseServlet;
-import com.itinerant.entity.Certificado;
-import com.itinerant.service.CertificadoServicios;
+import com.itinerant.service.ProfesionalServicios;
 
-@WebServlet("/admin/lista_certificados/")
-public class ListaCertificadosServlet extends BaseServlet {
+@WebServlet("/admin/lista_profesionales/")
+public class ListaProfesionalesServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
        
-    public ListaCertificadosServlet() {
+    public ListaProfesionalesServlet() {
         super();
     }
 
@@ -27,8 +22,8 @@ public class ListaCertificadosServlet extends BaseServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		CertificadoServicios certificadoServicios = new CertificadoServicios(entityManager, request, response);
-		certificadoServicios.listarCertificadosNoValidados();
+		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
+		profesionalServicios.listarProfesionalesNoValidados();
 	}
 
 

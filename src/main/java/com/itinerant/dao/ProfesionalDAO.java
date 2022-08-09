@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Profesional;
-import com.itinerant.entity.UsuarioInterno;
 
 public class ProfesionalDAO extends JpaDAO<Profesional> implements GenericDAO<Profesional> {
 

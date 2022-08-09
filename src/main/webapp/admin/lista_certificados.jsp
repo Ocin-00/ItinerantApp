@@ -7,14 +7,16 @@
 	<meta charset="ISO-8859-1">
 	<title>Itinerant - Administración</title>
 	<link rel="stylesheet" href="../css/style.css">
+	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
 	<h4>Administración</h4>
 	<ul class="menu">
-	  <li><a href="lista_profesionales">Profesionales</a></link>
-	  <li><a href="lista_certificados" class="active">Certificados</a></link>
-	  <li><a href="lista_supervisores">Supervisores</a></link>
+	  <li><a href="lista_profesionales">Profesionales</a>
+	  <li><a href="lista_certificados" class="active">Certificados</a>
+	  <li><a href="lista_supervisores">Supervisores</a>
 	</ul>
 	
 	<h3>Certificados pendientes de verificación</h3>
@@ -38,15 +40,37 @@
 					<td>${certificado.anyo}</td>
 					<td>${certificado.fechaRegistro}</td>
 					<td align="center">
-						<a href="Validar">Validar</a> |
-						<a href="Anular">Anular</a>
+						<a href="javascript:void(0);" class="validateLink" tit="${certificado.id.titulo}" pr="${certificado.id.idProfesional}">Validar</a> |
+						<a href="javascript:void(0);" class="deleteLink" tit="${certificado.id.titulo}" pr="${certificado.id.idProfesional}">Anular</a>
 					</td>
 				</tr>
 			</c:forEach>
 		</table>
 	</div>
-	
-	
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
+<script type="text/javascript">
+		$(document).ready(function() {
+			$(".deleteLink").each(function() {
+				$(this).on("click", function() {
+					profesionalId = $(this).attr("pr");
+					titulo = $(this).attr("tit");
+					if(confirm("¿Desea anular el certificado '" + titulo + "' perteneciente a '" + profesionalId + "'?")) {
+						window.location = "anular_certificado?pr=" + profesionalId
+						  				+ "&tit=" + titulo;
+					}
+				});
+			});
+			$(".validateLink").each(function() {
+				$(this).on("click", function() {
+					profesionalId = $(this).attr("pr");
+					titulo = $(this).attr("tit");
+					if(confirm("¿Desea validar el certificado '" + titulo + "' perteneciente a '" + profesionalId + "'?")) {
+						window.location = "validar_certificado?pr=" + profesionalId
+						  				+ "&tit=" + titulo;
+					}
+				});
+			});
+		});
+</script>
 </html>
