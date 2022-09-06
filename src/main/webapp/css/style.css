@@ -108,11 +108,16 @@ input {
 }
 
 #footermenu{
-	background-color: rgb(80,131,66);
+	background: rgb(80,131,66);
 }
 
 .error {
 	color: red;
 	margin: 5px;
 	font-size: 12px;
+}
+
+input[type=file] {
+  display:none;
+  /* visibility: hidden; */
 }

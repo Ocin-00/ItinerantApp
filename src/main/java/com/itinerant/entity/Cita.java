@@ -1,5 +1,5 @@
 package com.itinerant.entity;
-// Generated 5 jul 2022 14:47:27 by Hibernate Tools 4.3.6.Final
+// Generated 16 ago 2022 11:43:03 by Hibernate Tools 4.3.6.Final
 
 import java.util.Date;
 import javax.persistence.AttributeOverride;
@@ -9,7 +9,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -45,7 +44,7 @@ public class Cita implements java.io.Serializable {
 		this.horaInicio = horaInicio;
 		this.direccion = direccion;
 	}
-	
+
 	public Cita(CitaId id, Ciudadano ciudadano, Visita visita, Date horaInicio, String direccion, String anotaciones) {
 		this.id = id;
 		this.ciudadano = ciudadano;
@@ -57,10 +56,7 @@ public class Cita implements java.io.Serializable {
 
 	@EmbeddedId
 
-	@AttributeOverrides({
-			@AttributeOverride(name = "idProfesional", column = @Column(name = "id_profesional", nullable = false, length = 30)),
-			@AttributeOverride(name = "idLocalidad", column = @Column(name = "id_localidad", nullable = false)),
-			@AttributeOverride(name = "fecha", column = @Column(name = "fecha", nullable = false, length = 10)),
+	@AttributeOverrides({ @AttributeOverride(name = "idVisita", column = @Column(name = "id_visita", nullable = false)),
 			@AttributeOverride(name = "idCiudadano", column = @Column(name = "id_ciudadano", nullable = false, length = 30)) })
 	public CitaId getId() {
 		return this.id;
@@ -81,10 +77,7 @@ public class Cita implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({
-			@JoinColumn(name = "id_profesional", referencedColumnName = "id_profesional", nullable = false, insertable = false, updatable = false),
-			@JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad", nullable = false, insertable = false, updatable = false),
-			@JoinColumn(name = "fecha", referencedColumnName = "fecha", nullable = false, insertable = false, updatable = false) })
+	@JoinColumn(name = "id_visita", nullable = false, insertable = false, updatable = false)
 	public Visita getVisita() {
 		return this.visita;
 	}
@@ -116,8 +109,9 @@ public class Cita implements java.io.Serializable {
 	public String getAnotaciones() {
 		return this.anotaciones;
 	}
-	
+
 	public void setAnotaciones(String anotaciones) {
 		this.anotaciones = anotaciones;
 	}
+
 }

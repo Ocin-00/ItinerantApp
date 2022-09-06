@@ -12,7 +12,7 @@
 		<h3>Por favor, inténtelo de nuevo más tarde o contacte a nuestros administradores.</h3>
 	</div>
 	<div align="center">
-		<a href="javascrip:history.go(-1)">Volver</a>
+		<a href="javascript:history.go(-1)">Volver</a>
 	</div>
 </body>
 </html>

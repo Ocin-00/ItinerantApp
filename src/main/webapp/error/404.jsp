@@ -11,7 +11,7 @@
 		<h2>Lo sentimos, el recurso requerido no ha sido encontrado.</h2>
 	</div>
 	<div align="center">
-		<a href="javascrip:history.go(-1)">Volver</a>
+		<a href="javascript:history.go(-1)">Volver</a>
 	</div>
 </body>
 </html>

@@ -5,11 +5,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Itinerant - Profesionales</title>
+<title>Itinerant - Usuario</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-	<jsp:directive.include file="/frontend/header.jsp"/>
+	<jsp:directive.include file="/frontend/header_user.jsp"/>
 	
 	<h3>Visitas programadas</h3>
 	<div>

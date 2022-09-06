@@ -44,7 +44,7 @@
 						<td>Teléfono:</td>
 					</tr>
 					<tr>
-						<td><input type="text" name="telefono" id="telefono" size="25" value="${supervisor.telefono}"/></td>
+						<td><input type="tel" name="telefono" id="telefono" size="25" value="${supervisor.telefono}"/></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>

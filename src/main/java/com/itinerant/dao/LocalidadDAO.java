@@ -41,5 +41,4 @@ public class LocalidadDAO extends JpaDAO<Localidad> implements GenericDAO<Locali
 	public long count() {
 		return super.countWithNamedQuery("Localidad.countAll");
 	}
-
 }

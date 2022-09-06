@@ -11,8 +11,8 @@
 		
 		
 		<div class="menu_item">
-			<a href="frontend/login.jsp">Iniciar sesión</a> |
-			<a href="register">Registrarse</a>
+			<button onclick="location.href='frontend/login.jsp';">Iniciar sesión</button>
+			<button onclick="location.href='frontend/register.jsp';">Registrarse</button>
 		</div>
 		
 	</div>

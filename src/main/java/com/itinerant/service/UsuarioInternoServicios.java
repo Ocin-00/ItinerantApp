@@ -48,13 +48,14 @@ public class UsuarioInternoServicios {
 			} else if(usuario.getRol().equals(Rol.SUPERVISOR.toString())) {
 				homepage = "/supervisor/";
 			} else if(usuario.getRol().equals(Rol.CIUDADANO.toString())) {
-				homepage = "/inicio/";
+				homepage = "/frontend/inicio/";
 			} else if(usuario.getRol().equals(Rol.PROFESIONAL.toString())) {
-				homepage = "/profesional/";
+				homepage = "/frontend/profesional/";
 			}
 			
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher(homepage);
-			requestDispatcher.forward(request, response);
+			//RequestDispatcher requestDispatcher = request.getRequestDispatcher(homepage);
+			//requestDispatcher.forward(request, response);
+			response.sendRedirect(request.getContextPath() + homepage);
 		} else {
 			String message = "Error de inicio de sesión";
 			request.setAttribute("message", message);

@@ -1,4 +1,4 @@
-package com.itinerant.controller.frontend;
+package com.itinerant.controller.frontend.ciudadano;
 
 import java.io.IOException;
 
@@ -8,23 +8,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class LogoutServlet
- */
-@WebServlet("/frontend/logout")
-public class LogoutServlet extends HttpServlet {
+@WebServlet("/frontend/inicio/")
+public class CiudadanoHomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	public CiudadanoHomeServlet() {
+        super();
+    }
+
+    @Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
+	}
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.removeAttribute("userLogin");
-		
-		response.sendRedirect(request.getContextPath());
-		/*String homepage = "frontend/index.jsp";
+		String homepage = "index.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);*/
+		dispatcher.forward(request, response);
 	}
 
 }

@@ -3,7 +3,9 @@ package com.itinerant.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
+import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.entity.Visita;
 
 public class VisitaDAO extends JpaDAO<Visita> implements GenericDAO<Visita> {
@@ -35,6 +37,16 @@ public class VisitaDAO extends JpaDAO<Visita> implements GenericDAO<Visita> {
 	@Override
 	public List<Visita> listAll() {
 		return super.findWithNamedQuery("Visita.findAll");
+	}
+	
+	public List<Visita> listAllByLogin(String login) {
+		List<Visita> visitas = super.findWithNamedQuery("Visita.findAllByLogin", "login", login);
+		
+		if(visitas != null && visitas.size() > 0) {
+			return visitas;
+		}
+		
+		return null;
 	}
 
 	@Override

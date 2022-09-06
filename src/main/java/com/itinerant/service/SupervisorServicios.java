@@ -56,7 +56,7 @@ public class SupervisorServicios {
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
 		String nivelAcceso = request.getParameter("nivelAcceso");
-		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");	
+		SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");	
 		Date fechaNac = null;
 		try {
 			fechaNac = dateformat.parse(fechaNacTexto);

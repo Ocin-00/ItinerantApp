@@ -64,13 +64,26 @@ class ProfesionalDAOTest {
 	
 	@Test
 	public void testCreateCertificado() throws java.text.ParseException {
-		Profesional usuario = profesionalDAO.get("femargar");
+		Profesional usuario = profesionalDAO.get("sermata");
 		new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 		Date fechaRegistro = new Date(System.currentTimeMillis());
-		CertificadoId id = new CertificadoId("femargar", "Diploma");
+		CertificadoId id = new CertificadoId("sermata", "Diploma");
 		Certificado certificado = new Certificado(id, usuario, "Escuela", fechaRegistro, 2005, false);
 		
 		certificado = certificadoDAO.create(certificado);
+		
+		assertTrue(true);
+	}
+	
+	@Test
+	public void testDeleteCertificado() throws java.text.ParseException {
+		Profesional usuario = profesionalDAO.get("sermata");
+		new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+		Date fechaRegistro = new Date(System.currentTimeMillis());
+		CertificadoId id = new CertificadoId("sermata", "Diploma");
+		//Certificado certificado = new Certificado(id, usuario, "Escuela", fechaRegistro, 2005, false);
+		
+		certificadoDAO.delete(id);
 		
 		assertTrue(true);
 	}
@@ -95,6 +108,7 @@ class ProfesionalDAOTest {
 		
 		assertTrue(usuarios.size() > 0);
 	}
+	
 	
 	@AfterAll
 	public static void tearDownClass() {
