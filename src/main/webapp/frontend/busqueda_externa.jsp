@@ -5,17 +5,14 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Itinerant - Administración</title>
-	<link rel="stylesheet" href="../css/layout.css">
+	<title>Itinerant - Resultado de búsqueda</title>
+	<link rel="stylesheet" href="css/layout.css">
+	<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
 </head>
 <body>
-	<jsp:directive.include file="/frontend/header_user.jsp"/>
-	<div id="main">
-		<jsp:directive.include file="side_menu.jsp"/>
-		<div id="main-content">
-			<h2>Bienvenido administrador</h2>
-		</div>
-	</div>
+	<jsp:directive.include file="/frontend/header.jsp"/>
+	
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
 </html>

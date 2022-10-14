@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Profesional;
+import com.itinerant.entity.Visita;
 
 public class ProfesionalDAO extends JpaDAO<Profesional> implements GenericDAO<Profesional> {
 
@@ -57,4 +58,13 @@ public class ProfesionalDAO extends JpaDAO<Profesional> implements GenericDAO<Pr
 		return super.countWithNamedQuery("Profesional.countAll");
 	}
 
+	public List<Profesional> search(String keyword) {
+		List<Profesional> profesionales = super.findWithNamedQuery("Profesional.search", "keyword", keyword);
+		
+		if(profesionales != null && profesionales.size() > 0) {
+			return profesionales;
+		}
+		
+		return null;
+	}
 }

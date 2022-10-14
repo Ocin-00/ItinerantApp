@@ -91,7 +91,6 @@ public class SupervisorServicios {
 	public void editarSupervisor() throws ServletException, IOException {
 		String supervisorId = request.getParameter("id");
 		Supervisor supervisor = supervisorDAO.get(supervisorId);
-		System.out.println(supervisor.toString());
 		
 		String editpage = "supervisor_form.jsp";
 		request.setAttribute("supervisor", supervisor);

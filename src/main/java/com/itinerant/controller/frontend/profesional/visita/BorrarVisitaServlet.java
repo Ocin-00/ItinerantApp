@@ -1,4 +1,4 @@
-package com.itinerant.controller.frontend.profesional;
+package com.itinerant.controller.frontend.profesional.visita;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -12,7 +12,7 @@ import com.itinerant.service.VisitaServicios;
 /**
  * Servlet implementation class AnularCertificadoServlet
  */
-@WebServlet("/frontend/profesional/borrar_visita")
+@WebServlet("/profesional/borrar_visita")
 public class BorrarVisitaServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
        

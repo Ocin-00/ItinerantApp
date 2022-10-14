@@ -53,4 +53,14 @@ public class VisitaDAO extends JpaDAO<Visita> implements GenericDAO<Visita> {
 	public long count() {
 		return super.countWithNamedQuery("Visita.countAll");
 	}
+	
+	public List<Visita> search(String keyword) {
+		List<Visita> visitas = super.findWithNamedQuery("Visita.search", "keyword", keyword);
+		
+		if(visitas != null && visitas.size() > 0) {
+			return visitas;
+		}
+		
+		return null;
+	}
 }

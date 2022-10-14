@@ -27,11 +27,11 @@
 	float:none; 
 }
 
-#headermenu {
+#header {
 	display: table;
 }
 
-#headermenu div {
+#header div {
 	display:inline-table; 
 	vertical-align:middle;
 	float:center;	
@@ -55,7 +55,7 @@ a:active {
 	color: red;
 }
 
-#headermenu a:link {
+#header a:link {
 	font-size: larger;
 }
 
@@ -107,10 +107,6 @@ input {
 	height: 20px;
 }
 
-#footermenu{
-	background: rgb(80,131,66);
-}
-
 .error {
 	color: red;
 	margin: 5px;
@@ -119,5 +115,4 @@ input {
 
 input[type=file] {
   display:none;
-  /* visibility: hidden; */
 }

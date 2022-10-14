@@ -1,4 +1,4 @@
-package com.itinerant.controller.frontend.profesional;
+package com.itinerant.controller.frontend.profesional.visita;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.itinerant.controller.BaseServlet;
 import com.itinerant.service.VisitaServicios;
 
-@WebServlet("/frontend/profesional/nueva_visita")
+@WebServlet("/profesional/nueva_visita")
 public class NuevaVisitaServlet extends BaseServlet {
 	
 

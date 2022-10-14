@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/frontend/inicio/")
+@WebServlet("/inicio/")
 public class CiudadanoHomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class CiudadanoHomeServlet extends HttpServlet {
 	}
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String homepage = "index.jsp";
+		String homepage = "../frontend/inicio/index.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
 		dispatcher.forward(request, response);
 	}

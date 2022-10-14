@@ -1,23 +1,29 @@
-<div>
-	<div id="headermenu">
-		<div class="menu_item">
-			<img src="../images/itinerant.jpg" height="162"/>
-		</div>
-		
-		<div class="menu_item">
-			<input type="search" name="keyword" size="50" height="71" width="742">
-			<input type="button" value="buscar">
-		</div>
-
-		<div class="menu_item">
-			<img src="../images/Ajustes.png" height="62"/>
-			<img src="../images/Notificaciones.png" height="62"/>
-			<img src="../images/Chat.png" height="62"/>
-			<img src="../images/Usuario.png" height="62"/>
-			<a href="../frontend/logout">logout</a>
-		</div>
-		
+<div id="header">
+	<div>
+		<img src="../images/itinerant.jpg" height="100" />
 	</div>
-	
+
+	<div class="header-items">
+		<form action="buscar" method="get">
+			<input type="search" placeholder="Buscar.." name="keyword" size="50" height="71" width="742">
+			<button type="submit">Buscar</button>
+		</form>
+	</div>
+
+	<div>
+		<img src="../images/Notificaciones.png" height="45" /> <img
+			src="../images/Chat.png" height="45" />
+		<div class="dropdown">
+			<button id="iconoUsuario" class="dropdown-button"></button>
+			<label for="iconoUsuario"> <img src="../images/Usuario.png"
+				height="50" />
+			</label>
+			<div class="dropdown-content">
+				<a href="#">Configuración</a>
+				<hr width="80%" />
+				<a href="../logout">Cerrar sesión</a>
+			</div>
+		</div>
+		<a href="../logout"></a>
+	</div>
 </div>
- <hr width="100%" />

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.entity.Profesional;
+import com.itinerant.entity.Visita;
 
 public class ProfesionalServicios {
 	private ProfesionalDAO profesionalDAO;
@@ -51,5 +52,16 @@ public class ProfesionalServicios {
 		profesional.setValidez(true);
 		profesionalDAO.update(profesional);
 		listarProfesionalesNoValidados("La cuenta del profesional ha sido validada con éxito.");
+	}
+
+	public void buscar(String keyword) {
+		List<Profesional> listaProfesionales = null;
+		if(keyword.equals("")) {
+			listaProfesionales = profesionalDAO.listAll();
+		} else {
+			listaProfesionales = profesionalDAO.search(keyword);
+		}
+		request.setAttribute("listaProfesionales", listaProfesionales);
+		
 	}
 }

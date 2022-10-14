@@ -40,17 +40,19 @@ public class UsuarioInternoServicios {
 		
 		if(loginResult) {
 			String homepage = null;
-			request.getSession().setAttribute("userLogin", login);
+			request.getSession().setAttribute("userLogin", login);			
 			UsuarioInterno usuario = usuarioInternoDAO.get(login);
+			String rol = usuario.getRol();
+			request.getSession().setAttribute("rol", rol);
 			
-			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
+			if(rol.equals(Rol.ADMINISTRADOR.toString())) {
 				homepage = "/admin/";
-			} else if(usuario.getRol().equals(Rol.SUPERVISOR.toString())) {
+			} else if(rol.equals(Rol.SUPERVISOR.toString())) {
 				homepage = "/supervisor/";
-			} else if(usuario.getRol().equals(Rol.CIUDADANO.toString())) {
-				homepage = "/frontend/inicio/";
-			} else if(usuario.getRol().equals(Rol.PROFESIONAL.toString())) {
-				homepage = "/frontend/profesional/";
+			} else if(rol.equals(Rol.CIUDADANO.toString())) {
+				homepage = "/inicio/";
+			} else if(rol.equals(Rol.PROFESIONAL.toString())) {
+				homepage = "/profesional/";
 			}
 			
 			//RequestDispatcher requestDispatcher = request.getRequestDispatcher(homepage);
@@ -59,7 +61,7 @@ public class UsuarioInternoServicios {
 		} else {
 			String message = "Error de inicio de sesión";
 			request.setAttribute("message", message);
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("frontend/login.jsp");
 			requestDispatcher.forward(request, response);
 		}
 	}

@@ -47,4 +47,11 @@
 <!-- 	<location>/error/500.jsp</location> -->
 <!--   </error-page>  -->
  
+ <context-param> 
+   <description>Location to store uploaded images</description> 
+   <param-name>image-upload</param-name> 
+   <param-value>
+      C:\Apache Software Foundation\Tomcat 9.0\webapps\data\img\
+   </param-value> 
+ </context-param>
 </web-app>

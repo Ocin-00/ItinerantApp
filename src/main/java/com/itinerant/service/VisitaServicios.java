@@ -1,7 +1,10 @@
 package com.itinerant.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +37,8 @@ public class VisitaServicios {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private VisitaDAO visitaDAO;
-	
+	private final String IMAGE_FOLDER = "C:/Users/Nico/git/repository/ItinerantApp/src/main/webapp/img/"; //Si se cambia esta ruta cambiar la de visita.setImagenRuta();
+	//private final String IMAGE_FOLDER = "../../../../webapp/img/";
 	
 	
 	public VisitaServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
@@ -50,7 +54,6 @@ public class VisitaServicios {
 	
 	public void listarVisitas(String message) throws ServletException, IOException {
 		String login = (String) request.getSession().getAttribute("userLogin");
-		System.out.println(login);
 		List<Visita> visitas = visitaDAO.listAllByLogin(login);
 		
 		request.setAttribute("visitas", visitas);
@@ -58,7 +61,7 @@ public class VisitaServicios {
 			request.setAttribute("message", message);
 		}
 		
-		String homepage = "index.jsp";
+		String homepage = "../frontend/profesional/lista_visitas.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
 		dispatcher.forward(request, response);
 	}
@@ -77,7 +80,7 @@ public class VisitaServicios {
 		request.setAttribute("listaCategorias", categorias);
 		request.setAttribute("listaLocalidades", localidades);
 		
-		String homepage = "visita_form.jsp";
+		String homepage = "../frontend/profesional/visita_form.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
 		dispatcher.forward(request, response);
 	}
@@ -92,7 +95,7 @@ public class VisitaServicios {
 	}
 
 	private boolean hayIncompatibilidades() {
-		return false;
+		return false; //COMPLETAR
 	}
 
 	private Visita inicializarDatos() throws IOException, ServletException {
@@ -103,7 +106,7 @@ public class VisitaServicios {
 		String horaInicioTexto = request.getParameter("horaInicio");
 		String horaFinTexto = request.getParameter("horaFin");
 		String descripcion = request.getParameter("descripcion");
-		int desplazamiento = Integer.parseInt(request.getParameter("desplazamiento"));
+		double desplazamiento = Double.parseDouble(request.getParameter("desplazamiento"));
 		double precio = Double.parseDouble(request.getParameter("precio"));
 		
 		System.out.println(horaInicioTexto);
@@ -141,9 +144,18 @@ public class VisitaServicios {
 			byte[] imageBytes = new byte[(int) size];
 			
 			InputStream inputStream = part.getInputStream();
-			inputStream.read(imageBytes);
+			String nombreImagen = nombrarImagen();
+			String src = IMAGE_FOLDER + nombreImagen;
+			OutputStream outputStream = new FileOutputStream(src);
+			int length; 
+			
+			while ((length = inputStream.read(imageBytes)) != -1) {
+				outputStream.write(imageBytes, 0, length);
+			}
+
 			inputStream.close();
-			visita.setImagen(imageBytes);
+			outputStream.close();
+			visita.setImagenRuta("../img/" + nombreImagen);
 		}
 		
 		String[] categoriasId = request.getParameterValues("categorias");
@@ -157,6 +169,55 @@ public class VisitaServicios {
 		}
 		
 		return visita;
+	}
+
+	private String nombrarImagen() {
+		return "img" + new File(IMAGE_FOLDER).list().length + ".jpg";
+	}
+
+	public void VerVisita() throws ServletException, IOException {
+		int visitaId = Integer.parseInt(request.getParameter("id"));
+		Visita visita = visitaDAO.get(visitaId);
+		request.setAttribute("visita", visita);
+		
+		String homepage = "../frontend/profesional/ver_visita.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		dispatcher.forward(request, response);
+	}
+	
+	public void vistaEdicionVisita() throws ServletException, IOException {
+		CategoriaDAO categoriaDAO = new CategoriaDAO(entityManager);
+		List<Categoria> categorias = categoriaDAO.listAll();
+		request.setAttribute("listaCategorias", categorias);
+		
+		int visitaId = Integer.parseInt(request.getParameter("id"));
+		Visita visita = visitaDAO.get(visitaId);
+		request.setAttribute("visita", visita);
+		
+		String homepage = "../frontend/profesional/visita_form.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		dispatcher.forward(request, response);
+	}
+
+	public void actualizarVisita() throws IOException, ServletException {
+		Visita visita= inicializarDatos();
+		int idVisita = Integer.parseInt(request.getParameter("id"));
+		visita.setIdVisita(idVisita);
+		if(!hayIncompatibilidades()) {
+			visitaDAO.update(visita);
+			listarVisitas("La visita ha sido modificada con éxito");
+		}
+		listarVisitas("La visita no se ha podido modificar");	
+	}
+
+	public void buscar(String keyword) {
+		List<Visita> listaVisitas = null;
+		if(keyword.equals("")) {
+			listaVisitas = visitaDAO.listAll();
+		} else {
+			listaVisitas = visitaDAO.search(keyword);
+		}
+		request.setAttribute("listaVisitas", listaVisitas);
 	}
 
 }

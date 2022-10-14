@@ -13,22 +13,22 @@
 			Editar supervisor
 		</c:if>
 	</title>
-	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
-	<jsp:directive.include file="header.jsp" />
+	<jsp:directive.include file="/frontend/header_user.jsp"/>
 
-	<div align="center" id="horizontalsplit">
+	<div id="main">
 		<c:if test="${supervisor == null}">
 			<form action="crear_supervisor" method="post" id="supervisorForm">
 		</c:if>	
 		<c:if test="${supervisor != null}">
 			<form action="actualizar_supervisor" method="post" id="supervisorForm">
 		</c:if>
-			<div class="left">
-				<table align="center" class="form">
+			<div>
+				<table>
 					<tr>
 						<td>Nombre:</td>
 						<td>Apellidos:</td>
@@ -77,8 +77,8 @@
 				</table>
 			</div>
 
-			<div class="right">
-				<table align="center" class="form">
+			<div>
+				<table>
 					<tr>
 						<td>Email:</td>
 						<td>Nombre de usuario:</td>
@@ -132,7 +132,7 @@
 					</tr>
 				</table>
 	
-				<table align="left">
+				<table>
 					<tr>
 						<td>Por favor, elija el nivel de acceso:</td>
 					</tr>

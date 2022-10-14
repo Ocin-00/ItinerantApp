@@ -1,0 +1,167 @@
+@charset "ISO-8859-1";
+
+#header {
+	grid-row-start: 1;
+	border-bottom: 1px solid black;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding-right: 10px;
+}
+
+.header-items * {
+	min-height: 35px;
+	max-height: 35px;
+}
+
+.dropdown {
+	display: inline-block;
+	position: relative;
+}
+
+.dropdown-content {
+	background-color: white;
+	margin: auto;
+	display: none;
+	position: absolute;
+	width: 100%;
+	min-width: 105px;
+	min-height: 40px;
+	overflow: auto;
+	box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.4);
+	right: 20%;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+.dropdown-content a {
+	display: block;
+	color: #000000;
+	padding: 5px;
+	text-decoration: none;
+	text-align: center;
+}
+
+.dropdown-content a:hover {
+	background-color: #f2f2f2;
+}
+
+.dropdown-button {
+	display: none;
+}
+
+#ajustes {
+	margin-right: 10px;
+}
+
+#main-centered {
+	grid-row-start: 2;
+	grid-row-end: 3;
+	min-height: 70vh;
+	margin: auto;
+}
+
+#main{
+	grid-template-columns: 1fr 7fr;
+	grid-template-rows: 1fr;
+	display: grid;
+	min-height: 70vh;
+}
+
+#side-menu{
+	grid-column-start: 1;
+	border-right: 1px solid black;	
+	
+}
+
+#side-menu a {
+  	display: block;
+  	color: #000000;
+  	padding-top: 5px;
+  	padding-bottom: 5px;
+  	text-decoration: none;
+  	text-align: left; 
+  	padding-left: 25px;
+  	border-top: 1px solid grey;
+  	border-bottom: 1px solid grey
+}
+
+#side-menu h3{
+	padding-left: 10px;
+}
+
+#side-menu a:hover {
+	background-color: #f2f2f2;
+}
+
+#main-content{
+	grid-column-start: 2;
+	margin-top: 50px;
+	margin-left: 50px;
+	margin-right: auto;
+}
+.main-button {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#footer {
+	background: rgb(80, 131, 66);
+	grid-row-start: 3;
+	grid-row-end: 4;
+	color: rgb(190, 190, 190);
+	padding-top: 20px;
+}
+
+#footer a:link {
+	color: rgb(190, 190, 190);
+	text-decoration: underline;
+}
+
+#footer a:hover {
+	color: blue;
+	text-decoration: underline;
+}
+
+body {
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 6fr 1fr;
+	display: grid;
+	margin: auto;
+}
+
+table {
+	border: 0px solid black;
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 8px;
+}
+
+th {
+	background: white;
+	color: black;
+	font-size: larger;
+}
+
+table.form {
+	border: 1;
+	padding: 4px;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.error {
+	color: red;
+	margin: 5px;
+	font-size: 12px;
+	display:block;
+}
+
+input[type=file] {
+  visibility: hidden;
+}

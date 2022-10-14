@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class LogoutServlet
  */
-@WebServlet("/frontend/logout")
+@WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -22,9 +22,6 @@ public class LogoutServlet extends HttpServlet {
 		session.removeAttribute("userLogin");
 		
 		response.sendRedirect(request.getContextPath());
-		/*String homepage = "frontend/index.jsp";
-		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);*/
 	}
 
 }

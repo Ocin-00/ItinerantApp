@@ -1,6 +1,8 @@
 package com.itinerant.entity;
 // Generated 16 ago 2022 11:43:03 by Hibernate Tools 4.3.6.Final
 
+import java.beans.Transient;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +31,11 @@ import javax.persistence.TemporalType;
 	 @NamedQuery(name = "Visita.findAll", query = "SELECT v FROM Visita v"),
 	 @NamedQuery(name = "Visita.findAllByLogin", query = "SELECT v FROM Visita v WHERE v.profesional.login = :login"),
 	 @NamedQuery(name = "Visita.countAll", query = "SELECT count(*) FROM Visita v"),
+	 @NamedQuery(name = "Visita.search", query = "SELECT v FROM Visita v WHERE v.nombre = '%' || :keyword || '%'"
+	 											+ "OR v.descripcion = '%' || :keyword || '%'"
+	 											+ "OR v.localidad.nombre = '%' || :keyword || '%'"
+	 											+ "OR v.profesional.nombre = '%' || :keyword || '%'"
+	 											+ "OR v.profesional.apellidos = '%' || :keyword || '%'")
 })
 @Table(name = "visita", catalog = "itinerant_db")
 public class Visita implements java.io.Serializable {
@@ -43,7 +50,8 @@ public class Visita implements java.io.Serializable {
 	private int duracionCitas;
 	private double duracionDesplazamiento;
 	private double precio;
-	private byte[] imagen;
+	private String imagenRuta;
+	//private String base64Image;
 	private String nombre;
 	private Set<Categoria> categorias = new HashSet<Categoria>(0);
 	private Set<Cita> citas = new HashSet<Cita>(0);
@@ -66,7 +74,7 @@ public class Visita implements java.io.Serializable {
 	}
 
 	public Visita(Localidad localidad, Profesional profesional, Date fecha, Date horaInicio, Date horaFin,
-			String descripcion, int duracionCitas, double duracionDesplazamiento, double precio, byte[] imagen,
+			String descripcion, int duracionCitas, double duracionDesplazamiento, double precio, String imagenRuta,
 			String nombre, Set<Categoria> categorias, Set<Cita> citas) {
 		this.localidad = localidad;
 		this.profesional = profesional;
@@ -77,7 +85,7 @@ public class Visita implements java.io.Serializable {
 		this.duracionCitas = duracionCitas;
 		this.duracionDesplazamiento = duracionDesplazamiento;
 		this.precio = precio;
-		this.imagen = imagen;
+		this.imagenRuta = imagenRuta;
 		this.nombre = nombre;
 		this.categorias = categorias;
 		this.citas = citas;
@@ -181,13 +189,13 @@ public class Visita implements java.io.Serializable {
 		this.precio = precio;
 	}
 
-	@Column(name = "imagen")
-	public byte[] getImagen() {
-		return this.imagen;
+	@Column(name = "imagen_ruta")
+	public String getImagenRuta() {
+		return this.imagenRuta;
 	}
 
-	public void setImagen(byte[] imagen) {
-		this.imagen = imagen;
+	public void setImagenRuta(String imagenRuta) {
+		this.imagenRuta = imagenRuta;
 	}
 
 	@Column(name = "nombre", nullable = false, length = 50)
@@ -220,4 +228,17 @@ public class Visita implements java.io.Serializable {
 		this.citas = citas;
 	}
 
+	/*
+	@javax.persistence.Transient
+	public String getBase64Image() {
+		if(imagen != null) {
+			base64Image = Base64.getEncoder().encodeToString(this.imagen);
+		}
+		return base64Image;
+	}
+	
+	@javax.persistence.Transient
+	public void setBase64Image(String base64Image) {
+		this.base64Image = base64Image;
+	}*/
 }

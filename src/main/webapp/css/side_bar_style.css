@@ -1,0 +1,41 @@
+@charset "ISO-8859-1";
+
+#main-side-bar{
+	grid-template-columns: 1fr 7fr;
+	grid-template-rows: 1fr;
+	display: grid;
+	min-height: 70vh;
+}
+
+#side-menu{
+	grid-column-start: 1;
+	border-right: 1px solid black;	
+	
+}
+
+#side-menu a {
+  	display: block;
+  	color: #000000;
+  	padding-top: 5px;
+  	padding-bottom: 5px;
+  	text-decoration: none;
+  	text-align: left; 
+  	padding-left: 25px;
+  	border-top: 1px solid grey;
+  	border-bottom: 1px solid grey
+}
+
+#side-menu h3{
+	padding-left: 10px;
+}
+
+#side-menu a:hover {
+	background-color: #f2f2f2;
+}
+
+#main-content{
+	grid-column-start: 2;
+	margin-top: 50px;
+	margin-left: 50px;
+	margin-right: auto;
+}

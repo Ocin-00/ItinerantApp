@@ -6,14 +6,14 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Login</title>
-	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
-	<div align="center">
-		<h2>Bienvenido:</h2>
+	<div id="main-centered" align="center">
+		<h1>Bienvenido:</h1>
 		<c:if test="${message != null}">
 			<div><h4>${message}</h4></div>
 		</c:if>
@@ -28,11 +28,11 @@
 					<th><input type="password" name="password" id="password" size="10"><br/></th>
 				</tr>
 			</table>
-			<div>
+			<div class="main-button">
 				<button type="submit">Iniciar sesión</button>	
 			</div>
 		</form>
-	</div>
+		</div>
 	<jsp:directive.include file="footer.jsp"/>
 </body>
 <script type="text/javascript">

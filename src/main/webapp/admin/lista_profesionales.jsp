@@ -6,50 +6,49 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Itinerant - Administración</title>
-	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
+<style>
+	#side-menu a:nth-child(2){ background-color: #e0e0e0 }
+</style>
 <body>
-	<jsp:directive.include file="header.jsp"/>
-	<h4>Administración</h4>
-	<ul class="menu">
-	  <li><a href="lista_profesionales" class="active">Profesionales</a>
-	  <li><a href="lista_certificados">Certificados</a>
-	  <li><a href="lista_supervisores">Supervisores</a>
-	</ul>
-	
-	<h3>Profesionales pendientes de verificación</h3>
-	<div>
-		<table border="1">
-			<tr>
-				<th>Índice</th>
-				<th>Nombre</th>
-				<th>Apellidos</th>
-				<th>Login</th>
-				<th>Email</th>
-				<th>Teléfono</th>
-				<th>Fecha de Registro</th>
-				<th>Acciones</th>
-			</tr>
-			<c:forEach var="profesional" items="${profesionalesSinValidar}" varStatus="status">
+	<jsp:directive.include file="/frontend/header_user.jsp"/>
+	<div id="main">	
+		<jsp:directive.include file="side_menu.jsp"/>
+		
+		<div id="main-content">
+			<h2>Profesionales pendientes de verificación</h2>
+			<table border="1">
 				<tr>
-					<td>${status.index + 1}</td>
-					<td>${profesional.nombre}</td>
-					<td>${profesional.apellidos}</td>
-					<td>${profesional.login}</td>
-					<td>${profesional.email}</td>
-					<td>${profesional.telefono}</td>
-					<td>${profesional.fechaRegistro}</td>
-					<td align="center">
-						<a href="javascript:void(0);" class="validateLink" id="${profesional.login}">Validar</a> |
-						<a href="javascript:void(0);" class="deleteLink" id="${profesional.login}">Anular</a>
-					</td>
+					<th>Índice</th>
+					<th>Nombre</th>
+					<th>Apellidos</th>
+					<th>Login</th>
+					<th>Email</th>
+					<th>Teléfono</th>
+					<th>Fecha de Registro</th>
+					<th>Acciones</th>
 				</tr>
-			</c:forEach>
-		</table>
+				<c:forEach var="profesional" items="${profesionalesSinValidar}" varStatus="status">
+					<tr>
+						<td>${status.index + 1}</td>
+						<td>${profesional.nombre}</td>
+						<td>${profesional.apellidos}</td>
+						<td>${profesional.login}</td>
+						<td>${profesional.email}</td>
+						<td>${profesional.telefono}</td>
+						<td>${profesional.fechaRegistro}</td>
+						<td align="center">
+							<a href="javascript:void(0);" class="validateLink" id="${profesional.login}">Validar</a> |
+							<a href="javascript:void(0);" class="deleteLink" id="${profesional.login}">Anular</a>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</div>
 	</div>
-	
 	
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>

@@ -106,4 +106,7 @@ public class Localidad implements java.io.Serializable {
 		this.visitas = visitas;
 	}
 
+	public String toString() {
+		return this.nombre;
+	}
 }
