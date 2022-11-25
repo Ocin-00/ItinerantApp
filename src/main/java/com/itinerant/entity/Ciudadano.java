@@ -34,6 +34,7 @@ public class Ciudadano extends UsuarioInterno {
 	private String estadoCivil;
 	private String formacion;
 	private String telefono;
+	//private String direccion;
 	private Set<Cita> citas = new HashSet<Cita>(0);
 
 	public Ciudadano() {
@@ -48,8 +49,9 @@ public class Ciudadano extends UsuarioInterno {
 
 	public Ciudadano(String login, String password, String email, String nombre, 
 			String apellidos, Date fechaNac,String localizacion, int diasSancion, String sexo,
-			String estadoCivil, String formacion, String telefono,byte[] fotoPerfil, Set<Cita> citas,
-			Set<Chat> chatsForUsuarioFuente, Set<Alerta> alertas, Set<Chat> chatsForUsuarioDestino) {
+			String estadoCivil, String formacion, String telefono, byte[] fotoPerfil, 
+			Set<Cita> citas, Set<Chat> chatsForUsuarioFuente, Set<Alerta> alertas, 
+			Set<Chat> chatsForUsuarioDestino) {
 		super(login, password, email, nombre, apellidos, Rol.CIUDADANO.toString(), fechaNac, fotoPerfil, chatsForUsuarioFuente, alertas, 
 				chatsForUsuarioDestino);
 		this.localizacion = localizacion;
@@ -114,7 +116,16 @@ public class Ciudadano extends UsuarioInterno {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
+	/*
+	@Column(name = "direccion", length = 100)
+	public String getDireccion() {
+		return this.direccion;
+	}
 
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+	*/
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ciudadano")
 	public Set<Cita> getCitas() {
 		return this.citas;

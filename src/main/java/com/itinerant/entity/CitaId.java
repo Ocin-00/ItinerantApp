@@ -1,7 +1,6 @@
 package com.itinerant.entity;
-// Generated 5 jul 2022 14:47:27 by Hibernate Tools 4.3.6.Final
+// Generated 10 nov 2022 18:51:10 by Hibernate Tools 4.3.6.Final
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -11,46 +10,24 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class CitaId implements java.io.Serializable {
 
-	private String idProfesional;
-	private int idLocalidad;
-	private Date fecha;
+	private int idVisita;
 	private String idCiudadano;
 
 	public CitaId() {
 	}
 
-	public CitaId(String idProfesional, int idLocalidad, Date fecha, String idCiudadano) {
-		this.idProfesional = idProfesional;
-		this.idLocalidad = idLocalidad;
-		this.fecha = fecha;
+	public CitaId(int idVisita, String idCiudadano) {
+		this.idVisita = idVisita;
 		this.idCiudadano = idCiudadano;
 	}
 
-	@Column(name = "id_profesional", nullable = false, length = 30)
-	public String getIdProfesional() {
-		return this.idProfesional;
+	@Column(name = "id_visita", nullable = false)
+	public int getIdVisita() {
+		return this.idVisita;
 	}
 
-	public void setIdProfesional(String idProfesional) {
-		this.idProfesional = idProfesional;
-	}
-
-	@Column(name = "id_localidad", nullable = false)
-	public int getIdLocalidad() {
-		return this.idLocalidad;
-	}
-
-	public void setIdLocalidad(int idLocalidad) {
-		this.idLocalidad = idLocalidad;
-	}
-
-	@Column(name = "fecha", nullable = false, length = 10)
-	public Date getFecha() {
-		return this.fecha;
-	}
-
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+	public void setIdVisita(int idVisita) {
+		this.idVisita = idVisita;
 	}
 
 	@Column(name = "id_ciudadano", nullable = false, length = 30)
@@ -71,23 +48,15 @@ public class CitaId implements java.io.Serializable {
 			return false;
 		CitaId castOther = (CitaId) other;
 
-		return ((this.getIdProfesional() == castOther.getIdProfesional())
-				|| (this.getIdProfesional() != null && castOther.getIdProfesional() != null
-						&& this.getIdProfesional().equals(castOther.getIdProfesional())))
-				&& (this.getIdLocalidad() == castOther.getIdLocalidad())
-				&& ((this.getFecha() == castOther.getFecha()) || (this.getFecha() != null
-						&& castOther.getFecha() != null && this.getFecha().equals(castOther.getFecha())))
-				&& ((this.getIdCiudadano() == castOther.getIdCiudadano())
-						|| (this.getIdCiudadano() != null && castOther.getIdCiudadano() != null
-								&& this.getIdCiudadano().equals(castOther.getIdCiudadano())));
+		return (this.getIdVisita() == castOther.getIdVisita()) && ((this.getIdCiudadano() == castOther.getIdCiudadano())
+				|| (this.getIdCiudadano() != null && castOther.getIdCiudadano() != null
+						&& this.getIdCiudadano().equals(castOther.getIdCiudadano())));
 	}
 
 	public int hashCode() {
 		int result = 17;
 
-		result = 37 * result + (getIdProfesional() == null ? 0 : this.getIdProfesional().hashCode());
-		result = 37 * result + this.getIdLocalidad();
-		result = 37 * result + (getFecha() == null ? 0 : this.getFecha().hashCode());
+		result = 37 * result + this.getIdVisita();
 		result = 37 * result + (getIdCiudadano() == null ? 0 : this.getIdCiudadano().hashCode());
 		return result;
 	}

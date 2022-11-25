@@ -12,8 +12,22 @@
 </head>
 <body>
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
-	<jsp:directive.include file="../side_menu.jsp"/>
-	
+	<div id = "main">
+		<c:if test="${sessionScope.rol == 'ADMINISTRADOR'}">
+			<jsp:directive.include file="/../admin/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'PROFESIONAL'}">
+			<jsp:directive.include file="/../frontend/profesional/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'CIUDADANO'}">
+			<jsp:directive.include file="../frontend/inicio/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'SUPERVISOR'}">
+			<jsp:directive.include file="../supervisor/side_menu.jsp"/>
+		</c:if>
+		
+		<jsp:directive.include file="/frontend/busqueda.jsp"/>
+	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
 </html>

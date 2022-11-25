@@ -30,7 +30,7 @@ public class BuscarServlet extends BaseServlet {
 		if(request.getSession().getAttribute("userLogin") != null) {
 			homepage = "../frontend/busqueda_interna.jsp";
 		}
-		
+		request.setAttribute("keyword", keyword);
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
 		dispatcher.forward(request, response);
 	}

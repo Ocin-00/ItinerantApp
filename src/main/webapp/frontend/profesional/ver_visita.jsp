@@ -17,7 +17,7 @@
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
 	<div id="main">
 		<jsp:directive.include file="side_menu.jsp"/>
-		<div id="main-content">
+		<div id="main-content-items">
 			<div>
 				<h2>Detalles de la visita</h2>
 				<table>
@@ -57,18 +57,22 @@
 				<table border="1">
 					<tr>
 						<th>Índice</th>
-						<th>Hora</th>
 						<th>Cliente</th>
+						<th>Visita</th>
+						<th>Fecha</th>
+						<th>Hora</th>
 						<th>Acciones</th>
 					</tr>
-					<c:forEach var="visita" items="${citas}" varStatus="status">
+					<c:forEach var="cita" items="${citas}" varStatus="status">
 						<tr>
 							<td>${status.index + 1}</td>
-							<td>${cita.horaInicio}</td>
 							<td>${cita.ciudadano}</td>
+							<td>${cita.visita.nombre}</td>
+							<td>${cita.visita.fecha}</td>
+							<td>${cita.horaInicio}</td>
 							<td align="center">
-								<a href="ver_cita?visita=${visita.idVisita}&id=${cita.ciudadano.login}">Ver detalles</a> |
-								<a href="javascript:void(0);" class="deleteLink" id="${cita.ciudadano.login}">Cancelar</a>
+								<a href="ver_detalles">Detalles</a> |
+								<a href="anular_cita">Anular</a>
 							</td>
 						</tr>
 					</c:forEach>

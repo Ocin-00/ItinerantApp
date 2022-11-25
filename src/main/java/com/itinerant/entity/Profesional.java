@@ -21,11 +21,13 @@ import com.itinerant.enums.Rol;
 @NamedQueries({
 	 @NamedQuery(name = "Profesional.findAll", query = "SELECT p FROM Profesional p ORDER BY p.apellidos"),
 	 @NamedQuery(name = "Profesional.findAllNotValid", query = "SELECT p FROM Profesional p WHERE p.validez is not true ORDER BY p.fechaRegistro"),
+	 @NamedQuery(name = "Profesional.findAllValid", query = "SELECT p FROM Profesional p WHERE p.validez is true"),
 	 @NamedQuery(name = "Profesional.findByEmail", query = "SELECT p FROM Profesional p WHERE p.email = :email"),
 	 @NamedQuery(name = "Profesional.countAll", query = "SELECT count(*) FROM Profesional p"),
 	 @NamedQuery(name = "Profesional.checkLogin", query = "SELECT p FROM Profesional p WHERE p.login = :login AND p.password = :password"),
-	 @NamedQuery(name = "Profesional.search", query = "SELECT p FROM Profesional p WHERE p.nombre = '%' || :keyword || '%'"
-				+ "OR p.apellidos = '%' || :keyword || '%'"),
+	 @NamedQuery(name = "Profesional.search", query = "SELECT p FROM Profesional p WHERE (p.nombre LIKE '%' || :keyword || '%'"
+													+ "OR p.apellidos LIKE '%' || :keyword || '%')"
+													+ "AND p.validez is true"),
 })
 @Table(name = "profesional", catalog = "itinerant_db")
 public class Profesional extends UsuarioInterno {

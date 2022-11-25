@@ -2,6 +2,7 @@ package com.itinerant.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -100,6 +101,13 @@ class VisitaDAOTest {
 		assertTrue(visitas.size() > 0);
 	}
 	
+	@Test
+	public void testSearch() {
+		String keyword = "fisiología";
+		List<Visita> visitas = visitaDAO.search(keyword);
+		
+		assertEquals(1, visitas.size());
+	}
 	
 	@AfterAll
 	public static void tearDownClass() {

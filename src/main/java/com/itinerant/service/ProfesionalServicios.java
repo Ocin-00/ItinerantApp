@@ -57,7 +57,7 @@ public class ProfesionalServicios {
 	public void buscar(String keyword) {
 		List<Profesional> listaProfesionales = null;
 		if(keyword.equals("")) {
-			listaProfesionales = profesionalDAO.listAll();
+			listaProfesionales = profesionalDAO.listAllValid();
 		} else {
 			listaProfesionales = profesionalDAO.search(keyword);
 		}

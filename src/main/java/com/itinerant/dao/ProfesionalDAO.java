@@ -52,6 +52,10 @@ public class ProfesionalDAO extends JpaDAO<Profesional> implements GenericDAO<Pr
 	public List<Profesional> listAllNotValid() {
 		return super.findWithNamedQuery("Profesional.findAllNotValid");
 	}
+	
+	public List<Profesional> listAllValid() {
+		return super.findWithNamedQuery("Profesional.findAllValid");
+	}
 
 	@Override
 	public long count() {

@@ -7,8 +7,8 @@
 	<meta charset="ISO-8859-1">
 	<title>Login</title>
 	<link rel="stylesheet" href="css/layout.css">
-	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
-	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
@@ -39,7 +39,6 @@
 	$(document).ready(function(){
 		$("#loginForm").validate({
 				rules: {
-					
 					login: "required",
 					password: "required",
 				},

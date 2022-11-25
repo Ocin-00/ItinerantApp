@@ -12,7 +12,9 @@
 </head>
 <body>
 	<jsp:directive.include file="/frontend/header.jsp"/>
-	
+	<div id="main">
+		<jsp:directive.include file="/frontend/busqueda.jsp"/>
+	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
 </html>

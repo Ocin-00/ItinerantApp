@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Categoria;
+import com.itinerant.entity.Visita;
 
 
 public class CategoriaDAO extends JpaDAO<Categoria> implements GenericDAO<Categoria> {
@@ -51,5 +52,4 @@ public class CategoriaDAO extends JpaDAO<Categoria> implements GenericDAO<Catego
 	public long count() {
 		return super.countWithNamedQuery("Categoria.countAll");
 	}
-
 }

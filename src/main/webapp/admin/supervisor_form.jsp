@@ -188,8 +188,15 @@
 					nss: "required",
 					fechaNac: "required",
 					login: "required",
-					password: "required",
-					comfirmPassword: "required",
+					password: {
+			            required: true,
+			            minlength: 5
+			        },
+			        comfirmPassword: {
+			            required: true,
+			            minlength: 5,
+			            equalTo: "#password"
+			        },
 					nivelAcceso: "required"
 				},
 				
@@ -206,8 +213,15 @@
 					nss: "Por favor introduzca el número de la seguridad social del supervisor.",
 					fechaNac: "Por favor introduzca la fecha de nacimiento.",
 					login: "Por favor introduzca un nombre de usuario válido.",
-					password: "Por favor introduzca la contraseña.",
-					comfirmPassword: "Por favor repita la contraseña.",
+					password: {
+						required: "Por favor introduzca la contraseña.",
+						minlength: "Por favor, asegúrese de que la contraña tenga al menos 5 caracteres."
+					},
+					comfirmPassword: {
+						required: "Por favor repita la contraseña.",
+						minlength: "Por favor, asegúrese de que la contraña tenga al menos 5 caracteres.",
+						equalTo: "Los campos no coinciden."
+					},
 					nivelAcceso: "Por favor indique un nivel de acceso."
 				}
 			});

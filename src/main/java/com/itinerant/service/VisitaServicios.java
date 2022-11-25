@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -27,10 +28,12 @@ import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.dao.SupervisorDAO;
 import com.itinerant.dao.VisitaDAO;
 import com.itinerant.entity.Categoria;
+import com.itinerant.entity.Cita;
 import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
 import com.itinerant.entity.Supervisor;
 import com.itinerant.entity.Visita;
+import com.itinerant.enums.Rol;
 
 public class VisitaServicios {
 	private EntityManager entityManager;
@@ -73,16 +76,23 @@ public class VisitaServicios {
 	}
 
 	public void NuevaVisitaFormulario() throws ServletException, IOException {
-		CategoriaDAO categoriaDAO = new CategoriaDAO(entityManager);
-		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
-		List<Categoria> categorias = categoriaDAO.listAll();
-		List<Localidad> localidades = localidadDAO.listAll();
-		request.setAttribute("listaCategorias", categorias);
-		request.setAttribute("listaLocalidades", localidades);
-		
-		String homepage = "../frontend/profesional/visita_form.jsp";
-		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);
+		String login = (String) request.getSession().getAttribute("userLogin");
+		ProfesionalDAO profesionalDAO = new ProfesionalDAO(entityManager);
+		Profesional profesional = profesionalDAO.get(login);
+		if(profesional.getValidez()) {
+			CategoriaDAO categoriaDAO = new CategoriaDAO(entityManager);
+			LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
+			List<Categoria> categorias = categoriaDAO.listAll();
+			List<Localidad> localidades = localidadDAO.listAll();
+			request.setAttribute("listaCategorias", categorias);
+			request.setAttribute("listaLocalidades", localidades);
+			
+			String homepage = "../frontend/profesional/visita_form.jsp";
+			RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+			dispatcher.forward(request, response);
+		} else {
+			listarVisitas("Lo sentiemos, tiene que esperar a que su cuenta sea validada.");
+		}
 	}
 
 	public void crearVisita() throws ServletException, IOException {		
@@ -180,6 +190,9 @@ public class VisitaServicios {
 		Visita visita = visitaDAO.get(visitaId);
 		request.setAttribute("visita", visita);
 		
+		List<Cita> citas = new ArrayList(visita.getCitas());
+		request.setAttribute("citas", citas);
+		
 		String homepage = "../frontend/profesional/ver_visita.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
 		dispatcher.forward(request, response);
@@ -220,4 +233,57 @@ public class VisitaServicios {
 		request.setAttribute("listaVisitas", listaVisitas);
 	}
 
+	public void VerVisitaBusqueda() throws ServletException, IOException {
+		int visitaId = Integer.parseInt(request.getParameter("id"));
+		Visita visita = visitaDAO.get(visitaId);
+		request.setAttribute("visita", visita);
+		
+		List<Date> listaHorasPosibles = calcularHorarios(visita);
+		List<Cita> citasPedidas = new ArrayList(visita.getCitas());		
+		List<Date> listaHoras = calcularHorasDisponibles(listaHorasPosibles, citasPedidas);
+		request.setAttribute("listaHoras", listaHoras);
+		
+		String homepage = "frontend/inicio/busqueda_visita.jsp";
+		String rol = (String) request.getSession().getAttribute("rol");
+		if(rol == null) {
+			request.setAttribute("esCiudadano", false);
+		} else if(rol.equals(Rol.CIUDADANO.toString())) {
+			request.setAttribute("esCiudadano", true);
+			homepage = "../frontend/inicio/busqueda_visita.jsp";
+		} else {
+			request.setAttribute("esCiudadano", false);
+			homepage = "../frontend/inicio/busqueda_visita.jsp";
+		} 
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		dispatcher.forward(request, response);	
+	}
+
+	public List<Date> calcularHorarios(Visita v){
+		Date hora = new Date((long) (v.getHoraInicio().getTime()));
+		List<Date> horario = new ArrayList<>();
+		while(hora.before(v.getHoraFin())) {
+			horario.add(hora);
+			hora = new Date((long) (hora.getTime() + ((v.getDuracionCitas() + v.getDuracionDesplazamiento()) * 60 * 1000)));
+		}
+		return horario;
+	}
+	
+	public List<Date> calcularHorasDisponibles(List<Date> listaHorasPosibles, List<Cita> citasPedidas) {
+		List<Date> listaHoras = new ArrayList<>();
+		
+		for (int i = 0; i < listaHorasPosibles.size(); i++) {
+			boolean encontrado = false;
+			int j = 0; 
+			while (encontrado == false && j < citasPedidas.size()) {
+				encontrado = listaHorasPosibles.get(i).equals(citasPedidas.get(j).getHoraInicio());
+				j++;
+			}
+			if(!encontrado) {
+				listaHoras.add(listaHorasPosibles.get(i));
+			}
+		}
+		
+		return listaHoras;
+	}
 }

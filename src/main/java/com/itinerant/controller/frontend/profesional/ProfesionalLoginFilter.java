@@ -1,4 +1,4 @@
-package com.itinerant.controller.admin;
+package com.itinerant.controller.frontend.profesional;
 
 import java.io.IOException;
 
@@ -21,10 +21,10 @@ import javax.servlet.http.HttpSession;
 import com.itinerant.enums.Rol;
 import com.itinerant.service.UsuarioInternoServicios;
 
-@WebFilter("/admin/*")
-public class AdminLoginFilter extends HttpFilter implements Filter {
+@WebFilter("/profesional/*")
+public class ProfesionalLoginFilter extends HttpFilter implements Filter {
 
-    public AdminLoginFilter() {
+    public ProfesionalLoginFilter() {
         super();
     }
 
@@ -44,13 +44,13 @@ public class AdminLoginFilter extends HttpFilter implements Filter {
 			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ItinerantApp");
 			EntityManager entityManager = entityManagerFactory.createEntityManager();
 			UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, httpRequest, httpResponse);
-			Boolean esAdmin = usuarioInternoServicios.getRol(login).equals(Rol.ADMINISTRADOR.toString());
-			if(esAdmin) {
+			Boolean esProfesional = usuarioInternoServicios.getRol(login).equals(Rol.PROFESIONAL.toString());
+			if(esProfesional) {
 				chain.doFilter(request, response);
 			} else {
 				String message = "No tiene autorización para acceder.";
 				request.setAttribute("message", message);
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/admin/message.jsp");
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("../admin/message.jsp");
 				requestDispatcher.forward(request, response);
 			}
 		} else {

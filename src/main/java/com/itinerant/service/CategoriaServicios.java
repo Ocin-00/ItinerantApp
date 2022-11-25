@@ -20,7 +20,7 @@ public class CategoriaServicios {
 		this.response = response;		
 	}
 
-	public List<Categoria> listarCertificados() {
+	public List<Categoria> listarCategorias() {
 		return categoriaDAO.listAll();
 	}
 

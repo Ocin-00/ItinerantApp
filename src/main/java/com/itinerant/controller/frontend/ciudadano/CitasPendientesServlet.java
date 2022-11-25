@@ -1,4 +1,4 @@
-package com.itinerant.controller.admin;
+package com.itinerant.controller.frontend.ciudadano;
 
 import java.io.IOException;
 
@@ -9,14 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class AdminHomeServlet
- */
-@WebServlet("/admin/")
-public class AdminHomeServlet extends HttpServlet {
+import com.itinerant.controller.BaseServlet;
+import com.itinerant.service.CitaServicios;
+
+@WebServlet("/inicio/citas_pendientes")
+public class CitasPendientesServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public AdminHomeServlet() {
+
+	public CitasPendientesServlet() {
         super();
     }
 
@@ -26,9 +26,8 @@ public class AdminHomeServlet extends HttpServlet {
 	}
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String homepage = "index.jsp";
-		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);
+		CitaServicios citaServicios = new CitaServicios(entityManager, request, response);
+		citaServicios.listarCitasPendientes();
 	}
 
 }

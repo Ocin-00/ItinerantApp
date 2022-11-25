@@ -31,11 +31,12 @@ import javax.persistence.TemporalType;
 	 @NamedQuery(name = "Visita.findAll", query = "SELECT v FROM Visita v"),
 	 @NamedQuery(name = "Visita.findAllByLogin", query = "SELECT v FROM Visita v WHERE v.profesional.login = :login"),
 	 @NamedQuery(name = "Visita.countAll", query = "SELECT count(*) FROM Visita v"),
-	 @NamedQuery(name = "Visita.search", query = "SELECT v FROM Visita v WHERE v.nombre = '%' || :keyword || '%'"
-	 											+ "OR v.descripcion = '%' || :keyword || '%'"
-	 											+ "OR v.localidad.nombre = '%' || :keyword || '%'"
-	 											+ "OR v.profesional.nombre = '%' || :keyword || '%'"
-	 											+ "OR v.profesional.apellidos = '%' || :keyword || '%'")
+	 @NamedQuery(name = "Visita.search", query = "SELECT v FROM Visita v WHERE v.nombre LIKE '%' || :keyword || '%'"
+	 											+ "OR v.descripcion LIKE '%' || :keyword || '%'"
+	 											+ "OR v.localidad.nombre LIKE '%' || :keyword || '%'"
+	 											+ "OR v.profesional.nombre LIKE '%' || :keyword || '%'"
+	 											+ "OR v.profesional.apellidos LIKE '%' || :keyword || '%'")
+	 											//+ "OR '%' || :keyword || '%' IN v.categorias")
 })
 @Table(name = "visita", catalog = "itinerant_db")
 public class Visita implements java.io.Serializable {
@@ -51,7 +52,6 @@ public class Visita implements java.io.Serializable {
 	private double duracionDesplazamiento;
 	private double precio;
 	private String imagenRuta;
-	//private String base64Image;
 	private String nombre;
 	private Set<Categoria> categorias = new HashSet<Categoria>(0);
 	private Set<Cita> citas = new HashSet<Cita>(0);
@@ -227,18 +227,4 @@ public class Visita implements java.io.Serializable {
 	public void setCitas(Set<Cita> citas) {
 		this.citas = citas;
 	}
-
-	/*
-	@javax.persistence.Transient
-	public String getBase64Image() {
-		if(imagen != null) {
-			base64Image = Base64.getEncoder().encodeToString(this.imagen);
-		}
-		return base64Image;
-	}
-	
-	@javax.persistence.Transient
-	public void setBase64Image(String base64Image) {
-		this.base64Image = base64Image;
-	}*/
 }
