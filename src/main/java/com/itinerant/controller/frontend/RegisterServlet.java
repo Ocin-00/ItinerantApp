@@ -24,8 +24,7 @@ public class RegisterServlet extends BaseServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, request, response);
-		usuarioInternoServicios.register();
+		doGet(request, response);
 	}
 
 }

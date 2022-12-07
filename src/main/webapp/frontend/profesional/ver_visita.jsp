@@ -53,31 +53,44 @@
 					</tr>
 				</table>
 			</div>
-			<div>
-				<table border="1">
-					<tr>
-						<th>Índice</th>
-						<th>Cliente</th>
-						<th>Visita</th>
-						<th>Fecha</th>
-						<th>Hora</th>
-						<th>Acciones</th>
-					</tr>
-					<c:forEach var="cita" items="${citas}" varStatus="status">
+			<c:if test="${numeroCitas > 0}">
+				<div>
+					<c:if test="${message != null}">
+						<h3>${message}</h3>
+					</c:if>
+					<table border="1">
 						<tr>
-							<td>${status.index + 1}</td>
-							<td>${cita.ciudadano}</td>
-							<td>${cita.visita.nombre}</td>
-							<td>${cita.visita.fecha}</td>
-							<td>${cita.horaInicio}</td>
-							<td align="center">
-								<a href="ver_detalles">Detalles</a> |
-								<a href="anular_cita">Anular</a>
-							</td>
+							<th>Índice</th>
+							<th>Cliente</th>
+							<th>Visita</th>
+							<th>Fecha</th>
+							<th>Hora</th>
+							<th>Acciones</th>
 						</tr>
-					</c:forEach>
-				</table>
-			</div>
+						<c:forEach var="cita" items="${citas}" varStatus="status">
+							<tr>
+								<td>${status.index + 1}</td>
+								<td>${cita.ciudadano}</td>
+								<td>${cita.visita.nombre}</td>
+								<td>${cita.visita.fecha}</td>
+								<td>${cita.horaInicio}</td>
+								<td align="center">
+									<a href="ver_cita?id=${visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a> |
+									<a href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular</a>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+				</div>
+			</c:if>
+			<c:if test="${pasadoTiempoLimite == true}">
+				<div>
+					<div>
+						<label>Describa la urgencia:</label>
+					</div>
+					<textarea rows="5" cols="50" name="urgencia" id="urgencia"></textarea>
+				</div>
+			</c:if>
 			<div>
 				<button  onclick="location.href='editar_visita?id=${visita.idVisita}';">Editar</button>
 			</div>
@@ -89,10 +102,10 @@
 		$(document).ready(function() {
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
-					id = $(this).attr("id");
-					id = $(this).attr("visita");
-					if(confirm("¿Desea eliminar la cita del usuario " + id + "?")) {
-						window.location = "borrar_cita?visita=" + visita + "&id=" + id;
+					login = $(this).attr("id");
+					idVisita = $(this).attr("visita");
+					if(confirm("¿Desea eliminar la cita del usuario " + login + "?")) {
+						window.location = "anular_cita?id=" + idVisita + "&login=" + login;
 					}
 				});
 			});

@@ -5,14 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Itinerant - Citas Pendientes</title>
-	<link rel="stylesheet" href="../css/layout.css">
-	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
-	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+<meta charset="ISO-8859-1">
+<title>Itinerant - Citas Pendientes</title>
+<link rel="stylesheet" href="../css/layout.css">
 </head>
 <style>
-	#side-menu a:nth-child(2){ background-color: #e0e0e0 }
+	#side-menu a:nth-child(3){ background-color: #e0e0e0 }
 </style>
 <body>
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
@@ -20,7 +18,7 @@
 	<div id="main">
 		<jsp:directive.include file="side_menu.jsp"/>
 		<div id="main-content">
-		<h3>Citas pendientes</h3>
+		<h3>Historial de citas</h3>
 		<table border="1">
 			<tr>
 				<th>Índice</th>
@@ -43,10 +41,10 @@
 						String hora = format.format(pageContext.getAttribute("hora"));
 						out.println(hora);  
 						%></td>
+					</td>
 					<td>${cita.visita.profesional.telefono}</td>
 					<td align="center">
-						<a href="detalles_cita_pendiente?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a> |
-						<a href="javascript:void(0);" class="deleteLink" id="${cita.visita.idVisita}">Anular</a>
+						<a href="detalles_cita_historial?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a>
 					</td>
 				</tr>
 			</c:forEach>
@@ -57,17 +55,4 @@
 	
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
-<script type="text/javascript">
-		$(document).ready(function() {
-			$(".deleteLink").each(function() {
-				$(this).on("click", function() {
-					idVisita = $(this).attr("id");
-					login = "${sessionScope.userLogin}";
-					if(confirm("¿Desea eliminar esta cita?")) {
-						window.location = "anular_cita?id=" + idVisita + "&login=" + login;
-					}
-				});
-			});
-		});
-	</script>
 </html>

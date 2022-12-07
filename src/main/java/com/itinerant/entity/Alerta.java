@@ -25,29 +25,30 @@ import javax.persistence.Table;
 @Table(name = "alerta", catalog = "itinerant_db")
 public class Alerta implements java.io.Serializable {
 
-	private int idAlerta;
+	private Integer idAlerta;
 	private UsuarioInterno usuarioInterno;
 	private String titulo;
 	private String cuerpo;
+	private boolean visto;
 
 	public Alerta() {
 	}
 
-	public Alerta(int idAlerta, UsuarioInterno usuarioInterno, String titulo, String cuerpo) {
-		this.idAlerta = idAlerta;
+	public Alerta(UsuarioInterno usuarioInterno, String titulo, String cuerpo, boolean visto) {
 		this.usuarioInterno = usuarioInterno;
 		this.titulo = titulo;
 		this.cuerpo = cuerpo;
+		this.visto = visto;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id_alerta", unique = true, nullable = false)
-	public int getIdAlerta() {
+	public Integer getIdAlerta() {
 		return this.idAlerta;
 	}
 
-	public void setIdAlerta(int idAlerta) {
+	public void setIdAlerta(Integer idAlerta) {
 		this.idAlerta = idAlerta;
 	}
 
@@ -70,13 +71,22 @@ public class Alerta implements java.io.Serializable {
 		this.titulo = titulo;
 	}
 
-	@Column(name = "cuerpo", nullable = false, length = 100)
+	@Column(name = "cuerpo", nullable = false, length = 500)
 	public String getCuerpo() {
 		return this.cuerpo;
 	}
 
 	public void setCuerpo(String cuerpo) {
 		this.cuerpo = cuerpo;
+	}
+	
+	@Column(name = "visto", nullable = false, length = 100)
+	public boolean getVisto() {
+		return this.visto;
+	}
+
+	public void setVisto(boolean visto) {
+		this.visto = visto;
 	}
 
 }

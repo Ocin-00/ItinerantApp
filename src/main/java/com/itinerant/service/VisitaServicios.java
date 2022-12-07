@@ -22,11 +22,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.itinerant.dao.AlertaDAO;
 import com.itinerant.dao.CategoriaDAO;
+import com.itinerant.dao.CitaDAO;
 import com.itinerant.dao.LocalidadDAO;
 import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.dao.SupervisorDAO;
 import com.itinerant.dao.VisitaDAO;
+import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Categoria;
 import com.itinerant.entity.Cita;
 import com.itinerant.entity.Localidad;
@@ -40,12 +43,16 @@ public class VisitaServicios {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private VisitaDAO visitaDAO;
+	private CitaDAO citaDAO;
+	private AlertaDAO alertaDAO;
 	private final String IMAGE_FOLDER = "C:/Users/Nico/git/repository/ItinerantApp/src/main/webapp/img/"; //Si se cambia esta ruta cambiar la de visita.setImagenRuta();
 	//private final String IMAGE_FOLDER = "../../../../webapp/img/";
 	
 	
 	public VisitaServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		visitaDAO = new VisitaDAO(entityManager);
+		citaDAO = new CitaDAO(entityManager);
+		alertaDAO = new AlertaDAO(entityManager);
 		this.entityManager = entityManager;
 		this.request = request;
 		this.response = response;
@@ -71,11 +78,47 @@ public class VisitaServicios {
 	
 	public void borrarVisita() throws ServletException, IOException {
 		int visitaId = Integer.parseInt(request.getParameter("id"));
-		visitaDAO.delete(visitaId);
-		listarVisitas("La visita ha sido borrada con éxito.");
+		Visita visita = visitaDAO.get(visitaId);
+		List<Cita> citas = new ArrayList<>(visita.getCitas());
+		
+		Date fechaCita = visita.getHoraInicio();
+		
+		Date ahora = new Date();
+		Date tiempoLimite = new Date(fechaCita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
+		
+		String urgenciaTexto = request.getParameter("urgencia"); //FALTA AÑADIR URGENCIA EN HTTP
+		boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
+		boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
+		
+		if(urgencia || !pasadoTiempoLimite) {
+			for(int i = 0; i < citas.size(); i++) {
+				Cita cita = citas.get(i);
+				citaDAO.delete(cita.getId());
+				SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
+				
+				String cuerpoAlerta = null;
+				
+				if(urgencia) { 
+					cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+										+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada por el siguiente motivo:" + urgenciaTexto;
+				} else {
+					cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+										+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";
+				}
+				Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", cuerpoAlerta, false);
+				alertaDAO.create(alerta);
+				//Mandar notificación
+			}
+			visitaDAO.delete(visitaId);
+			listarVisitas("La visita ha sido borrada con éxito.");
+		} else {
+			request.setAttribute("pasadoTiempoLimite", pasadoTiempoLimite);
+			verVisita("Es demasiado tarde para cancelar la cita a menos que se trate de una urgencia, si este es el caso por favor indíquelo.");	
+		}
 	}
 
-	public void NuevaVisitaFormulario() throws ServletException, IOException {
+	public void nuevaVisitaFormulario() throws ServletException, IOException {
 		String login = (String) request.getSession().getAttribute("userLogin");
 		ProfesionalDAO profesionalDAO = new ProfesionalDAO(entityManager);
 		Profesional profesional = profesionalDAO.get(login);
@@ -132,12 +175,14 @@ public class VisitaServicios {
 			e.printStackTrace();
 		}
 
-		SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm");	
+		String horaInicioCompleta = fechaTexto + " " + horaInicioTexto;
+		String horaFinCompleta = fechaTexto + " " + horaFinTexto;
+		SimpleDateFormat timeformat = new SimpleDateFormat("yyyy-MM-dd HH:mm");	
 		Date horaInicio = null;
 		Date horaFin = null;
 		try {
-			horaInicio = timeformat.parse(horaInicioTexto);
-			horaFin = timeformat.parse(horaFinTexto);
+			horaInicio = timeformat.parse(horaInicioCompleta);
+			horaFin = timeformat.parse(horaFinCompleta);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -185,13 +230,20 @@ public class VisitaServicios {
 		return "img" + new File(IMAGE_FOLDER).list().length + ".jpg";
 	}
 
-	public void VerVisita() throws ServletException, IOException {
+	public void verVisita() throws ServletException, IOException {
+		verVisita(null);
+	}
+	
+	public void verVisita(String message) throws ServletException, IOException {
 		int visitaId = Integer.parseInt(request.getParameter("id"));
 		Visita visita = visitaDAO.get(visitaId);
 		request.setAttribute("visita", visita);
 		
 		List<Cita> citas = new ArrayList(visita.getCitas());
 		request.setAttribute("citas", citas);
+		request.setAttribute("numeroCitas", citas.size());
+		
+		request.setAttribute("message", message);
 		
 		String homepage = "../frontend/profesional/ver_visita.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
@@ -217,10 +269,44 @@ public class VisitaServicios {
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		visita.setIdVisita(idVisita);
 		if(!hayIncompatibilidades()) {
-			visitaDAO.update(visita);
-			listarVisitas("La visita ha sido modificada con éxito");
+			List<Cita> citas = new ArrayList<>(visita.getCitas());
+			
+			Date fechaCita = visita.getHoraInicio();
+			
+			Date ahora = new Date();
+			Date tiempoLimite = new Date(fechaCita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
+			
+			String urgenciaTexto = request.getParameter("urgencia"); //FALTA AÑADIR URGENCIA EN HTTP
+			boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
+			boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
+			
+			if(urgencia || !pasadoTiempoLimite) {
+				for(int i = 0; i < citas.size(); i++) {
+					Cita cita = citas.get(i);
+					SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
+					
+					String cuerpoAlerta = null;
+					
+					if(urgencia) { 
+						cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+											+ timeFormat.format(cita.getHoraInicio()) + " ha sido modificada por el siguiente motivo:" + urgenciaTexto;
+					} else {
+						cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+											+ timeFormat.format(cita.getHoraInicio()) + " ha sido modificada.";
+					}
+					Alerta alerta = new Alerta(cita.getCiudadano(), "Cita modificada", cuerpoAlerta, false);
+					alertaDAO.create(alerta);
+					//Mandar notificación
+				}
+				visitaDAO.update(visita);
+				listarVisitas("La visita ha sido modificada con éxito");
+			} else {
+				request.setAttribute("pasadoTiempoLimite", pasadoTiempoLimite);
+				verVisita("Es demasiado tarde para modificar la cita a menos que se trate de una urgencia, si este es el caso por favor indíquelo.");	
+			}
 		}
-		listarVisitas("La visita no se ha podido modificar");	
+		listarVisitas("La visita no se ha podido modificar por incompatibilidades con otras.");	
 	}
 
 	public void buscar(String keyword) {

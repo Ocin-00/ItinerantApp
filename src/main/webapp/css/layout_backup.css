@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset "ISO-8859-1";
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
 #header {
@@ -141,11 +141,15 @@
 }
 
 .main-content-split-items {
-	margin-left: 30px;	
+	margin-left: 30px;
 }
 
 .main-content-split-items * {
-	padding-top: 5px;	
+	padding-top: 5px;
+}
+
+.main-content-split-items .stars {
+	text-align: left;
 }
 
 .main-button {
@@ -272,14 +276,14 @@ input[type=file] {
 }
 .stars label {
 	float:right;
-	font-size: 75px;
+	font-size: 100px;
 	color: lightgrey;
 	margin: 0 5px;
 	text-shadow: 1px 1px #bbb;
 }
 
 .stars label:before {
-	content: '★';
+	content: '*';
 }
 
 .stars input:checked ~ label{
@@ -295,40 +299,4 @@ input[type=file] {
 .stars input:checked > label:hover ~ label{
 	color: gold;
 	text-shadow: 1px 1px goldenrod;
-}
-
-.stars .error {
-	color: red;
-	margin: 5px;
-	font-size: 12px;
-	text-shadow: none;
-	
-}
-
-.stars .error input {
-	display: none;
-}
-
-.stars .error label:before {
-	content: '';
-}
-
-.blocked-stars input {
-	display: none;
-}
-.blocked-stars label {
-	float:right;
-	font-size: 75px;
-	color: lightgrey;
-	margin: 0 5px;
-	text-shadow: 1px 1px #bbb;
-}
-
-.blocked-stars label:before {
-	content: '★';
-}
-
-.blocked-stars input:checked ~ label{
-	color: gold;
-	text-shadow: 1px 1px #c60;
 }

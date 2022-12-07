@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -17,9 +18,6 @@
 	</c:if>
 <title>Itinerant - Visitas</title>
 </head>
-<style>
-	#side-menu a:nth-child(2){ background-color: #e0e0e0 }
-</style>
 <body>
 	<c:if test="${sessionScope.userLogin != null}">
 		<jsp:directive.include file="/frontend/header_user.jsp"/>
@@ -80,13 +78,18 @@
 							<label for="horaCita">Horas disponibles:</label>
 							<select name="horaCita" id="horaCita">
 								<c:forEach items="${listaHoras}" var="horaCita">
-									<option value="${horaCita}">${horaCita.hours}:${horaCita.minutes}</option>
+									<option value="${horaCita}">
+										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+										  String hora = format.format(pageContext.getAttribute("horaCita"));
+										  out.println(hora);  
+										%>
+									</option>
 								</c:forEach>
 							</select>
 						</div>
 						<div>
 							<div>
-								<label>Dirección:</label>
+								<label>Dirección: ${horaCita.hours}:${horaCita.minutes}</label>
 							</div>
 								<input type="text" name="direccion" id="direccion">
 								<input type="checkbox" name="direccionUsuario" id="direccionUsuario" value="true">

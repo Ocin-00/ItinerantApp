@@ -35,8 +35,8 @@ import javax.persistence.TemporalType;
 	 											+ "OR v.descripcion LIKE '%' || :keyword || '%'"
 	 											+ "OR v.localidad.nombre LIKE '%' || :keyword || '%'"
 	 											+ "OR v.profesional.nombre LIKE '%' || :keyword || '%'"
-	 											+ "OR v.profesional.apellidos LIKE '%' || :keyword || '%'")
-	 											//+ "OR '%' || :keyword || '%' IN v.categorias")
+	 											+ "OR v.profesional.apellidos LIKE '%' || :keyword || '%'"
+	 											+ "ORDER BY v.fecha DESC")
 })
 @Table(name = "visita", catalog = "itinerant_db")
 public class Visita implements java.io.Serializable {

@@ -33,6 +33,8 @@ public class Cita implements java.io.Serializable {
 	private Date horaInicio;
 	private String direccion;
 	private String anotaciones;
+	private String review;
+	private Integer puntuacion;
 
 	public Cita() {
 	}
@@ -45,13 +47,15 @@ public class Cita implements java.io.Serializable {
 		this.direccion = direccion;
 	}
 
-	public Cita(CitaId id, Ciudadano ciudadano, Visita visita, Date horaInicio, String direccion, String anotaciones) {
+	public Cita(CitaId id, Ciudadano ciudadano, Visita visita, Date horaInicio, String direccion, String anotaciones, String review, Integer puntuacion) {
 		this.id = id;
 		this.ciudadano = ciudadano;
 		this.visita = visita;
 		this.horaInicio = horaInicio;
 		this.direccion = direccion;
 		this.anotaciones = anotaciones;
+		this.review = review;
+		this.puntuacion = puntuacion;
 	}
 
 	@EmbeddedId
@@ -112,6 +116,24 @@ public class Cita implements java.io.Serializable {
 
 	public void setAnotaciones(String anotaciones) {
 		this.anotaciones = anotaciones;
+	}
+	
+	@Column(name = "review", length = 200)
+	public String getReview() {
+		return this.review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
+	}
+	
+	@Column(name = "puntuacion")
+	public Integer getPuntuacion() {
+		return this.puntuacion;
+	}
+
+	public void setPuntuacion(Integer puntuacion) {
+		this.puntuacion = puntuacion;
 	}
 
 }

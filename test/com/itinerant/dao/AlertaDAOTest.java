@@ -37,7 +37,7 @@ class AlertaDAOTest {
 	@Test
 	void testCreateAlerta() {
 		UsuarioInterno usuario = usuarioDAO.get("nialcha");
-		Alerta alerta = new Alerta(1, usuario, "Alerta 1", "Esta es la alerta 1");
+		Alerta alerta = new Alerta(usuario, "Alerta 1", "Esta es la alerta 1", false);
 		alerta = alertaDAO.create(alerta);
 		
 		assertTrue(true);

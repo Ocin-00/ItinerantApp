@@ -6,10 +6,10 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>
-		<c:if test="${supervisor == null}">
+		<c:if test="${usuario == null}">
 			Registrarse
 		</c:if>	
-		<c:if test="${supervisor != null}">
+		<c:if test="${usuario != null}">
 			Editar cuenta
 		</c:if>
 	</title>
@@ -22,7 +22,7 @@
 
 	<div id="main-centered">
 		<c:if test="${usuario == null}">
-			<form action="register" method="post" id="usuarioForm">
+			<form action="nuevo_usuario" method="post" id="usuarioForm">
 		</c:if>	
 		<c:if test="${usuario != null}">
 			<form action="actualizar_usuario" method="post" id="usuarioForm"">
@@ -196,9 +196,9 @@
 			<div align="center">
 				<button type="submit">Crear cuenta</button>
 			</div>
-			<c:if test="${messaege != null}">
+			<c:if test="${message != null}">
 				<div align = "center">
-					${messaege}
+					${message}
 				</div>
 			</c:if>
 		</form>
@@ -254,7 +254,7 @@
 					nombre: "Por favor introduzca su nombre.",
 					apellidos: "Por favor introduzca sus apellidos.",
 					telefono: "Por favor introduzca el número de teléfono.",
-					formacion: "Por favor repita la contraseña.",
+					formacion: "Por favor indique su formación.",
 					codPostal: "Por favor introduzca el municipio en el que vive.",
 					fechaNac: "Por favor introduzca su fecha de nacimiento.",
 					login: "Por favor introduzca un nombre de usuario válido.",

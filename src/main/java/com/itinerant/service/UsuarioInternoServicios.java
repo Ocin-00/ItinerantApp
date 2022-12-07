@@ -15,11 +15,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.itinerant.dao.AdministradorDAO;
+import com.itinerant.dao.AlertaDAO;
 import com.itinerant.dao.CategoriaDAO;
 import com.itinerant.dao.CiudadanoDAO;
 import com.itinerant.dao.LocalidadDAO;
 import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.dao.UsuarioInternoDAO;
+import com.itinerant.entity.Administrador;
+import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Categoria;
 import com.itinerant.entity.Ciudadano;
 import com.itinerant.entity.Localidad;
@@ -34,9 +38,13 @@ public class UsuarioInternoServicios {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private EntityManager entityManager;
+	private AlertaDAO alertaDAO;
+	private AdministradorDAO administradorDAO;
 
 	public UsuarioInternoServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		usuarioInternoDAO = new UsuarioInternoDAO(entityManager);
+		alertaDAO = new AlertaDAO(entityManager);
+		administradorDAO = new AdministradorDAO(entityManager);
 		this.request = request;
 		this.response = response;
 		this.entityManager = entityManager;
@@ -132,12 +140,25 @@ public class UsuarioInternoServicios {
 			Profesional profesional = new Profesional(login, password, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, sexo, estadoCivil, null, false, fechaRegistro, null, null, null, null, null, null);
 			ProfesionalDAO profesionalDAO = new ProfesionalDAO(entityManager);
 			profesionalDAO.create(profesional);
+			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
+			String cuerpoAlerta = "Un nuevo usuario profesional se registró el día " + dateFormat.format(fechaRegistro) 
+								+ " a las " + timeFormat.format(fechaRegistro);
+			List<Administrador> admins = administradorDAO.listAll();
+			for(int i = 0; i < admins.size(); i++) {
+				Alerta alerta = new Alerta(admins.get(i), "Nuevo profesional", cuerpoAlerta, false);
+				alertaDAO.create(alerta);
+			}
 		} else {
 			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, 0, sexo, estadoCivil, formacion, telefono, null, null, null, null, null);
 			CiudadanoDAO ciudadanoDAO = new CiudadanoDAO(entityManager);
 			ciudadanoDAO.create(ciudadano);
 		}
 		login(login, password);
+	}
+
+	private Administrador elegirAdmin() {
+		return null;
 	}
 
 	public void registerView() throws ServletException, IOException {
