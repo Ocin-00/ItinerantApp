@@ -109,6 +109,9 @@ public class VisitaServicios {
 				Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", cuerpoAlerta, false);
 				alertaDAO.create(alerta);
 				//Mandar notificación
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
+				
 			}
 			visitaDAO.delete(visitaId);
 			listarVisitas("La visita ha sido borrada con éxito.");
@@ -298,6 +301,9 @@ public class VisitaServicios {
 					Alerta alerta = new Alerta(cita.getCiudadano(), "Cita modificada", cuerpoAlerta, false);
 					alertaDAO.create(alerta);
 					//Mandar notificación
+					AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+					alertaServicios.mandarNotificacion(alerta);
+					
 				}
 				visitaDAO.update(visita);
 				listarVisitas("La visita ha sido modificada con éxito");

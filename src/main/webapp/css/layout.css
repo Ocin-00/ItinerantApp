@@ -332,3 +332,116 @@ input[type=file] {
 	color: gold;
 	text-shadow: 1px 1px #c60;
 }
+
+/*
+.notification-bell{
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45px;
+	height: 45px;
+	color: #333333;
+	background: #dddddd;
+	border: none;
+	outline: none;
+	border-radius: 50%;
+}
+*/
+
+.notification-bell{
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45px;
+	height: 45px;
+	color: #333333;
+	background: white;
+	border: none;
+	outline: none;
+	border-radius: 50%;
+}
+
+.notification-bell:hover{
+	cursor: pointer;
+	background: #dddddd;
+}
+
+.notification-bell-badge{
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	width: 20px;
+	height: 20px;
+	background: red;
+	color: white;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 12px;
+	
+}
+
+#notifications-tab {
+    border: 1px solid black;
+    background-color: white;
+    position: absolute;
+    right: 7%;
+    width: 500px;
+    display: none;
+}
+
+#notifications{
+	display: inline-block;
+	position: relative;
+}
+
+#notifications-tab div button {
+	align-self: left;
+}
+
+#notifications-tab a:link {
+	margin-left: 5px; 
+}
+
+.ui-accordion-header.ui-state-active { background-color: rgb(80, 131, 66); }
+
+.notification-title-unread {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background: red;
+	color: white;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 12px;
+	left: 2px;
+	top: 9px;
+}
+
+/*
+.notification {
+    border: 1px solid black;
+    background-color: white;
+    position: relative;
+}
+#notification-body{
+    height: 0px;    
+    overflow: hidden;
+    transition:             height 500ms ease;
+        -moz-transition:    height 500ms ease;
+        -ms-transition:     height 500ms ease;
+        -o-transition:      height 500ms ease;
+        -webkit-transition: height 500ms ease;
+}
+.expanded {
+    height: 200px !important;
+}
+#notification-title {    
+    cursor: pointer;
+}
+*/

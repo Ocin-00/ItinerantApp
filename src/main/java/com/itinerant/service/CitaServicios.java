@@ -8,9 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.Stack;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -19,15 +21,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.text.DateFormatter;
 
+import com.itinerant.dao.AdministradorDAO;
 import com.itinerant.dao.AlertaDAO;
 import com.itinerant.dao.CitaDAO;
 import com.itinerant.dao.CiudadanoDAO;
 import com.itinerant.dao.VisitaDAO;
+import com.itinerant.entity.Administrador;
 import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Cita;
 import com.itinerant.entity.CitaId;
 import com.itinerant.entity.Ciudadano;
 import com.itinerant.entity.Visita;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.util.HttpChannelAuthorizer;
 
 public class CitaServicios {
 	private HttpServletRequest request;
@@ -36,6 +43,7 @@ public class CitaServicios {
 	private CiudadanoDAO ciudadanoDAO;
 	private VisitaDAO visitaDAO;
 	private AlertaDAO alertaDAO;
+	private AdministradorDAO administradorDAO;
 	private EntityManager entityManager;
 
 	public CitaServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
@@ -44,6 +52,7 @@ public class CitaServicios {
 		ciudadanoDAO = new CiudadanoDAO(entityManager);
 		visitaDAO = new VisitaDAO(entityManager);
 		alertaDAO = new AlertaDAO(entityManager);
+		administradorDAO = new AdministradorDAO(entityManager);
 		this.request = request;
 		this.response = response;		
 	}
@@ -157,6 +166,10 @@ public class CitaServicios {
 								+ cita.getVisita().getLocalidad() + " con las siguientes anotaciones: " + anotaciones;
 			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Nueva cita", cuerpoAlerta, false);
 			alertaDAO.create(alerta);
+			
+			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+			alertaServicios.mandarNotificacion(alerta);
+			
 		} catch (org.hibernate.exception.ConstraintViolationException e) {
 			message = "Lo sentimos, no puedes pedir cita dos veces";
 			e.printStackTrace();
@@ -204,6 +217,9 @@ public class CitaServicios {
 			Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", cuerpoAlerta, false);
 			alertaDAO.create(alerta);
 			//Mandar notificación
+			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+			alertaServicios.mandarNotificacion(alerta);
+			
 			VisitaServicios visitaServicios = new VisitaServicios(entityManager, request, response);
 			visitaServicios.verVisita("La cita ha sido borrada con éxito.");
 		} else {
@@ -238,6 +254,9 @@ public class CitaServicios {
 			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita anulada", cuerpoAlerta, false);
 			alertaDAO.create(alerta);
 			//Mandar notificación
+			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+			alertaServicios.mandarNotificacion(alerta);
+			
 			listarCitasPendientes("La cita ha sido borrada con éxito.");
 		} else {
 			detallesCitaPendiente("Lo sentimos, es demasiado tarde para cancelar la cita.");	
@@ -316,6 +335,9 @@ public class CitaServicios {
 			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita modificada", cuerpoAlerta, false);
 			alertaDAO.create(alerta);
 			//Mandar notificación
+			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+			alertaServicios.mandarNotificacion(alerta);
+			
 			detallesCitaPendiente("Las anotaciones han sido modificadas con éxito.");
 		} else {
 			detallesCitaPendiente("Lo sentimos, es demasiado tarde para modificar la cita.");	
@@ -374,9 +396,16 @@ public class CitaServicios {
 							+ " no ha asistido a la cita prevista el día " + dateFormat.format(cita.getHoraInicio())
 							+ " a las " + timeFormat.format(cita.getHoraInicio()) 
 							+ " en el municipio " + cita.getVisita().getLocalidad();
-		Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita modificada", cuerpoAlerta, false);
-		alertaDAO.create(alerta);
-		//Mandar notificación
+		List<Administrador> admins = administradorDAO.listAll();
+		for(int i = 0; i < admins.size(); i++) {
+			Alerta alerta = new Alerta(admins.get(i), "Ausencia en cita", cuerpoAlerta, false);
+			
+			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+			alertaServicios.mandarNotificacion(alerta);
+			
+			alertaDAO.create(alerta);
+		}
+		
 		verCita("La ausencia ha sido notificada");
 	}
 }

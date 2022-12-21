@@ -3,6 +3,7 @@ package com.itinerant.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import com.itinerant.entity.Alerta;
+import com.itinerant.entity.Ciudadano;
 
 public class AlertaDAO extends JpaDAO<Alerta> implements GenericDAO<Alerta> {
 	
@@ -35,6 +36,10 @@ public class AlertaDAO extends JpaDAO<Alerta> implements GenericDAO<Alerta> {
 		return super.findWithNamedQuery("Alerta.findAll");
 	}
 
+	public List<Alerta> listAllByLogin(String login) {
+		return super.findWithNamedQuery("Alerta.findAllByLogin", "login", login);
+	}
+	
 	@Override
 	public long count() {
 		return super.countWithNamedQuery("Alerta.countAll");

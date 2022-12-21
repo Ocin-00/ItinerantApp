@@ -50,6 +50,50 @@
 			<version>1.2</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20180130</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.jspwiki</groupId>
+		    <artifactId>jspwiki-main</artifactId>
+		    <version>2.11.3</version>
+		    <scope>provided</scope>
+		</dependency>
+
 		
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.10</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>2.14.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.14.1</version>
+		</dependency>
+		<!--
+		<dependency>
+		    <groupId>io.vertx</groupId>
+		    <artifactId>vertx-web</artifactId>
+		    <version>4.3.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.pusher</groupId>
+		    <artifactId>pusher-java-client</artifactId>
+		    <version>2.4.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.vertx</groupId>
+		    <artifactId>vertx-sockjs-service-proxy</artifactId>
+		    <version>4.3.5</version>
+		</dependency>
+		-->
 	</dependencies>
 </project>

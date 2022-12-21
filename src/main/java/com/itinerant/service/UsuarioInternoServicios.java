@@ -7,13 +7,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.itinerant.dao.AdministradorDAO;
 import com.itinerant.dao.AlertaDAO;
@@ -58,6 +61,20 @@ public class UsuarioInternoServicios {
 		return usuarioInternoDAO.get(login) != null;		
 	}
 	
+	public void removeSessionAttributes() {
+		HttpSession session = request.getSession();
+		String login = (String) session.getAttribute("userLogin");
+		session.removeAttribute("userLogin");
+		session.removeAttribute("rol");
+		session.removeAttribute("misAlertas");
+		/*
+		HashMap<String, Stack<Alerta>> pilasUsuarios = (HashMap<String, Stack<Alerta>>) request.getSession().getServletContext().getAttribute("PilasUsuarios");
+		pilasUsuarios.remove(login);
+		request.getSession().getServletContext().setAttribute("PilasUsuarios", pilasUsuarios);
+		*/
+		
+	}
+	
 	public void login(String login, String password) throws ServletException, IOException {
 		if(login == null || password == null) {
 			login = request.getParameter("login");
@@ -67,10 +84,29 @@ public class UsuarioInternoServicios {
 		
 		if(loginResult) {
 			String homepage = null;
+			if(request.getSession().getAttribute("userLogin") != null) {
+				removeSessionAttributes();
+			}
 			request.getSession().setAttribute("userLogin", login);			
 			UsuarioInterno usuario = usuarioInternoDAO.get(login);
 			String rol = usuario.getRol();
 			request.getSession().setAttribute("rol", rol);
+			
+			HashMap<String, Stack<Alerta>> pilasUsuarios = (HashMap<String, Stack<Alerta>>) request.getSession().getServletContext().getAttribute("PilasUsuarios");
+			
+			Stack<Alerta> notificaciones;
+			notificaciones = pilasUsuarios.get(login);
+			
+			if(notificaciones == null) {
+				List<Alerta> alertas = alertaDAO.listAllByLogin(login);
+				notificaciones = new Stack<>();
+				notificaciones.addAll(alertas);
+			}
+			
+			request.getSession().setAttribute("misAlertas", notificaciones);
+			
+			pilasUsuarios.put(login, notificaciones);			
+			request.getSession().getServletContext().setAttribute("PilasUsuarios", pilasUsuarios);
 			
 			if(rol.equals(Rol.ADMINISTRADOR.toString())) {
 				homepage = "/admin/";
@@ -147,6 +183,10 @@ public class UsuarioInternoServicios {
 			List<Administrador> admins = administradorDAO.listAll();
 			for(int i = 0; i < admins.size(); i++) {
 				Alerta alerta = new Alerta(admins.get(i), "Nuevo profesional", cuerpoAlerta, false);
+				
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
+				
 				alertaDAO.create(alerta);
 			}
 		} else {

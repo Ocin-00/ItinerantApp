@@ -19,7 +19,8 @@ import javax.persistence.Table;
  */
 @Entity
 @NamedQueries({
-	 @NamedQuery(name = "Alerta.findAll", query = "SELECT a FROM Alerta a ORDER BY a.titulo"),
+	 @NamedQuery(name = "Alerta.findAll", query = "SELECT a FROM Alerta a"),
+	 @NamedQuery(name = "Alerta.findAllByLogin", query = "SELECT a FROM Alerta a WHERE a.usuarioInterno.login = :login"),
 	 @NamedQuery(name = "Alerta.countAll", query = "SELECT count(*) FROM Alerta a"),
 })
 @Table(name = "alerta", catalog = "itinerant_db")
@@ -30,16 +31,35 @@ public class Alerta implements java.io.Serializable {
 	private String titulo;
 	private String cuerpo;
 	private boolean visto;
+	private boolean nuevo;
 
 	public Alerta() {
 	}
 
+	public Alerta(UsuarioInterno usuarioInterno, String titulo, String cuerpo) {
+		this.usuarioInterno = usuarioInterno;
+		this.titulo = titulo;
+		this.cuerpo = cuerpo;
+		this.visto = false;
+		this.nuevo = true;
+	}
+	
 	public Alerta(UsuarioInterno usuarioInterno, String titulo, String cuerpo, boolean visto) {
 		this.usuarioInterno = usuarioInterno;
 		this.titulo = titulo;
 		this.cuerpo = cuerpo;
 		this.visto = visto;
+		this.nuevo = true;
 	}
+	
+	public Alerta(UsuarioInterno usuarioInterno, String titulo, String cuerpo, boolean visto, boolean nuevo) {
+		this.usuarioInterno = usuarioInterno;
+		this.titulo = titulo;
+		this.cuerpo = cuerpo;
+		this.visto = visto;
+		this.nuevo = nuevo;
+	}
+	
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -87,6 +107,15 @@ public class Alerta implements java.io.Serializable {
 
 	public void setVisto(boolean visto) {
 		this.visto = visto;
+	}
+	
+	@Column(name = "nuevo", nullable = false, length = 100)
+	public boolean getNuevo() {
+		return this.nuevo;
+	}
+
+	public void setNuevo(boolean nuevo) {
+		this.nuevo = nuevo;
 	}
 
 }

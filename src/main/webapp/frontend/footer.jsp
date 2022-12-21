@@ -1,14 +1,11 @@
 <div id="footer">	
-	<c:if test="${sessionScope.userLogin == null}">
-		<div class="footer-pictures">
-			<img src="images/logo-fvmp.png" height="100"/>
-		</div>
-	</c:if>
-	<c:if test="${sessionScope.userLogin != null}">
-		<div class="footer-pictures">
-			<img src="../images/logo-fvmp.png" height="100"/>
-		</div>
-	</c:if>
+	<div class="footer-pictures">
+		<img src="
+		<%String path = request.getContextPath();
+		  out.println(path + "/"); 
+		%>
+		images/logo-fvmp.png" height="100"/>
+	</div>
 	<div class="footer-items">
 		<a href=".jsp">Quiénes somos</a> |
 		<a href=".jsp">Qué hacemos</a> |
