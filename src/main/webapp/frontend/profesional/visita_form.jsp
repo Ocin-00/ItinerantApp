@@ -163,7 +163,7 @@
 					&nbsp;&nbsp;
 					<button id="buttonCancel">Cancelar</button>				
 				</div>
-				<div><input type="file" id="imagenVisita" name="imagenVisita"/></div>
+				<div class="image-input"><input type="file" id="imagenVisita" name="imagenVisita"/></div>
 			</form>
 	</div>
 	

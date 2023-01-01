@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +40,16 @@
 						<td>Fecha: ${visita.fecha}</td>
 					</tr>
 					<tr>
-						<td>Hora: ${visita.horaInicio.hours}:${visita.horaInicio.minutes} - ${visita.horaFin.hours}:${visita.horaFin.minutes}</td>
+						<td>Hora: <c:set var="hora" value="${visita.horaInicio}"></c:set>
+										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+										String hora = format.format(pageContext.getAttribute("hora"));
+										out.println(hora);  
+										%> - 
+										<c:set var="hora" value="${visita.horaFin}"></c:set>
+										<%hora = format.format(pageContext.getAttribute("hora"));
+										out.println(hora);  
+										%>
+						</td>
 					</tr>
 					<tr>
 						<td>Tiempo de cita: ${visita.duracionCitas} min</td>
@@ -78,11 +88,17 @@
 								<td>${cita.ciudadano}</td>
 								<td>${cita.visita.nombre}</td>
 								<td>${cita.visita.fecha}</td>
-								<td>${cita.horaInicio}</td>
+								<td><c:set var="hora" value="${cita.horaInicio}"></c:set>
+										<%hora = format.format(pageContext.getAttribute("hora"));
+										out.println(hora);  
+										%>
+									</td>
 								<td align="center">
-									<a href="ver_cita?id=${visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a> |
-									<a href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular</a>
-								</td>
+									<a href="ver_cita?id=${visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a>
+									<c:if test="${esFutura == true}">
+										|
+										<a href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular</a>
+									</c:if> </td>
 							</tr>
 						</c:forEach>
 					</table>
@@ -96,9 +112,11 @@
 					<textarea rows="5" cols="50" name="urgencia" id="urgencia"></textarea>
 				</div>
 			</c:if>
-			<div>
-				<button  onclick="location.href='editar_visita?id=${visita.idVisita}';">Editar</button>
-			</div>
+			<c:if test="${esFutura == true}">
+				<div>
+					<button  onclick="location.href='editar_visita?id=${visita.idVisita}';">Editar</button>
+				</div>
+			</c:if>
 		</div>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>

@@ -16,7 +16,7 @@
 <title>Itinerant - Visitas</title>
 </head>
 <style>
-	#side-menu a:nth-child(2){ background-color: #e0e0e0 }
+	#side-menu a:nth-child(3){ background-color: #e0e0e0 }
 </style>
 <body>
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
@@ -24,7 +24,7 @@
 		<jsp:directive.include file="side_menu.jsp"/>
 		<div id="main-content-items">
 			<div>
-				<h2>Detalles de la visita</h2>
+				<h2>Detalles de la Cita</h2>
 				<table>
 					<tr>
 						<td rowspan="5">
@@ -68,9 +68,11 @@
 				</form>
 			</c:if>
 			<div>
-				<button onclick="location.href='editar_visita?id=${visita.idVisita}';">Contactar</button>
-				<button href="javascript:void(0);" class="ausenciaLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}"">Informar de ausencia</button>
-				<c:if test="${pasadoTiempoLimite == null}">
+				<button  onclick="location.href='contactar?id=${cita.ciudadano.login}';">Contactar</button>
+				<c:if test="${esFutura == false}">
+					<button href="javascript:void(0);" class="ausenciaLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Informar de ausencia</button>
+				</c:if>
+				<c:if test="${esFutura == true}">
 					<button href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular Cita</button>
 				</c:if>
 			</div>

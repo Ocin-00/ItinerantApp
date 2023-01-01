@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,7 @@
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <style>
-	#side-menu a:nth-child(2){ background-color: #e0e0e0 }
+	#side-menu a:nth-child(3){ background-color: #e0e0e0 }
 </style>
 <body>
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
@@ -25,44 +26,79 @@
 		<jsp:directive.include file="side_menu.jsp"/>
 		<div id="main-content">
 			<h4>Bienvenido, <c:out value="${sessionScope.userLogin}"></c:out></h4>
-			<h3>Visitas programadas</h3>
+			<h3>Mis citas</h3>
 		
 			<c:if test="${message != null}">
 				<div><h4>${message}</h4></div>
 			</c:if>
-			<table border="1">
-				<tr>
-					<th>Índice</th>
-					<th>Localidad</th>
-					<th>Fecha</th>
-					<th>Hora inicio</th>
-					<th>Hora fin</th>
-					<th>Acciones</th>
-				</tr>
-				<c:forEach var="visita" items="${visitas}" varStatus="status">
-					<tr>
-						<td>${status.index + 1}</td>
-						<td>${visita.localidad.nombre}</td>
-						<td>${visita.fecha}</td>
-						<td>${visita.horaInicio.hours}:${visita.horaInicio.minutes}</td>
-						<td>${visita.horaFin.hours}:${visita.horaFin.minutes}</td>
-						<td align="center">
-							<a href="ver_visita?id=${visita.idVisita}">Ver detalles</a> |
-							<a href="javascript:void(0);" class="deleteLink" id="${visita.idVisita}">Borrar</a>
-						</td>
-					</tr>
-				</c:forEach>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td align="center">
-							<a href="nueva_visita">Añadir</a>
-						</td>
-					</tr>
-			</table>
+			<div class="tab-parent">
+				<ul class="tabs">
+					<li id="citasPendientes" class="option option-active"><a href="#contenidoCitasPendientes">Citas Pendientes</a></li>
+					<li id="historicoCitas" class="option"><a href="#contenidoHistorialCitas">Histórico de Citas</a></li>
+				</ul>
+				
+				<div class="tab-container">
+					<div id="contenidoCitasPendientes" class="tab_content">
+						<table border="1">
+							<tr>
+								<th>Índice</th>
+								<th>Cliente</th>
+								<th>Visita</th>
+								<th>Fecha</th>
+								<th>Hora</th>
+								<th>Acciones</th>
+							</tr>
+							<c:forEach var="cita" items="${citasPendientes}" varStatus="status">
+								<tr>
+									<td>${status.index + 1}</td>
+									<td>${cita.ciudadano}</td>
+									<td>${cita.visita.nombre}</td>
+									<td>${cita.visita.fecha}</td>
+									<td><c:set var="hora" value="${cita.horaInicio}"></c:set>
+										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+										String hora = format.format(pageContext.getAttribute("hora"));
+										out.println(hora);  
+										%>
+									</td>
+									<td align="center">
+										<a href="ver_cita?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a> |
+										<a href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular</a>
+									</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+					<div id="contenidoHistorialCitas"  class="tab_content">
+						<table border="1">
+							<tr>
+								<th>Índice</th>
+								<th>Cliente</th>
+								<th>Visita</th>
+								<th>Fecha</th>
+								<th>Hora</th>
+								<th>Acciones</th>
+							</tr>
+							<c:forEach var="cita" items="${historialCitas}" varStatus="status">
+								<tr>
+									<td>${status.index + 1}</td>
+									<td>${cita.ciudadano}</td>
+									<td>${cita.visita.nombre}</td>
+									<td>${cita.visita.fecha}</td>
+									<td><c:set var="hora" value="${cita.horaInicio}"></c:set>
+										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+										String hora = format.format(pageContext.getAttribute("hora"));
+										out.println(hora);  
+										%>
+									</td>
+									<td align="center">
+										<a href="ver_cita?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a>
+									</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>
@@ -71,11 +107,28 @@
 		$(document).ready(function() {
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
-					id = $(this).attr("id");
-					if(confirm("¿Desea eliminar la visita de id " + id + "?")) {
-						window.location = "borrar_visita?id=" + id;
+					login = $(this).attr("id");
+					idVisita = $(this).attr("visita");
+					if(confirm("¿Desea eliminar la cita del usuario " + login + "?")) {
+						window.location = "anular_cita?id=" + idVisita + "&login=" + login;
 					}
 				});
+			});
+
+			$(".tab_content").hide(); //Hide all content
+			$("ul.tabs li:first").addClass("active").show(); //Activate first tab
+			$(".tab_content:first").show(); //Show first tab content
+
+			//On Click Event
+			$("ul.tabs li").click(function() {
+
+				$("ul.tabs li").removeClass("active"); //Remove any "active" class
+				$(this).addClass("active"); //Add "active" class to selected tab
+				$(".tab_content").hide(); //Hide all tab content
+
+				var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+				$(activeTab).fadeIn(); //Fade in the active ID content
+				return false;
 			});
 		});
 	</script>

@@ -12,22 +12,12 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.itinerant.adapter.AlertaTypeAdapter;
 import com.itinerant.dao.AlertaDAO;
 import com.itinerant.entity.Alerta;
 
 import org.hibernate.proxy.HibernateProxy;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.handler.sockjs.SockJSHandler;
-import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
-import io.vertx.ext.web.handler.sockjs.impl.SockJSImpl;
 
 public class AlertaServicios {
 	private HttpServletRequest request;

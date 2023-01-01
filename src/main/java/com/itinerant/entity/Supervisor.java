@@ -39,10 +39,10 @@ public class Supervisor extends UsuarioPrivilegiado {
 	
 	public Supervisor(String login, String password, String email, String nombre,String apellidos, 
 			Date fechaNac, String telefono, String nss,String organismoCoordinador, String nivelAcceso,
-			byte[] fotoPerfil, Set<Chat> chatsForUsuarioFuente,Set<Alerta> alertas, 
-			Set<Chat> chatsForUsuarioDestino) {
+			byte[] fotoPerfil, Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
+			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
 		super(login, password, email, nombre, apellidos, Rol.SUPERVISOR.toString(), fechaNac, telefono, nss, organismoCoordinador,
-				fotoPerfil, chatsForUsuarioFuente, alertas, chatsForUsuarioDestino);
+				fotoPerfil, chatMensajesForIdRecipient, alertas, chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 		this.nivelAcceso = nivelAcceso;
 	}
 

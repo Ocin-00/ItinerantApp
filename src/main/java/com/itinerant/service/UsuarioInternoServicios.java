@@ -204,7 +204,7 @@ public class UsuarioInternoServicios {
 			request.setAttribute("message", message);
 			registerView();
 		} else if(rol.equals(Rol.PROFESIONAL.toString())) {
-			Profesional profesional = new Profesional(login, password, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, sexo, estadoCivil, null, false, fechaRegistro, null, null, null, null, null, null);
+			Profesional profesional = new Profesional(login, password, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, sexo, estadoCivil, null, false, fechaRegistro, null, null, null, null, null, null, null, null);
 			ProfesionalDAO profesionalDAO = new ProfesionalDAO(entityManager);
 			profesionalDAO.create(profesional);
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -221,7 +221,7 @@ public class UsuarioInternoServicios {
 				alertaDAO.create(alerta);
 			}
 		} else {
-			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, 0, sexo, estadoCivil, formacion, telefono, null, null, null, null, null);
+			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, 0, sexo, estadoCivil, formacion, telefono, null, null, null, null, null, null, null);
 			CiudadanoDAO ciudadanoDAO = new CiudadanoDAO(entityManager);
 			ciudadanoDAO.create(ciudadano);
 		}

@@ -66,7 +66,20 @@ public class VisitaServicios {
 		String login = (String) request.getSession().getAttribute("userLogin");
 		List<Visita> visitas = visitaDAO.listAllByLogin(login);
 		
-		request.setAttribute("visitas", visitas);
+		List<Visita> visitasPendientes = new ArrayList<Visita>();
+		List<Visita> historialVisitas = new ArrayList<Visita>();
+		Date ahora = new Date();
+		
+		for(Visita visita : visitas) {
+			if(ahora.before(visita.getHoraInicio())) {
+				visitasPendientes.add(visita);
+			} else {
+				historialVisitas.add(visita);
+			}
+		}
+		
+		request.setAttribute("visitasPendiente", visitasPendientes);
+		request.setAttribute("historialVisitas", historialVisitas);
 		if(message != null) {
 			request.setAttribute("message", message);
 		}
@@ -241,6 +254,9 @@ public class VisitaServicios {
 		int visitaId = Integer.parseInt(request.getParameter("id"));
 		Visita visita = visitaDAO.get(visitaId);
 		request.setAttribute("visita", visita);
+		
+		Date ahora = new Date();
+		request.setAttribute("esFutura", !ahora.after(visita.getHoraInicio()));
 		
 		List<Cita> citas = new ArrayList(visita.getCitas());
 		request.setAttribute("citas", citas);

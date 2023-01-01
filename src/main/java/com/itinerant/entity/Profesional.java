@@ -58,10 +58,10 @@ public class Profesional extends UsuarioInterno {
 
 	public Profesional(String login, String password, String email, String nombre, String apellidos, Date fechaNac,
 			String localizacion, String formacion, String telefono, String sexo, String estadoCivil, String descripcion,
-			boolean validez, Date fechaRegistro, byte[] fotoPerfil, Set<Visita> visitas, Set<Certificado> certificados, Set<Chat> chatsForUsuarioFuente,
-			Set<Alerta> alertas, Set<Chat> chatsForUsuarioDestino) {
-		super(login, password, email, nombre, apellidos, Rol.PROFESIONAL.toString(), fechaNac, fotoPerfil, chatsForUsuarioFuente, alertas,
-				chatsForUsuarioDestino);
+			boolean validez, Date fechaRegistro, byte[] fotoPerfil, Set<Visita> visitas, Set<Certificado> certificados,Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
+			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
+		super(login, password, email, nombre, apellidos, Rol.PROFESIONAL.toString(), fechaNac, fotoPerfil, chatMensajesForIdRecipient, alertas, 
+				chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 		this.localizacion = localizacion;
 		this.formacion = formacion;
 		this.telefono = telefono;

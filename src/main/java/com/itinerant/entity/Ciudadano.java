@@ -50,10 +50,10 @@ public class Ciudadano extends UsuarioInterno {
 	public Ciudadano(String login, String password, String email, String nombre, 
 			String apellidos, Date fechaNac,String localizacion, int diasSancion, String sexo,
 			String estadoCivil, String formacion, String telefono, byte[] fotoPerfil, 
-			Set<Cita> citas, Set<Chat> chatsForUsuarioFuente, Set<Alerta> alertas, 
-			Set<Chat> chatsForUsuarioDestino) {
-		super(login, password, email, nombre, apellidos, Rol.CIUDADANO.toString(), fechaNac, fotoPerfil, chatsForUsuarioFuente, alertas, 
-				chatsForUsuarioDestino);
+			Set<Cita> citas, Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
+			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
+		super(login, password, email, nombre, apellidos, Rol.CIUDADANO.toString(), fechaNac, fotoPerfil, chatMensajesForIdRecipient, alertas, 
+				chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 		this.localizacion = localizacion;
 		this.diasSancion = diasSancion;
 		this.sexo = sexo;

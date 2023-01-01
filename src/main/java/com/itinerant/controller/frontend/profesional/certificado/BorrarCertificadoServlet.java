@@ -1,6 +1,8 @@
-package com.itinerant.controller.admin.certificado;
+package com.itinerant.controller.frontend.profesional.certificado;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,21 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 import com.itinerant.controller.BaseServlet;
 import com.itinerant.service.CertificadoServicios;
 
-/**
- * Servlet implementation class AnularCertificadoServlet
- */
-@WebServlet("/admin/anular_certificado")
-public class AnularCertificadoServlet extends BaseServlet {
+@WebServlet("/profesional/borrar_certificado")
+public class BorrarCertificadoServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public AnularCertificadoServlet() {
-        super();
-    }
+
+	public BorrarCertificadoServlet() {
+		super();
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		CertificadoServicios certificadoServicios = new CertificadoServicios(entityManager, request, response);
-		
 		certificadoServicios.anularCertificado();
 	}
 

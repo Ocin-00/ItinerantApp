@@ -13,11 +13,11 @@ import com.itinerant.controller.BaseServlet;
 import com.itinerant.service.CitaServicios;
 import com.itinerant.service.VisitaServicios;
 
-@WebServlet("/profesional/lista_citas")
-public class ListaCitasServlet extends BaseServlet {
+@WebServlet("/profesional/listar_citas")
+public class ListarCitasServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 
-	public ListaCitasServlet() {
+	public ListarCitasServlet() {
         super();
     }
 
@@ -28,7 +28,7 @@ public class ListaCitasServlet extends BaseServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CitaServicios citaServicios = new CitaServicios(entityManager, request, response);
-		//citaServicios.listarCitas();
+		citaServicios.listarCitasProfesional();
 	}
 
 }

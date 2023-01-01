@@ -25,22 +25,26 @@ import com.itinerant.dao.AdministradorDAO;
 import com.itinerant.dao.AlertaDAO;
 import com.itinerant.dao.CitaDAO;
 import com.itinerant.dao.CiudadanoDAO;
+import com.itinerant.dao.ProfesionalDAO;
+import com.itinerant.dao.UsuarioInternoDAO;
 import com.itinerant.dao.VisitaDAO;
 import com.itinerant.entity.Administrador;
 import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Cita;
 import com.itinerant.entity.CitaId;
 import com.itinerant.entity.Ciudadano;
+import com.itinerant.entity.Profesional;
+import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.entity.Visita;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.util.HttpChannelAuthorizer;
+import com.itinerant.enums.Rol;
 
 public class CitaServicios {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private CitaDAO citaDAO;
 	private CiudadanoDAO ciudadanoDAO;
+	private UsuarioInternoDAO usuarioInternoDAO;
+	private ProfesionalDAO profesionalDAO;
 	private VisitaDAO visitaDAO;
 	private AlertaDAO alertaDAO;
 	private AdministradorDAO administradorDAO;
@@ -50,6 +54,8 @@ public class CitaServicios {
 		this.entityManager = entityManager;
 		citaDAO = new CitaDAO(entityManager);
 		ciudadanoDAO = new CiudadanoDAO(entityManager);
+		usuarioInternoDAO = new UsuarioInternoDAO(entityManager);
+		profesionalDAO = new ProfesionalDAO(entityManager);
 		visitaDAO = new VisitaDAO(entityManager);
 		alertaDAO = new AlertaDAO(entityManager);
 		administradorDAO = new AdministradorDAO(entityManager);
@@ -63,13 +69,33 @@ public class CitaServicios {
 	
 	public void listarCitasPendientes(String message) throws ServletException, IOException {
 		String login = (String) request.getSession().getAttribute("userLogin");
-		Ciudadano usuario = ciudadanoDAO.get(login);
-		List<Cita> citas = new ArrayList(usuario.getCitas());
+		UsuarioInterno usuario = usuarioInternoDAO.get(login);
 		
-		List<Cita> citasPendientes = buscarCitasPendientes(citas);
+		String homepage = null;
+		List<Cita> citas = new ArrayList<Cita>();
 		
-		String homepage = "../frontend/inicio/citas_pendientes.jsp";
-		listarCitas(message, homepage, citasPendientes);
+		if(usuario.getRol().equals(Rol.CIUDADANO.toString())) {
+			Ciudadano ciudadano = ciudadanoDAO.get(login);
+			citas.addAll(ciudadano.getCitas());
+			
+			homepage = "../frontend/inicio/citas_pendientes.jsp";
+			List<Cita> citasPendientes = buscarCitasPendientes(citas);
+			listarCitas(message, homepage, citasPendientes);
+			
+		} else if(usuario.getRol().equals(Rol.PROFESIONAL.toString())){
+			Profesional profesional = profesionalDAO.get(login);
+			List<Visita> visitas = new ArrayList<Visita>(profesional.getVisitas());
+			for(Visita visita : visitas) {
+				citas.addAll(visita.getCitas());
+			}
+			List<Cita> citasPendientes = buscarCitasPendientes(citas);
+			request.setAttribute("citasPendientes", citasPendientes);
+		} else {
+			homepage = "../admin/message.jsp";
+			request.setAttribute("message", "Ha habido un error.");
+			RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+			dispatcher.forward(request, response);
+		}
 	}
 	
 	public void listarHistorialCitas() throws ServletException, IOException {
@@ -79,13 +105,34 @@ public class CitaServicios {
 	
 	public void listarHistorialCitas(String message) throws ServletException, IOException {
 		String login = (String) request.getSession().getAttribute("userLogin");
-		Ciudadano usuario = ciudadanoDAO.get(login);
-		List<Cita> citas = new ArrayList(usuario.getCitas());
+		UsuarioInterno usuario = usuarioInternoDAO.get(login);
 		
-		List<Cita> historialCitas = buscarHistorialCitas(citas);
+		String homepage = null;
+		List<Cita> citas = new ArrayList<Cita>();
 		
-		String homepage = "../frontend/inicio/historial_citas.jsp";
-		listarCitas(message, homepage, historialCitas);
+		if(usuario.getRol().equals(Rol.CIUDADANO.toString())) {
+			Ciudadano ciudadano = ciudadanoDAO.get(login);
+			citas.addAll(ciudadano.getCitas());
+			
+			homepage = "../frontend/inicio/historial_citas.jsp";
+			List<Cita> historialCitas = buscarHistorialCitas(citas);
+			listarCitas(message, homepage, historialCitas);
+			
+		} else if(usuario.getRol().equals(Rol.PROFESIONAL.toString())){
+			Profesional profesional = profesionalDAO.get(login);
+			List<Visita> visitas = new ArrayList<Visita>(profesional.getVisitas());
+			for(Visita visita : visitas) {
+				citas.addAll(visita.getCitas());
+			}
+			List<Cita> historialCitas = buscarHistorialCitas(citas);
+			request.setAttribute("historialCitas", historialCitas);
+		} else {
+			homepage = "../admin/message.jsp";
+			request.setAttribute("message", "Ha habido un error.");
+			RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+			dispatcher.forward(request, response);
+		}
+		
 	}
 	
 	public List<Cita> buscarCitasPendientes(List<Cita> citas) {
@@ -275,6 +322,9 @@ public class CitaServicios {
 		CitaId citaId = new CitaId(idVisita, login);
 		Cita cita = citaDAO.get(citaId);
 		
+		Date ahora = new Date();
+		
+		request.setAttribute("esFutura", !ahora.after(cita.getHoraInicio()));
 		request.setAttribute("visita", visita);
 		request.setAttribute("cita", cita);
 		
@@ -407,5 +457,14 @@ public class CitaServicios {
 		}
 		
 		verCita("La ausencia ha sido notificada");
+	}
+
+	public void listarCitasProfesional() throws ServletException, IOException {
+		listarCitasPendientes();
+		listarHistorialCitas();
+		
+		String homepage = "../frontend/profesional/lista_citas.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		dispatcher.forward(request, response);
 	}
 }

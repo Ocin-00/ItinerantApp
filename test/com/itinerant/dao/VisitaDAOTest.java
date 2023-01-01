@@ -13,7 +13,6 @@ import javax.persistence.Persistence;
 
 import com.google.protobuf.TextFormat.ParseException;
 import com.itinerant.entity.Certificado;
-import com.itinerant.entity.CertificadoId;
 import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
 import com.itinerant.entity.UsuarioInterno;

@@ -49,10 +49,10 @@ public class UsuarioPrivilegiado extends UsuarioInterno {
 
 	public UsuarioPrivilegiado(String login, String password, String email, String nombre, 
 			String apellidos, String rol, Date fechaNac, String telefono, String nss, String organismoCoordinador,
-			byte[] fotoPerfil, Set<Chat> chatsForUsuarioFuente,Set<Alerta> alertas, 
-			Set<Chat> chatsForUsuarioDestino) {
-		super(login, password, email, nombre, apellidos, rol, fechaNac, fotoPerfil, chatsForUsuarioFuente, alertas,
-				chatsForUsuarioDestino);
+			byte[] fotoPerfil, Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
+			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
+		super(login, password, email, nombre, apellidos, rol, fechaNac, fotoPerfil, chatMensajesForIdRecipient, alertas, 
+				chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 		this.telefono = telefono;
 		this.nss = nss;
 		this.organismoCoordinador = organismoCoordinador;
