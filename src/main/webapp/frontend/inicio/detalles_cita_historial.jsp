@@ -79,7 +79,7 @@
 						</c:if>
 					</div>
 					<div>
-						<button  onclick="location.href='editar_visita?id=${visita.idVisita}';">Contactar</button>
+						<button  onclick="location.href='contactar?id=${visita.profesional.login}';">Contactar</button>
 					</div>
 				</div>
 			</div>

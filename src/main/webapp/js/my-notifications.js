@@ -3,7 +3,9 @@
  */
 $(document).ready(function(){
 		checkNotifications(true); //Lo ejecuta nada más cargar la página
+		checkMessageNumber();
 		setInterval(function() { checkNotifications(false); }, 5000); //Vuelve a comprobarlo cada 5 segs
+		setInterval(function() { checkMessageNumber(); }, 1000);
 		function checkNotifications(firstLoad) {
 			$.ajax({
 				type:"GET",
@@ -49,8 +51,25 @@ $(document).ready(function(){
 			});
 		}
 		
-		function htmlText() {
-			
+		function checkMessageNumber() {
+			$.ajax({
+				type:"GET",
+		        url:'../get_number_messages',	
+		        success: function(result){
+					let aux = JSON.parse(result);
+					
+					mensajesNoVistos = aux[0].numeroMensajes
+					if(mensajesNoVistos == 0) {
+						$("#chat-icon-badge").hide();
+					} else {
+						$("#chat-icon-badge").show();
+						$("#chat-icon-badge").text(mensajesNoVistos);
+					}
+		  		},
+		  		error: function(result){
+		            alert("error con los datos");
+		        }
+			});
 		}
 		
 		$("#notifications-tab").accordion({

@@ -1,5 +1,5 @@
 package com.itinerant.entity;
-// Generated 5 jul 2022 14:47:27 by Hibernate Tools 4.3.6.Final
+// Generated 22 dic 2022 13:04:01 by Hibernate Tools 4.3.6.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,30 +21,35 @@ import javax.persistence.Table;
  */
 @Entity
 @NamedQueries({
-	 @NamedQuery(name = "Chat.findAll", query = "SELECT l FROM Localidad l"),
-	 @NamedQuery(name = "Chat.countAll", query = "SELECT count(*) FROM Localidad l")
+	 @NamedQuery(name = "Chat.findAllByLogin", query = "SELECT c FROM Chat c WHERE c.usuarioInternoByIdSender.login = :login"
+	 												+ " OR c.usuarioInternoByIdRecipient.login = :login"),
+	 @NamedQuery(name = "Chat.findAllBySenderAndRecipient", query = "SELECT c FROM Chat c WHERE (c.usuarioInternoByIdSender.login = :sender"
+				+ " AND c.usuarioInternoByIdRecipient.login = :recipient) OR (c.usuarioInternoByIdRecipient.login = :sender"
+				+ " AND c.usuarioInternoByIdSender.login = :recipient)")
 })
 @Table(name = "chat", catalog = "itinerant_db")
 public class Chat implements java.io.Serializable {
 
 	private Integer idChat;
-	private UsuarioInterno usuarioInternoByUsuarioFuente;
-	private UsuarioInterno usuarioInternoByUsuarioDestino;
+	private UsuarioInterno usuarioInternoByIdRecipient;
+	private UsuarioInterno usuarioInternoByIdSender;
 	private Set<ChatMensaje> chatMensajes = new HashSet<ChatMensaje>(0);
+	private boolean nuevo;
 
 	public Chat() {
 	}
 
-	public Chat(UsuarioInterno usuarioInternoByUsuarioFuente, UsuarioInterno usuarioInternoByUsuarioDestino) {
-		this.usuarioInternoByUsuarioFuente = usuarioInternoByUsuarioFuente;
-		this.usuarioInternoByUsuarioDestino = usuarioInternoByUsuarioDestino;
+	public Chat(UsuarioInterno usuarioInternoByIdRecipient, UsuarioInterno usuarioInternoByIdSender) {
+		this.usuarioInternoByIdRecipient = usuarioInternoByIdRecipient;
+		this.usuarioInternoByIdSender = usuarioInternoByIdSender;
+		this.nuevo = true;
 	}
 
-	public Chat(UsuarioInterno usuarioInternoByUsuarioFuente, UsuarioInterno usuarioInternoByUsuarioDestino,
-			Set<ChatMensaje> chatMensajes) {
-		this.usuarioInternoByUsuarioFuente = usuarioInternoByUsuarioFuente;
-		this.usuarioInternoByUsuarioDestino = usuarioInternoByUsuarioDestino;
+	public Chat(UsuarioInterno usuarioInternoByIdRecipient, UsuarioInterno usuarioInternoByIdSender, Set<ChatMensaje> chatMensajes) {
+		this.usuarioInternoByIdRecipient = usuarioInternoByIdRecipient;
+		this.usuarioInternoByIdSender = usuarioInternoByIdSender;
 		this.chatMensajes = chatMensajes;
+		this.nuevo = true;
 	}
 
 	@Id
@@ -60,23 +65,23 @@ public class Chat implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usuario_fuente", nullable = false)
-	public UsuarioInterno getUsuarioInternoByUsuarioFuente() {
-		return this.usuarioInternoByUsuarioFuente;
+	@JoinColumn(name = "id_recipient", nullable = false)
+	public UsuarioInterno getUsuarioInternoByIdRecipient() {
+		return this.usuarioInternoByIdRecipient;
 	}
 
-	public void setUsuarioInternoByUsuarioFuente(UsuarioInterno usuarioInternoByUsuarioFuente) {
-		this.usuarioInternoByUsuarioFuente = usuarioInternoByUsuarioFuente;
+	public void setUsuarioInternoByIdRecipient(UsuarioInterno usuarioInternoByIdRecipient) {
+		this.usuarioInternoByIdRecipient = usuarioInternoByIdRecipient;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usuario_destino", nullable = false)
-	public UsuarioInterno getUsuarioInternoByUsuarioDestino() {
-		return this.usuarioInternoByUsuarioDestino;
+	@JoinColumn(name = "id_sender", nullable = false)
+	public UsuarioInterno getUsuarioInternoByIdSender() {
+		return this.usuarioInternoByIdSender;
 	}
 
-	public void setUsuarioInternoByUsuarioDestino(UsuarioInterno usuarioInternoByUsuarioDestino) {
-		this.usuarioInternoByUsuarioDestino = usuarioInternoByUsuarioDestino;
+	public void setUsuarioInternoByIdSender(UsuarioInterno usuarioInternoByIdSender) {
+		this.usuarioInternoByIdSender = usuarioInternoByIdSender;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
@@ -88,4 +93,12 @@ public class Chat implements java.io.Serializable {
 		this.chatMensajes = chatMensajes;
 	}
 
+	@Column(name = "nuevo", nullable = false, length = 100)
+	public boolean getNuevo() {
+		return this.nuevo;
+	}
+
+	public void setNuevo(boolean nuevo) {
+		this.nuevo = nuevo;
+	}
 }

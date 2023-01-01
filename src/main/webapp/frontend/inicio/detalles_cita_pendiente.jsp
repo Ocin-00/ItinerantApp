@@ -79,7 +79,7 @@
 						</c:if>
 					</div>
 					<div>
-						<button  onclick="location.href='editar_visita?id=${visita.idVisita}';">Contactar</button>
+						<button  onclick="location.href='contactar?id=${visita.profesional.login}';">Contactar</button>
 						<button href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular Cita</button>
 					</div>
 				</div>

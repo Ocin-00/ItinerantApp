@@ -27,32 +27,16 @@
 		<div id="notifications">
 			<button type="button" class="notification-bell" id="notification-bell" name="notification-bell">
 				<img alt="" src="../images/Notificaciones.png" height="45" class="notification-bell" id="notification-bell" name="notification-bell">
-				<!--
-				<input type="image" src="../images/Notificaciones.png" height="45" class="notification-bell" id="notification-bell" name="notification-bell"/> 
-				
-				<span class="material-icons">notifications</span>
-				
-				<c:if test="${numAlertasNoVistas > 0}">
-					<span class="notification-bell-badge" id="notification-bell-badge">${numAlertasNoVistas}</span>
-				</c:if>
-				-->
 				<span class="notification-bell-badge" id="notification-bell-badge">${numAlertasNoVistas}</span>
 			</button>
-			<div id="notifications-tab">
-			<!-- 
-				<c:forEach var="alerta" items="${misAlertas}" varStatus="status">
-						<h3 class="notification-title" idAlerta="${alerta.idAlerta}">${alerta.titulo}</h3>
-	  					<div>
-							<p>${alerta.cuerpo}</p>
-							<button class='delete-button' idAlerta='${alerta.idAlerta}'>Borrar</button>
-						</div>
-				</c:forEach>
-				<hr>
-				<a href="../limpiar_todo">Limpiar todo</a>
-			 -->
-			</div>
+			<div id="notifications-tab"></div>
 		</div>
-		<img src="../images/Chat.png" height="45" />
+		<div id="chat-button">
+			<button type="button" class="chat-icon" id="chat-icon" name="chat-icon" onclick="location.href='chat'">
+				<img alt="" src="../images/Chat.png" height="45" class="chat-icon" id="chat-icon" name="chat-icon">
+				<span class="chat-icon-badge" id="chat-icon-badge"></span>
+			</button>
+		</div>
 		<div class="dropdown">
 			<button id="iconoUsuario" class="dropdown-button"></button>
 			<label for="iconoUsuario"> 

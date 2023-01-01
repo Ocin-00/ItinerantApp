@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import com.itinerant.dao.AdministradorDAO;
 import com.itinerant.dao.AlertaDAO;
 import com.itinerant.dao.CategoriaDAO;
+import com.itinerant.dao.ChatDAO;
 import com.itinerant.dao.CiudadanoDAO;
 import com.itinerant.dao.LocalidadDAO;
 import com.itinerant.dao.ProfesionalDAO;
@@ -28,6 +29,8 @@ import com.itinerant.dao.UsuarioInternoDAO;
 import com.itinerant.entity.Administrador;
 import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Categoria;
+import com.itinerant.entity.Chat;
+import com.itinerant.entity.ChatMensaje;
 import com.itinerant.entity.Ciudadano;
 import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
@@ -43,14 +46,18 @@ public class UsuarioInternoServicios {
 	private EntityManager entityManager;
 	private AlertaDAO alertaDAO;
 	private AdministradorDAO administradorDAO;
+	private ChatDAO chatDAO;
+	private MensajeServicios mensajeServicios;
 
 	public UsuarioInternoServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		usuarioInternoDAO = new UsuarioInternoDAO(entityManager);
 		alertaDAO = new AlertaDAO(entityManager);
 		administradorDAO = new AdministradorDAO(entityManager);
+		chatDAO = new ChatDAO(entityManager);
 		this.request = request;
 		this.response = response;
 		this.entityManager = entityManager;
+		mensajeServicios = new MensajeServicios(entityManager, request, response);
 	}
 
 	public boolean emailRepetido(String email) {
@@ -67,6 +74,8 @@ public class UsuarioInternoServicios {
 		session.removeAttribute("userLogin");
 		session.removeAttribute("rol");
 		session.removeAttribute("misAlertas");
+		session.removeAttribute("misChats");
+		session.removeAttribute("mensajes");
 		/*
 		HashMap<String, Stack<Alerta>> pilasUsuarios = (HashMap<String, Stack<Alerta>>) request.getSession().getServletContext().getAttribute("PilasUsuarios");
 		pilasUsuarios.remove(login);
@@ -107,6 +116,28 @@ public class UsuarioInternoServicios {
 			
 			pilasUsuarios.put(login, notificaciones);			
 			request.getSession().getServletContext().setAttribute("PilasUsuarios", pilasUsuarios);
+			
+			HashMap<String, List<Chat>> chats = (HashMap<String, List<Chat>>) request.getSession().getServletContext().getAttribute("chats");
+			
+			List<Chat> misChats;
+			misChats = chats.get(login);
+			
+			if(misChats == null) {
+				misChats = new ArrayList<>();
+				List<Chat> chatsBD = chatDAO.findAllByLogin(login);
+				if(chatsBD != null) {
+					misChats.addAll(chatsBD);
+				}
+			}
+			
+			for(Chat chat : misChats) {
+				mensajeServicios.inicializarMensajes(chat.getIdChat());
+			}
+			
+			request.getSession().setAttribute("misChats", misChats);
+			
+			chats.put(login, misChats);			
+			request.getSession().getServletContext().setAttribute("chats", chats);
 			
 			if(rol.equals(Rol.ADMINISTRADOR.toString())) {
 				homepage = "/admin/";

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.itinerant.entity.Chat;
 import com.itinerant.entity.ChatMensaje;
 
 public class ChatMensajeDAO extends JpaDAO<ChatMensaje> implements GenericDAO<ChatMensaje> {
@@ -41,4 +42,15 @@ public class ChatMensajeDAO extends JpaDAO<ChatMensaje> implements GenericDAO<Ch
 	public long count() {
 		return super.countWithNamedQuery("ChatMensaje.countAll");
 	}	
+	
+	public List<ChatMensaje> findAllByChatId(Integer idChat) {
+		List<ChatMensaje> mensajes = super.findWithNamedQuery("ChatMensaje.findAllByChatId", "idChat", idChat);
+		
+		if(mensajes != null && mensajes.size() > 0) {
+			return mensajes;
+		}
+		
+		return null;
+			
+	}
 }

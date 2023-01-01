@@ -1,8 +1,12 @@
 package com.itinerant.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import com.itinerant.entity.Chat;
+import com.itinerant.entity.UsuarioInterno;
 
 public class ChatDAO extends JpaDAO<Chat> implements GenericDAO<Chat> {
 	
@@ -37,5 +41,31 @@ public class ChatDAO extends JpaDAO<Chat> implements GenericDAO<Chat> {
 	@Override
 	public long count() {
 		return super.countWithNamedQuery("Chat.countAll");
+	}
+
+	public List<Chat> findAllByLogin(String login) {
+		List<Chat> chats = super.findWithNamedQuery("Chat.findAllByLogin", "login", login);
+		
+		if(chats != null && chats.size() > 0) {
+			return chats;
+		}
+		
+		return null;
+			
+	}
+	
+	public Chat findBySenderAndRecipient(String sender, String recipient) {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("sender", sender);
+		parameters.put("recipient", recipient);
+		
+		List<Chat> chats  = super.findWithNamedQuery("Chat.findAllBySenderAndRecipient", parameters);
+		
+		if(chats != null && chats.size() > 0) {
+			return chats.get(0);
+		}
+		
+		return null;
+			
 	}
 }
