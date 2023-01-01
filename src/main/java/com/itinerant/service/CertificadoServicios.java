@@ -1,15 +1,22 @@
 package com.itinerant.service;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -74,16 +81,30 @@ public class CertificadoServicios {
 		UsuarioInterno usuario = usuarioInternoDAO.get(login);
 		
 		Integer id =Integer.parseInt(request.getParameter("id"));
-		certificadoDAO.delete(id);
-		
-		if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
-			listarCertificadosNoValidados("El certificado ha sido borrado con éxito.");
+		Certificado certificado = certificadoDAO.get(id);
+		if(borrarArchivo(certificado.getRuta())) {
+			certificadoDAO.delete(id);
+			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
+				listarCertificadosNoValidados("El certificado ha sido borrado con éxito.");
+			} else {
+				listarCertificados("El certificado ha sido borrado con éxito.");
+			}
 		} else {
-			listarCertificados("El certificado ha sido borrado con éxito");
+			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
+				listarCertificadosNoValidados("El certificado no ha podido ser borrado con éxito.");
+			} else {
+				listarCertificados("l certificado no ha podido ser borrado con éxito.");
+			}
 		}
 		
 	}
 
+	private boolean borrarArchivo(String ruta) {
+		String path = request.getServletContext().getRealPath("/") + ruta.substring(2);
+		File file = new File(path);
+		return file.delete();
+	}
+	
 	public void validarCertificado() throws ServletException, IOException {
 		Integer id =Integer.parseInt(request.getParameter("id"));
 		Certificado certificado = certificadoDAO.get(id);
@@ -134,8 +155,14 @@ public class CertificadoServicios {
 		}
 	}
 
-	private String nombrarFichero() {
-		return "certificado" + new File(FILE_FOLDER).list().length + ".pdf";
+	private String nombrarFichero() throws IOException {
+		String path = request.getServletContext().getRealPath("/") + "/files/number.txt";
+		List<Integer> ints = Files.lines(Paths.get(path)).map(Integer::parseInt).collect(Collectors.toList());
+		Integer number = ints.get(0) + 1;
+		Files.write(Paths.get(path), number.toString().getBytes());
+		// El path de verdad es C:\Users\Nico\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ItinerantApp\files
+		//System.out.println(path);
+		return "certificado" + number + ".pdf";
 	}
 
 	private Certificado inicializarDatos() throws IOException, ServletException {
@@ -188,7 +215,7 @@ public class CertificadoServicios {
 		return false;
 	}
 
-	public void actualizarCertificado() throws Exception {	//COMPLETAR
+	public void actualizarCertificado() throws Exception {
 		try {
 			int idCertificado = Integer.parseInt(request.getParameter("id"));
 			Certificado certificado = certificadoDAO.get(idCertificado);

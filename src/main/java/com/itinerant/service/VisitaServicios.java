@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -126,6 +129,7 @@ public class VisitaServicios {
 				alertaServicios.mandarNotificacion(alerta);
 				
 			}
+			borrarImagen(visita.getImagenRuta());
 			visitaDAO.delete(visitaId);
 			listarVisitas("La visita ha sido borrada con éxito.");
 		} else {
@@ -242,8 +246,20 @@ public class VisitaServicios {
 		return visita;
 	}
 
-	private String nombrarImagen() {
-		return "img" + new File(IMAGE_FOLDER).list().length + ".jpg";
+	private boolean borrarImagen(String ruta) {
+		String path = request.getServletContext().getRealPath("/") + ruta.substring(2);
+		File file = new File(path);
+		return file.delete();
+	}
+	
+	private String nombrarImagen() throws IOException {
+		String path = request.getServletContext().getRealPath("/") + "/img/number.txt";
+		List<Integer> ints = Files.lines(Paths.get(path)).map(Integer::parseInt).collect(Collectors.toList());
+		Integer number = ints.get(0) + 1;
+		Files.write(Paths.get(path), number.toString().getBytes());
+		// El path de verdad es C:\Users\Nico\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ItinerantApp\img
+		//System.out.println(path);
+		return "img" + number + ".jpg";
 	}
 
 	public void verVisita() throws ServletException, IOException {
@@ -284,8 +300,9 @@ public class VisitaServicios {
 	}
 
 	public void actualizarVisita() throws IOException, ServletException {
-		Visita visita= inicializarDatos();
+		Visita visita = inicializarDatos();
 		int idVisita = Integer.parseInt(request.getParameter("id"));
+		Visita visitaOriginal = visitaDAO.get(idVisita);
 		visita.setIdVisita(idVisita);
 		if(!hayIncompatibilidades()) {
 			List<Cita> citas = new ArrayList<>(visita.getCitas());
@@ -320,6 +337,9 @@ public class VisitaServicios {
 					AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
 					alertaServicios.mandarNotificacion(alerta);
 					
+				}
+				if(visitaOriginal.getImagenRuta() != null) {
+					borrarImagen(visitaOriginal.getImagenRuta());
 				}
 				visitaDAO.update(visita);
 				listarVisitas("La visita ha sido modificada con éxito");
