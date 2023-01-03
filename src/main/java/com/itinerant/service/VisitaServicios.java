@@ -41,6 +41,8 @@ import com.itinerant.entity.Supervisor;
 import com.itinerant.entity.Visita;
 import com.itinerant.enums.Rol;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 public class VisitaServicios {
 	private EntityManager entityManager;
 	private HttpServletRequest request;
@@ -172,15 +174,15 @@ public class VisitaServicios {
 	}
 
 	private Visita inicializarDatos() throws IOException, ServletException {
-		String nombre = request.getParameter("nombre");		
-		int codPostal = Integer.parseInt(request.getParameter("codPostal"));
-		String fechaTexto = request.getParameter("fecha");
-		int tiempo = Integer.parseInt(request.getParameter("tiempo"));
-		String horaInicioTexto = request.getParameter("horaInicio");
-		String horaFinTexto = request.getParameter("horaFin");
-		String descripcion = request.getParameter("descripcion");
-		double desplazamiento = Double.parseDouble(request.getParameter("desplazamiento"));
-		double precio = Double.parseDouble(request.getParameter("precio"));
+		String nombre = StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));		
+		int codPostal = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("codPostal")));
+		String fechaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("fecha"));
+		int tiempo = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("tiempo")));
+		String horaInicioTexto = StringEscapeUtils.escapeHtml4(request.getParameter("horaInicio"));
+		String horaFinTexto = StringEscapeUtils.escapeHtml4(request.getParameter("horaFin"));
+		String descripcion = StringEscapeUtils.escapeHtml4(request.getParameter("descripcion"));
+		double desplazamiento = Double.parseDouble(StringEscapeUtils.escapeHtml4(request.getParameter("desplazamiento")));
+		double precio = Double.parseDouble(StringEscapeUtils.escapeHtml4(request.getParameter("precio")));
 		
 		System.out.println(horaInicioTexto);
 		
@@ -312,7 +314,7 @@ public class VisitaServicios {
 			Date ahora = new Date();
 			Date tiempoLimite = new Date(fechaCita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
 			
-			String urgenciaTexto = request.getParameter("urgencia"); //FALTA AÑADIR URGENCIA EN HTTP
+			String urgenciaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("urgencia")); //FALTA AÑADIR URGENCIA EN HTTP
 			boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
 			boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
 			

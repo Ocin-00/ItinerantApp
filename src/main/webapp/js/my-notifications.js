@@ -2,6 +2,7 @@
  * 
  */
 $(document).ready(function(){
+	
 		checkNotifications(true); //Lo ejecuta nada más cargar la página
 		checkMessageNumber();
 		setInterval(function() { checkNotifications(false); }, 5000); //Vuelve a comprobarlo cada 5 segs
@@ -85,7 +86,7 @@ $(document).ready(function(){
 		$('#notification-bell').click(function(){
 			$("#notifications-tab").toggle();
 		});
-	});
+});
 	$(document).on("click", ".notification-title", function(){
 		id = $(this).attr("idAlerta");
 		$.ajax({

@@ -1,11 +1,11 @@
 <%@page import="java.text.SimpleDateFormat"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<c:if test="${sessionScope.userLogin != null}">
 		<link rel="stylesheet" href="../css/layout.css">
 		<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
@@ -34,14 +34,16 @@
 		<c:if test="${sessionScope.userLogin != null}">
 			<jsp:directive.include file="side_menu.jsp"/>
 		</c:if>
-		
+		<c:set var="imagenRuta" value="${visita.imagenRuta}"></c:set>
 		<div id="main-content-split">
 			<div>
 				<h2>Detalles de la visita</h2>
 				<table>
 					<tr>
 						<td rowspan="5">
-							<img src="${visita.imagenRuta}" id="thumbnail" alt="No hay imagen disponible" width="200"/>
+							<img src="<%String imagePath = request.getContextPath();
+		 						 out.println(imagePath + pageContext.getAttribute("imagenRuta").toString().substring(2)); 
+								 %>" id="thumbnail" alt="No hay imagen disponible" width="200"/>
 						</td>
 						<td>Nombre: ${visita.nombre}</td>
 					</tr>
@@ -94,11 +96,11 @@
 						</div>
 						<div>
 							<div>
-								<label>Dirección: ${horaCita.hours}:${horaCita.minutes}</label>
+								<label>DirecciÃ³n: ${horaCita.hours}:${horaCita.minutes}</label>
 							</div>
 								<input type="text" name="direccion" id="direccion">
 								<input type="checkbox" name="direccionUsuario" id="direccionUsuario" value="true">
-								<label for="direccionUsuario">Usar dirección guardada en la cuenta</label>
+								<label for="direccionUsuario">Usar direcciÃ³n guardada en la cuenta</label>
 						</div>
 						<div>					
 							<div>

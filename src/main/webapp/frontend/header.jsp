@@ -11,9 +11,9 @@
 			<img src="images/Logo AVANT.png" height="50"/>
 		</div>
 		<div class="header-items">
-			<form action="buscar" method="get">
+			<form action="buscar" method="get" id="buscarForm">
 				<div  id="header-searchbar">
-					<input type="search" placeholder="Buscar.." name="keyword" size="50">
+					<input type="search" placeholder="Buscar.." name="keyword" size="50" id="keyword">
 					<button type="submit">Buscar</button>
 				</div>
 			</form>

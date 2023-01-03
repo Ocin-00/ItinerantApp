@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
@@ -75,7 +75,7 @@
 					</c:if>
 					<table border="1">
 						<tr>
-							<th>Índice</th>
+							<th>Ãndice</th>
 							<th>Cliente</th>
 							<th>Visita</th>
 							<th>Fecha</th>
@@ -127,7 +127,7 @@
 				$(this).on("click", function() {
 					login = $(this).attr("id");
 					idVisita = $(this).attr("visita");
-					if(confirm("¿Desea eliminar la cita del usuario " + login + "?")) {
+					if(confirm("Â¿Desea eliminar la cita del usuario " + login + "?")) {
 						window.location = "anular_cita?id=" + idVisita + "&login=" + login;
 					}
 				});

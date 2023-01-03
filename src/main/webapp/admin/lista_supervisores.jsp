@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Itinerant - Administración</title>
+	<meta charset="UTF-8">
+	<title>Itinerant - AdministraciÃ³n</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
@@ -27,12 +27,12 @@
 			<h2>Supervisores autorizados</h2>
 			<table border="1">
 				<tr>
-					<th>Índice</th>
+					<th>Ãndice</th>
 					<th>Nombre</th>
 					<th>Apellidos</th>
 					<th>Login</th>
 					<th>Email</th>
-					<th>Teléfono</th>
+					<th>TelÃ©fono</th>
 					<th>Organismo Coordinador</th>
 					<th>Nivel de acceso</th>
 					<th>Acciones</th>
@@ -63,7 +63,7 @@
 						<td></td>
 						<td></td>
 						<td align="center">
-							<a href="supervisor_form.jsp">Añadir</a>
+							<a href="supervisor_form.jsp">AÃ±adir</a>
 						</td>
 					</tr>
 			</table>
@@ -76,7 +76,7 @@
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
 					login = $(this).attr("id");
-					if(confirm("¿Desea eliminar el usuario de login " + login + "?")) {
+					if(confirm("Â¿Desea eliminar el usuario de login " + login + "?")) {
 						window.location = "borrar_supervisor?id=" + login;
 					}
 				});

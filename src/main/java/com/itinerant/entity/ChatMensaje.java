@@ -91,7 +91,7 @@ public class ChatMensaje implements java.io.Serializable {
 		this.usuarioInternoByIdSender = usuarioInternoByIdSender;
 	}
 
-	@Column(name = "cuerpo", nullable = false, length = 45)
+	@Column(name = "cuerpo", nullable = false, length = 500)
 	public String getCuerpo() {
 		return this.cuerpo;
 	}

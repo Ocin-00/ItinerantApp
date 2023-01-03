@@ -37,6 +37,8 @@ import com.itinerant.entity.Profesional;
 import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.enums.Rol;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 public class CertificadoServicios {
 	private CertificadoDAO certificadoDAO;
 	private AlertaDAO alertaDAO;
@@ -169,10 +171,10 @@ public class CertificadoServicios {
 		String login = (String) request.getSession().getAttribute("userLogin");
 		Profesional profesional = profesionalDAO.get(login);
 		
-		String titulo = request.getParameter("titulo");
+		String titulo = StringEscapeUtils.escapeHtml4(request.getParameter("titulo"));
 		
-		int anyo = Integer.parseInt(request.getParameter("anyo"));
-		String entidadEmisora = request.getParameter("entidadEmisora");
+		int anyo = Integer.parseInt(StringEscapeUtils.escapeHtml4((String) request.getParameter("anyo")));
+		String entidadEmisora = StringEscapeUtils.escapeHtml4((String) request.getParameter("entidadEmisora"));
 		
 		if(certificadoRepetido(profesional, titulo, entidadEmisora, anyo)) {
 			listarCertificados("Lo sentimos, no puedes poner dos certificados con los mismos datos");

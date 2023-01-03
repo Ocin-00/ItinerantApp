@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>Itinerant - Profesionales</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<link rel="stylesheet" href="../css/side-bar-style.css">
@@ -32,10 +32,10 @@
 			</c:if>
 			<table border="1">
 				<tr>
-					<th>Índice</th>
-					<th>Título</th>
+					<th>Ãndice</th>
+					<th>TÃ­tulo</th>
 					<th>Entidad emisora</th>
-					<th>Año</th>
+					<th>AÃ±o</th>
 					<th>Validez</th>
 					<th>Acciones</th>
 				</tr>
@@ -61,7 +61,7 @@
 					<td></td>
 					<td></td>
 					<td align="center">
-						<a href="nuevo_certificado">Añadir</a>
+						<a href="nuevo_certificado">AÃ±adir</a>
 					</td>
 				</tr>
 			</table>
@@ -74,7 +74,7 @@
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
 					id = $(this).attr("id");
-					if(confirm("¿Desea eliminar este certificado?")) {
+					if(confirm("Â¿Desea eliminar este certificado?")) {
 						window.location = "borrar_certificado?id=" + id;
 					}
 				});

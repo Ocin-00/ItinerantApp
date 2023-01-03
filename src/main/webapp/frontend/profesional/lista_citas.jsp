@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>Itinerant - Profesionales</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<link rel="stylesheet" href="../css/side-bar-style.css">
@@ -34,14 +34,14 @@
 			<div class="tab-parent">
 				<ul class="tabs">
 					<li id="citasPendientes" class="option option-active"><a href="#contenidoCitasPendientes">Citas Pendientes</a></li>
-					<li id="historicoCitas" class="option"><a href="#contenidoHistorialCitas">Histórico de Citas</a></li>
+					<li id="historicoCitas" class="option"><a href="#contenidoHistorialCitas">HistÃ³rico de Citas</a></li>
 				</ul>
 				
 				<div class="tab-container">
 					<div id="contenidoCitasPendientes" class="tab_content">
 						<table border="1">
 							<tr>
-								<th>Índice</th>
+								<th>Ãndice</th>
 								<th>Cliente</th>
 								<th>Visita</th>
 								<th>Fecha</th>
@@ -71,7 +71,7 @@
 					<div id="contenidoHistorialCitas"  class="tab_content">
 						<table border="1">
 							<tr>
-								<th>Índice</th>
+								<th>Ãndice</th>
 								<th>Cliente</th>
 								<th>Visita</th>
 								<th>Fecha</th>
@@ -109,7 +109,7 @@
 				$(this).on("click", function() {
 					login = $(this).attr("id");
 					idVisita = $(this).attr("visita");
-					if(confirm("¿Desea eliminar la cita del usuario " + login + "?")) {
+					if(confirm("Â¿Desea eliminar la cita del usuario " + login + "?")) {
 						window.location = "anular_cita?id=" + idVisita + "&login=" + login;
 					}
 				});

@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	
 	<title>
 		<c:if test="${certificado == null}">
@@ -48,7 +48,7 @@
 							<td colspan="2"><input type="text" name="entidadEmisora" id="entidadEmisora" size="40" value="${certificado.entidadEmisora}"/></td>					
 						</tr>
 						<tr>
-							<td>Año: ${certificado.anyo}</td>
+							<td>AÃ±o: ${certificado.anyo}</td>
 						</tr>
 						<tr>
 							<td colspan="2">
@@ -88,9 +88,9 @@
 			
 			messages: {
 				
-				titulo: "Por favor introduzca el título de su certificado.",
+				titulo: "Por favor introduzca el tÃ­tulo de su certificado.",
 				entidadEmisora: "Por favor introduzca la entidad que emition el certificado.",
-				anyo: "Por favor introduzca el año en el que se expedió.",
+				anyo: "Por favor introduzca el aÃ±o en el que se expediÃ³.",
 				certificadoFile: "Por favor introduzca el certificado en formato PDF.",
 			}
 		});

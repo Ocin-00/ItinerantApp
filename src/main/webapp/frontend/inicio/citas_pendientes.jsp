@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>Itinerant - Citas Pendientes</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
@@ -28,12 +28,12 @@
 		<h3>Citas pendientes</h3>
 		<table border="1">
 			<tr>
-				<th>Índice</th>
+				<th>Ãndice</th>
 				<th>Profesional</th>
 				<th>Visita</th>
 				<th>Fecha</th>
 				<th>Hora</th>
-				<th>Teléfono</th>
+				<th>TelÃ©fono</th>
 				<th>Acciones</th>
 			</tr>
 			<c:forEach var="cita" items="${citas}" varStatus="status">
@@ -68,7 +68,7 @@
 				$(this).on("click", function() {
 					idVisita = $(this).attr("id");
 					login = "${sessionScope.userLogin}";
-					if(confirm("¿Desea eliminar esta cita?")) {
+					if(confirm("Â¿Desea eliminar esta cita?")) {
 						window.location = "anular_cita?id=" + idVisita + "&login=" + login;
 					}
 				});

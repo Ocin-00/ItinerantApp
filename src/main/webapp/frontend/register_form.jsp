@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>
 		<c:if test="${usuario == null}">
 			Registrarse
@@ -43,14 +43,14 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="right">Teléfono:</td>
+						<td align="right">TelÃ©fono:</td>
 						<td><input type="tel" name="telefono" id="telefono" size="20" value="${usuario.telefono}"/></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="right">Dirección:</td>
+						<td align="right">DirecciÃ³n:</td>
 						<td><input type="text" name="direccion" id="direccion" size="20" value="${usuario.direccion}"/></td>
 					</tr>
 					<tr>
@@ -108,7 +108,7 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td>Contraseña:</td>
+						<td>ContraseÃ±a:</td>
 					</tr>
 					<tr>
 						<c:if test="${usuario == null}">
@@ -126,7 +126,7 @@
 					</tr>
 					<c:if test="${usuario == null}">
 					<tr>
-						<td>Confirme la contraseña:</td>
+						<td>Confirme la contraseÃ±a:</td>
 					</tr>
 					<tr>
 						<td><input type="password" name="comfirmPassword" id="comfirmPassword" size="25" /></td>			
@@ -154,7 +154,7 @@
 			</div>
 			
 			<div class="main-centered-register-items">
-				<h2>Ayúdanos a conocerte mejor:</h2>
+				<h2>AyÃºdanos a conocerte mejor:</h2>
 				<table>
 					<tr>
 						<td align="right">Sexo:</td>
@@ -183,7 +183,7 @@
 					</table>
 					<table>
 					<tr>
-						<td>Formación:</td>
+						<td>FormaciÃ³n:</td>
 					</tr>
 					<tr>
 						<td>
@@ -249,25 +249,25 @@
 					
 					email: {
 						required: "Por favor introduzca su e-mail.",
-						email: "Por favor introduzca un e-mail válido."
+						email: "Por favor introduzca un e-mail vÃ¡lido."
 					},
 					nombre: "Por favor introduzca su nombre.",
 					apellidos: "Por favor introduzca sus apellidos.",
-					telefono: "Por favor introduzca el número de teléfono.",
-					formacion: "Por favor indique su formación.",
+					telefono: "Por favor introduzca el nÃºmero de telÃ©fono.",
+					formacion: "Por favor indique su formaciÃ³n.",
 					codPostal: "Por favor introduzca el municipio en el que vive.",
 					fechaNac: "Por favor introduzca su fecha de nacimiento.",
-					login: "Por favor introduzca un nombre de usuario válido.",
+					login: "Por favor introduzca un nombre de usuario vÃ¡lido.",
 					password: {
-						required: "Por favor introduzca la contraseña.",
+						required: "Por favor introduzca la contraseÃ±a.",
 						minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres.")
 					},
 					comfirmPassword: {
-						required: "Por favor repita la contraseña.",
+						required: "Por favor repita la contraseÃ±a.",
 						minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres."),
 						equalTo: "Los campos no coinciden."
 					},
-					tipoCuenta: "Por favor indique qué tipo de cuenta desea."
+					tipoCuenta: "Por favor indique quÃ© tipo de cuenta desea."
 				}
 			});
 	}); 
@@ -296,18 +296,18 @@
 				},
 				
 				messages: {
-					login: "Por favor introduzca un nombre de usuario válido.",
+					login: "Por favor introduzca un nombre de usuario vÃ¡lido.",
 					password: {
-						required: "Por favor introduzca la contraseña.",
+						required: "Por favor introduzca la contraseÃ±a.",
 						minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres.")
 					},
 					comfirmPassword: {
-						required: "Por favor repita la contraseña.",
+						required: "Por favor repita la contraseÃ±a.",
 						minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres."),
 						equalTo: "Los campos no coinciden."
 					},
 					formacion: {
-						required: "Por favor repita la contraseña."
+						required: "Por favor repita la contraseÃ±a."
 					},
 				}
 			});

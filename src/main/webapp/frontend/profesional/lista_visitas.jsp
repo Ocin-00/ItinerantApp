@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>Itinerant - Profesionales</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<link rel="stylesheet" href="../css/side-bar-style.css">
@@ -34,14 +34,14 @@
 			<div class="tab-parent">
 				<ul class="tabs">
 					<li id="visitasPendientes" class="option option-active"><a href="#contenidoVisitasPendientes">Visitas Pendientes</a></li>
-					<li id="historicoVisitas" class="option"><a href="#contenidoHistorialVisitas">Histórico de Visitas</a></li>
+					<li id="historicoVisitas" class="option"><a href="#contenidoHistorialVisitas">HistÃ³rico de Visitas</a></li>
 				</ul>
 				
 				<div class="tab-container">
 					<div id="contenidoVisitasPendientes" class="tab_content">
 						<table border="1">
 							<tr>
-								<th>Índice</th>
+								<th>Ãndice</th>
 								<th>Localidad</th>
 								<th>Fecha</th>
 								<th>Hora inicio</th>
@@ -78,7 +78,7 @@
 									<td></td>
 									<td></td>
 									<td align="center">
-										<a href="nueva_visita">Añadir</a>
+										<a href="nueva_visita">AÃ±adir</a>
 									</td>
 								</tr>
 						</table>
@@ -86,7 +86,7 @@
 					<div id="contenidoHistorialVisitas"  class="tab_content">
 						<table border="1">
 							<tr>
-								<th>Índice</th>
+								<th>Ãndice</th>
 								<th>Localidad</th>
 								<th>Fecha</th>
 								<th>Hora inicio</th>
@@ -129,7 +129,7 @@
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
 					id = $(this).attr("id");
-					if(confirm("¿Desea eliminar la visita de id " + id + "?")) {
+					if(confirm("Â¿Desea eliminar la visita de id " + id + "?")) {
 						window.location = "borrar_visita?id=" + id;
 					}
 				});

@@ -38,6 +38,8 @@ import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.enums.Rol;
 import com.itinerant.enums.Sexo;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 public class UsuarioInternoServicios {
 	
 	private UsuarioInternoDAO usuarioInternoDAO;
@@ -86,8 +88,8 @@ public class UsuarioInternoServicios {
 	
 	public void login(String login, String password) throws ServletException, IOException {
 		if(login == null || password == null) {
-			login = request.getParameter("login");
-			password = request.getParameter("password");
+			login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
+			password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
 		}
 		boolean loginResult = usuarioInternoDAO.checkLogin(login, password);
 		
@@ -167,19 +169,19 @@ public class UsuarioInternoServicios {
 	}
 
 	public void register() throws ServletException, IOException {
-		String nombre = request.getParameter("nombre");
-		String apellidos = request.getParameter("apellidos");
-		String telefono = request.getParameter("telefono");
-		String direccion = request.getParameter("direccion");
-		int codPostal = Integer.parseInt(request.getParameter("codPostal"));
-		String fechaNacTexto = request.getParameter("fechaNac");
-		String email = request.getParameter("email");
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
-		String rol = request.getParameter("tipoCuenta");
-		String sexo = request.getParameter("sexo");
-		String estadoCivil = request.getParameter("estadoCivil");
-		String formacion = request.getParameter("formacion");
+		String nombre = StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));
+		String apellidos = StringEscapeUtils.escapeHtml4(request.getParameter("apellidos"));
+		String telefono = StringEscapeUtils.escapeHtml4(request.getParameter("telefono"));
+		String direccion = StringEscapeUtils.escapeHtml4(request.getParameter("direccion"));
+		int codPostal = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("codPostal")));
+		String fechaNacTexto = StringEscapeUtils.escapeHtml4(request.getParameter("fechaNac"));
+		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
+		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
+		String rol = StringEscapeUtils.escapeHtml4(request.getParameter("tipoCuenta"));
+		String sexo = StringEscapeUtils.escapeHtml4(request.getParameter("sexo"));
+		String estadoCivil = StringEscapeUtils.escapeHtml4(request.getParameter("estadoCivil"));
+		String formacion = StringEscapeUtils.escapeHtml4(request.getParameter("formacion"));
 		
 		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
 		Localidad municipio = localidadDAO.get(codPostal);

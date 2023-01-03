@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Itinerant - Resultado de búsqueda</title>
+	<meta charset="utf-8">
+	<title>Itinerant - Resultado de bÃºsqueda</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
@@ -54,7 +54,7 @@
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
-<script type="text/javascript">
+<script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
 	/*
     var socket = new WebSocket("ws://localhost:8080/ItinerantApp/chat");
@@ -90,9 +90,9 @@ $(document).ready(function() {
             event.preventDefault();
          }
     });
-
+    
 	function sendMensaje() {
-		var mensaje = $(".write-message").val();
+	  var mensaje = $(".write-message").val();
   	  var idChat = '${idChat}';
   	  var usuario = '${recipient.login}'
   	  $.ajax({

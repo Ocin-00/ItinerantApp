@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Itinerant - Administración</title>
+	<meta charset="UTF-8">
+	<title>Itinerant - AdministraciÃ³n</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
@@ -23,14 +23,14 @@
 	<div id="main">
 		<jsp:directive.include file="side_menu.jsp"/>
 		<div id="main-content">
-			<h2>Certificados pendientes de verificación</h2>
+			<h2>Certificados pendientes de verificaciÃ³n</h2>
 			<table border="1">
 				<tr>
-					<th>Índice</th>
+					<th>Ãndice</th>
 					<th>Profesional</th>
-					<th>Título</th>
+					<th>TÃ­tulo</th>
 					<th>Entidad emisora</th>
-					<th>Año</th>
+					<th>AÃ±o</th>
 					<th>Fecha de Registro</th>
 					<th>Acciones</th>
 				</tr>
@@ -59,7 +59,7 @@
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
 					id = $(this).attr("id");
-					if(confirm("¿Desea anular este certificado?")) {
+					if(confirm("Â¿Desea anular este certificado?")) {
 						window.location = "anular_certificado?id=" + id;
 					}
 				});
@@ -67,7 +67,7 @@
 			$(".validateLink").each(function() {
 				$(this).on("click", function() {
 					id = $(this).attr("id");
-					if(confirm("¿Desea validar este certificado?")) {
+					if(confirm("Â¿Desea validar este certificado?")) {
 						window.location = "validar_certificado?id=" + id;
 					}
 				});

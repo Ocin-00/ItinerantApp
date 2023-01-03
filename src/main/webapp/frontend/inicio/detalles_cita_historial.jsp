@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
@@ -52,13 +52,13 @@
 						</td>
 					</tr>
 					<tr>
-						<td>Dirección: ${cita.direccion}</td>
+						<td>DirecciÃ³n: ${cita.direccion}</td>
 					</tr>
 					<tr>
 						<td>Precio: ${visita.precio}</td>
 					</tr>
 					<tr>
-						<td>Categorías: </td>
+						<td>CategorÃ­as: </td>
 					</tr>
 					<tr>
 						<c:forEach  var="categoria" items="${visita.categorias}" varStatus="status">
@@ -66,7 +66,7 @@
 						</c:forEach>
 					</tr>
 					<tr>
-						<td>Descrpición: </td>
+						<td>DescrpiciÃ³n: </td>
 					</tr>
 					<tr>
 						<td>${visita.descripcion}</td>
@@ -88,7 +88,7 @@
 					<c:if test="${cita.review == null}">
 						<form id="reviewForm" action="nueva_review?id=${visita.idVisita}&login=${cita.ciudadano.login}" method="post">
 							<div>
-								<label>Deja tu reseña:</label>
+								<label>Deja tu reseÃ±a:</label>
 							</div>
 							<div class="stars">
 								<input type="radio" id="uno" name="puntuacion" value="1">
@@ -112,7 +112,7 @@
 				<div>
 					<c:if test="${cita.review != null}">
 						<div>
-							<label>Tu reseña:</label>
+							<label>Tu reseÃ±a:</label>
 						</div>
 						<div class="blocked-stars">
 							<input type="radio" id="uno" name="puntuacion" value="1" disabled="disabled">
@@ -144,7 +144,7 @@ $(document).ready(function(){
 			review: "required",
 		},
 		messages: {
-			puntuacion: "Por favor, introduzca su puntuación.",
+			puntuacion: "Por favor, introduzca su puntuaciÃ³n.",
 			review: "Por favor, describa su experiencia."
 		}
 	});

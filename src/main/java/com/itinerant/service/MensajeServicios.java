@@ -22,6 +22,7 @@ import com.itinerant.entity.ChatMensaje;
 import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.enums.MessageStatus;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -115,9 +116,8 @@ public class MensajeServicios {
 	}
 
 	public void sendMensaje() {
-		String cuerpoMensaje = request.getParameter("mensaje");
+		String cuerpoMensaje = StringEscapeUtils.escapeHtml4(request.getParameter("mensaje"));
 		if(!cuerpoMensaje.isBlank() && !cuerpoMensaje.isEmpty() && cuerpoMensaje != null) {
-			System.out.println("SEND MESSAGE");
 			Integer idChat = Integer.parseInt(request.getParameter("id"));
 			Chat chat = chatDAO.get(idChat);
 			

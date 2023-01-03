@@ -1,12 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>Itinerant - Generalitat Valenciana</title>
 	<link href="/ItinerantApp/css/layout.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="js/general.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
@@ -21,17 +24,17 @@
 			</div>
 			<div class="main-centered-text">
 				<div>
-					<h4>¿Qué es Itinerant?</h4>
-					<label>Es un programa de servicios, promovido por la DG de la Agenda AVANT y la Federación Valenciana de Municipios y Provincias, con la colaboración de las Mancomunidades y municipios AVANT. El objetivo de este programa, es la investigación y movilización de profesionales itinerantes para prestar servicios básicos necesarios en los diferentes municipios.</label>
+					<h4>Â¿QuÃ© es Itinerant?</h4>
+					<label>Es un programa de servicios, promovido por la DG de la Agenda AVANT y la FederaciÃ³n Valenciana de Municipios y Provincias, con la colaboraciÃ³n de las Mancomunidades y municipios AVANT. El objetivo de este programa, es la investigaciÃ³n y movilizaciÃ³n de profesionales itinerantes para prestar servicios bÃ¡sicos necesarios en los diferentes municipios.</label>
 				</div>	
 				<div>
-					<h4>¿Qué intenta la aplicación?</h4>
-					<label>Poner en contacto a los profesionales dispuestos a prestar sus servicios a domicilio en municipios AVANT con potenciales clientes residentes en dichos muncipios. La aplicación pretende ayudar en la implantación y popularización del programa para así facilitar el acceso a servicios en los municipios en riesgo de despoblación.</label>
+					<h4>Â¿QuÃ© intenta la aplicaciÃ³n?</h4>
+					<label>Poner en contacto a los profesionales dispuestos a prestar sus servicios a domicilio en municipios AVANT con potenciales clientes residentes en dichos muncipios. La aplicaciÃ³n pretende ayudar en la implantaciÃ³n y popularizaciÃ³n del programa para asÃ­ facilitar el acceso a servicios en los municipios en riesgo de despoblaciÃ³n.</label>
 				</div>	
 				<div>
-					<h4>¿Dónde se ha implantado?</h4>
-					<label>En el mapa de la izquierda se pueden observar los municipios categorizacos como AVANT, es decir, en riesgo de despoblación. A su vez también son visibles los municpios en los que el programa Itinerant ya se ha implantado el programa. El objetivo es que Itinerant sea una realidad en todos los municipios que lo precisan.</label>
-					<label>En cuanto a la aplicación, todavía está en fase de desarrollo y aún no se ha podido poner en marcha.</label>
+					<h4>Â¿DÃ³nde se ha implantado?</h4>
+					<label>En el mapa de la izquierda se pueden observar los municipios categorizacos como AVANT, es decir, en riesgo de despoblaciÃ³n. A su vez tambiÃ©n son visibles los municpios en los que el programa Itinerant ya se ha implantado el programa. El objetivo es que Itinerant sea una realidad en todos los municipios que lo precisan.</label>
+					<label>En cuanto a la aplicaciÃ³n, todavÃ­a estÃ¡ en fase de desarrollo y aÃºn no se ha podido poner en marcha.</label>
 				</div>	
 			</div>	
 		</div>

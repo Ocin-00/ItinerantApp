@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
@@ -33,7 +33,7 @@
 						<td>Cliente: ${cita.ciudadano}</td>
 					</tr>
 					<tr>
-						<td>Dirección: ${cita.direccion}</td>
+						<td>DirecciÃ³n: ${cita.direccion}</td>
 					</tr>
 					<tr>
 						<td>Fecha: ${visita.fecha}</td>
@@ -86,7 +86,7 @@
 				$(this).on("click", function() {
 					login = $(this).attr("id");
 					idVisita = $(this).attr("visita");
-					if(confirm("¿Desea eliminar la cita del usuario " + login + "?")) {
+					if(confirm("Â¿Desea eliminar la cita del usuario " + login + "?")) {
 						window.location = "anular_cita?id=" + idVisita + "&login=" + login;
 					}
 				});
@@ -95,7 +95,7 @@
 				$(this).on("click", function() {
 					login = $(this).attr("id");
 					idVisita = $(this).attr("visita");
-					if(confirm("¿Desea reportar la ausencia del usuario " + login + " en su cita?")) {
+					if(confirm("Â¿Desea reportar la ausencia del usuario " + login + " en su cita?")) {
 						window.location = "informar_ausencia?id=" + idVisita + "&login=" + login;
 					}
 				});
@@ -106,7 +106,7 @@
 				},
 				
 				messages: {
-					urgencia: "Por favor indique por qué tiene que cancelar la cita."
+					urgencia: "Por favor indique por quÃ© tiene que cancelar la cita."
 				}
 			});
 		});

@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	
 	<title>
 		<c:if test="${visita == null}">
@@ -108,7 +108,7 @@
 				<div>
 					<table>
 						<tr>
-							<td>Descripción</td>
+							<td>DescripciÃ³n</td>
 						</tr>
 						<tr>
 							<td><textarea rows="5" cols="50" name="descripcion" id="descripcion">${visita.descripcion}</textarea></td>
@@ -126,7 +126,7 @@
 					<table>
 						<tr>
 						<!-- REPASAR POR CUESTIONES DE EFICIENCIA Y SENCILLEZ -->
-							<td>Categorías:</td>
+							<td>CategorÃ­as:</td>
 							<td>
 								<select multiple="multiple" name="categorias" id="categorias">
 									<c:forEach items="${listaCategorias}" var="categoria">
@@ -187,13 +187,13 @@
 			messages: {
 				
 				nombre: "Por favor introduzca el nombre de la visita.",
-				codPostal: "Por favor introduzca la localidad donde se llevará a cabo la visita.",
-				fecha: "Por favor introduzca la fecha en la que realizará la visita.",
-				tiempo: "Por favor introduzca la duración de las citas para esta visita en minutos.",
-				horaInicio: "Por favor indique la hora en la que iniciará la visita.",
-				horaFin: "Por favor indique la hora a la que finalizará la visita.",
+				codPostal: "Por favor introduzca la localidad donde se llevarÃ¡ a cabo la visita.",
+				fecha: "Por favor introduzca la fecha en la que realizarÃ¡ la visita.",
+				tiempo: "Por favor introduzca la duraciÃ³n de las citas para esta visita en minutos.",
+				horaInicio: "Por favor indique la hora en la que iniciarÃ¡ la visita.",
+				horaFin: "Por favor indique la hora a la que finalizarÃ¡ la visita.",
 				desplazamiento: "Por favor indique el tiempo estimado de desplazamiento entre citas.",
-				descripcion: "Por favor introduzca una descripción.",
+				descripcion: "Por favor introduzca una descripciÃ³n.",
 				precio: "Por favor introduzca el precio por cita.",
 			}
 		});

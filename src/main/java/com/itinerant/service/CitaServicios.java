@@ -38,6 +38,8 @@ import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.entity.Visita;
 import com.itinerant.enums.Rol;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 public class CitaServicios {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -193,9 +195,9 @@ public class CitaServicios {
 		if(direccionUsuario) {
 			direccion = usuario.getLocalizacion();
 		} else {
-			direccion = request.getParameter("direccion");
+			direccion = StringEscapeUtils.escapeHtml4(request.getParameter("direccion"));
 		}
-		String anotaciones = request.getParameter("anotaciones");
+		String anotaciones = StringEscapeUtils.escapeHtml4(request.getParameter("anotaciones"));
 		
 		CitaId citaId = new CitaId(visitaId, login);
 		Cita cita = new Cita(citaId, usuario, visita, hora, direccion);
@@ -243,7 +245,7 @@ public class CitaServicios {
 		Date ahora = new Date();
 		Date tiempoLimite = new Date(fechaCita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
 		
-		String urgenciaTexto = request.getParameter("urgencia"); //Construir alerta con esto.
+		String urgenciaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("urgencia")); //Construir alerta con esto.
 		boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
 		boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
 		
@@ -371,7 +373,7 @@ public class CitaServicios {
 		
 		boolean pasadoTiempoLimite = ahora.after(tiempoLimite); //Comprobar que esto funcione bien
 		
-		String anotaciones = request.getParameter("anotaciones");
+		String anotaciones = StringEscapeUtils.escapeHtml4(request.getParameter("anotaciones"));
 		cita.setAnotaciones(anotaciones);
 		
 		if(!pasadoTiempoLimite) {
@@ -423,7 +425,7 @@ public class CitaServicios {
 		CitaId citaId = new CitaId(idVisita, login);
 		Cita cita = citaDAO.get(citaId);
 		
-		String review = request.getParameter("review");
+		String review = StringEscapeUtils.escapeHtml4(request.getParameter("review"));
 		Integer puntuacion = Integer.parseInt(request.getParameter("puntuacion"));
 		cita.setReview(review);
 		cita.setPuntuacion(puntuacion);

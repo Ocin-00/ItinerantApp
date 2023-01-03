@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.itinerant.dao.SupervisorDAO;
 import com.itinerant.entity.Supervisor;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 public class SupervisorServicios {
 	private EntityManager entityManager;
 	private SupervisorDAO supervisorDAO;
@@ -46,16 +48,16 @@ public class SupervisorServicios {
 	}
 	
 	public Supervisor inicializarDatos() {
-		String nombre = request.getParameter("nombre");
-		String apellidos = request.getParameter("apellidos");
-		String telefono = request.getParameter("telefono");
-		String orgCoord= request.getParameter("organismoCoordinador");
-		String nss = request.getParameter("nss");	
-		String fechaNacTexto = request.getParameter("fechaNac");
-		String email = request.getParameter("email");
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
-		String nivelAcceso = request.getParameter("nivelAcceso");
+		String nombre = StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));
+		String apellidos = StringEscapeUtils.escapeHtml4(request.getParameter("apellidos"));
+		String telefono = StringEscapeUtils.escapeHtml4(request.getParameter("telefono"));
+		String orgCoord= StringEscapeUtils.escapeHtml4(request.getParameter("organismoCoordinador"));
+		String nss = StringEscapeUtils.escapeHtml4(request.getParameter("nss"));	
+		String fechaNacTexto = StringEscapeUtils.escapeHtml4(request.getParameter("fechaNac"));
+		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
+		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
+		String nivelAcceso = StringEscapeUtils.escapeHtml4(request.getParameter("nivelAcceso"));
 		SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");	
 		Date fechaNac = null;
 		try {

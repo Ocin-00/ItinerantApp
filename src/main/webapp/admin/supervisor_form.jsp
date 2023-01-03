@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
+	<meta charset="UTF-8">
 	<title>
 		<c:if test="${supervisor == null}">
 			Crear supervisor
@@ -46,7 +46,7 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td>Teléfono:</td>
+						<td>TelÃ©fono:</td>
 					</tr>
 					<tr>
 						<td><input type="tel" name="telefono" id="telefono" size="25" value="${supervisor.telefono}"/></td>
@@ -64,7 +64,7 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td>Nº de la Seguridad Social:</td>
+						<td>NÂº de la Seguridad Social:</td>
 					</tr>
 					<tr>
 						<td><input type="text" name="nss" id="nss" size="25" value="${supervisor.nss}"/></td>
@@ -108,7 +108,7 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td>Contraseña:</td>
+						<td>ContraseÃ±a:</td>
 					</tr>
 					<tr>
 						<c:if test="${supervisor == null}">
@@ -126,7 +126,7 @@
 					</tr>
 					<c:if test="${supervisor == null}">
 					<tr>
-						<td>Confirme la contraseña:</td>
+						<td>Confirme la contraseÃ±a:</td>
 					</tr>
 					<tr>
 						<td><input type="password" name="comfirmPassword" id="comfirmPassword" size="25" /></td>			
@@ -149,14 +149,14 @@
 							<c:if test="${supervisor.nivelAcceso != 'General'}">
 								<input type="radio" id="general" name="nivelAcceso" value="General">
 							</c:if>
-							<label for="general">General</label><br>  
+							<label for="general">General</label><br> Â 
 							<c:if test="${supervisor.nivelAcceso == 'Mancomunal'}">
 								<input type="radio" id="mancomunal" name="nivelAcceso" value="Mancomunal" checked="checked">
 							</c:if>
 							<c:if test="${supervisor.nivelAcceso != 'Mancomunal'}">
 								<input type="radio" id="mancomunal" name="nivelAcceso" value="Mancomunal"> 
 							</c:if> 
-							<label for="mancomunal">Mancomunal</label><br>   
+							<label for="mancomunal">Mancomunal</label><br> Â  
 							<c:if test="${supervisor.nivelAcceso == 'Municipal'}">
 								<input type="radio" id="municipal" name="nivelAcceso" value="Municipal" checked="checked">
 							</c:if>
@@ -209,22 +209,22 @@
 					
 					email: {
 						required: "Por favor introduzca el e-mail.",
-						email: "Por favor introduzca un e-mail válido."
+						email: "Por favor introduzca un e-mail vÃ¡lido."
 					},
 					nombre: "Por favor introduzca el nombre.",
 					apellidos: "Por favor introduzca los apellidos.",
-					telefono: "Por favor introduzca el número de teléfono.",
-					organismoCoordinador: "Por favor introduzca el nombre de la organización en la que trabaja el supervisor.",
-					nss: "Por favor introduzca el número de la seguridad social del supervisor.",
+					telefono: "Por favor introduzca el nÃºmero de telÃ©fono.",
+					organismoCoordinador: "Por favor introduzca el nombre de la organizaciÃ³n en la que trabaja el supervisor.",
+					nss: "Por favor introduzca el nÃºmero de la seguridad social del supervisor.",
 					fechaNac: "Por favor introduzca la fecha de nacimiento.",
-					login: "Por favor introduzca un nombre de usuario válido.",
+					login: "Por favor introduzca un nombre de usuario vÃ¡lido.",
 					password: {
-						required: "Por favor introduzca la contraseña.",
-						minlength: "Por favor, asegúrese de que la contraña tenga al menos 5 caracteres."
+						required: "Por favor introduzca la contraseÃ±a.",
+						minlength: "Por favor, asegÃºrese de que la contraÃ±a tenga al menos 5 caracteres."
 					},
 					comfirmPassword: {
-						required: "Por favor repita la contraseña.",
-						minlength: "Por favor, asegúrese de que la contraña tenga al menos 5 caracteres.",
+						required: "Por favor repita la contraseÃ±a.",
+						minlength: "Por favor, asegÃºrese de que la contraÃ±a tenga al menos 5 caracteres.",
 						equalTo: "Los campos no coinciden."
 					},
 					nivelAcceso: "Por favor indique un nivel de acceso."
