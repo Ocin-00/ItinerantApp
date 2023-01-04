@@ -31,9 +31,19 @@
 		<jsp:directive.include file="/frontend/header.jsp"/>
 	</c:if>
 	<div id="main">
-		<c:if test="${sessionScope.userLogin != null}">
-			<jsp:directive.include file="side_menu.jsp"/>
+		<c:if test="${sessionScope.rol == 'ADMINISTRADOR'}">
+			<jsp:directive.include file="/../admin/side_menu.jsp"/>
 		</c:if>
+		<c:if test="${sessionScope.rol == 'PROFESIONAL'}">
+			<jsp:directive.include file="/../frontend/profesional/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'CIUDADANO'}">
+			<jsp:directive.include file="/../frontend/inicio/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'SUPERVISOR'}">
+			<jsp:directive.include file="/../supervisor/side_menu.jsp"/>
+		</c:if>
+		
 		<c:set var="imagenRuta" value="${visita.imagenRuta}"></c:set>
 		<div id="main-content-split">
 			<div>
@@ -60,7 +70,7 @@
 						<td>Tiempo de cita: ${visita.duracionCitas} min</td>
 					</tr>
 					<tr>
-						<td>Precio: ${visita.precio}</td>
+						<td>Precio: ${visita.precio} &euro;</td>
 					</tr>
 					<tr>
 						<td>Categorias:</td>

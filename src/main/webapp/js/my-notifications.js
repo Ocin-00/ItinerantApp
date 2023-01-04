@@ -7,6 +7,7 @@ $(document).ready(function(){
 		checkMessageNumber();
 		setInterval(function() { checkNotifications(false); }, 5000); //Vuelve a comprobarlo cada 5 segs
 		setInterval(function() { checkMessageNumber(); }, 1000);
+		
 		function checkNotifications(firstLoad) {
 			$.ajax({
 				type:"GET",

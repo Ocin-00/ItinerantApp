@@ -35,7 +35,7 @@
 		<div class="chat">
 		    <c:if test="${recipient != null}">
 		    	<div class="header-chat">	    	
-		    		<img class="photo" src="${recipient.fotoPerfil}" alt="foto">
+		    		<img class="photo" src="${recipient.imagenRuta}" alt="foto">
 		    		 
 		    		<h2 class="name">${recipient.nombre} ${recipient.apellidos}</h2>
 		    	</div>

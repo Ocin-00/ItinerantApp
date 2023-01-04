@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.itinerant.dao.AlertaDAO;
 import com.itinerant.entity.Alerta;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.hibernate.proxy.HibernateProxy;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,8 +47,8 @@ public class AlertaServicios {
 		    for (Alerta alerta: alertas) {
 		    	JSONObject jobj = new JSONObject();
 			    jobj.put("idAlerta", alerta.getIdAlerta());
-			    jobj.put("titulo", alerta.getTitulo());
-			    jobj.put("cuerpo", alerta.getCuerpo());
+			    jobj.put("titulo", StringEscapeUtils.escapeHtml4(alerta.getTitulo()));
+			    jobj.put("cuerpo", StringEscapeUtils.escapeHtml4(alerta.getCuerpo()));
 			    jobj.put("visto", alerta.getVisto());
 			    jobj.put("nuevo", alerta.getNuevo());
 			    jobj.put("usuarioInterno", alerta.getUsuarioInterno().getLogin());

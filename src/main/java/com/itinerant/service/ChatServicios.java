@@ -19,6 +19,7 @@ import com.itinerant.entity.Chat;
 import com.itinerant.entity.ChatMensaje;
 import com.itinerant.entity.UsuarioInterno;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -64,9 +65,9 @@ public class ChatServicios {
 				JSONObject jobj = new JSONObject();
 				jobj.put("idChat", chat.getIdChat());
 			    jobj.put("login", usuario.getLogin());
-			    jobj.put("nombre", usuario.getNombre());
-			    jobj.put("apellidos", usuario.getApellidos());
-			    jobj.put("foto_perfil", usuario.getFotoPerfil());
+			    jobj.put("nombre", StringEscapeUtils.escapeHtml4(usuario.getNombre()));
+			    jobj.put("apellidos", StringEscapeUtils.escapeHtml4(usuario.getApellidos()));
+			    jobj.put("foto_perfil", usuario.getImagenRuta());
 			    jobj.put("email", usuario.getEmail());
 			    jobj.put("nuevo", chat.getNuevo());
 			    jobj.put("mensajes_pendientes", mensajeServicios.mensajesPendientes(chat));

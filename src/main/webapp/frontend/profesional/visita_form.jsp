@@ -117,7 +117,7 @@
 					<table>
 						<tr>
 							<td>Precio:</td>
-							<td><input type="number" name="precio" id="precio" size="5" value="${visita.precio}"/></td>
+							<td><input type="number" name="precio" id="precio" size="5" value="${visita.precio}"/> &euro;</td>
 						</tr>
 					</table>
 				</div>

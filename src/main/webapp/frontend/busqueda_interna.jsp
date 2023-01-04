@@ -23,7 +23,7 @@
 			<jsp:directive.include file="/../admin/side_menu.jsp"/>
 		</c:if>
 		<c:if test="${sessionScope.rol == 'PROFESIONAL'}">
-			<jsp:directive.include file="/../frontend/profesional/side_menu.jsp"/>
+			<jsp:directive.include file="../frontend/profesional/side_menu.jsp"/>
 		</c:if>
 		<c:if test="${sessionScope.rol == 'CIUDADANO'}">
 			<jsp:directive.include file="../frontend/inicio/side_menu.jsp"/>

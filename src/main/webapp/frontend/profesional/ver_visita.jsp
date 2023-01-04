@@ -55,7 +55,7 @@
 						<td>Tiempo de cita: ${visita.duracionCitas} min</td>
 					</tr>
 					<tr>
-						<td>Precio: ${visita.precio}</td>
+						<td>Precio: ${visita.precio} &euro;</td>
 					</tr>
 					<tr>
 						<td>Categorias:</td>

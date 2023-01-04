@@ -10,7 +10,7 @@
 							src="<%String path = request.getContextPath();
 		 						 out.println(path + pageContext.getAttribute("imagenRuta").toString().substring(2)); 
 								%>" /></td>
-						<td>${visita.nombre} | ${visita.precio} euros</td>
+						<td>${visita.nombre} | ${visita.precio} &euro;</td>
 					</tr>
 					<tr>
 						<td>${visita.descripcion}</td>

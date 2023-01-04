@@ -84,7 +84,7 @@ public class MensajeServicios {
 				jobj.put("idChat", mensaje.getChat().getIdChat());
 			    jobj.put("sender", senderId);
 			    jobj.put("recipient", mensaje.getUsuarioInternoByIdRecipient().getLogin());
-			    jobj.put("cuerpo", mensaje.getCuerpo());
+			    jobj.put("cuerpo", StringEscapeUtils.escapeHtml4(mensaje.getCuerpo()));
 			    jobj.put("status", mensaje.getStatus().toString());
 			    jobj.put("hora", mensaje.getHora());
 			    jobj.toString();

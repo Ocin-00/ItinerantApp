@@ -466,7 +466,7 @@ table.form {
 	display: inline-block;
 	position: relative;
 }
-/*
+/*CAMBIAR BOTÓN PARA QUE SEA MÁS EVIDENTE*/
 .home-icon{
 	position: relative;
 	display: flex;
@@ -475,12 +475,12 @@ table.form {
 	width: 45px;
 	height: 45px;
 	color: #333333;
-	background: black;
-	border: none;
+	background: transparent;
+	border: 2px solid black;
 	outline: none;
 	border-radius: 30%;
 }
-*/
+
 .home-icon:hover{
 	cursor: pointer;
 	background: #dddddd;
@@ -540,7 +540,7 @@ table.form {
 
 .discussion-message .photo{
 	border-radius: 50%;
-	border: 1px solid black;
+	/*border: 1px solid black;*/
 	height: 50px;
 	width: 50px;
 }
@@ -564,7 +564,7 @@ table.form {
 
 .discussion-message-active .photo{
 	border-radius: 50%;
-	border: 1px solid black;
+	/*border: 1px solid black;*/
 	height: 50px;
 	width: 50px;
 }
@@ -624,7 +624,7 @@ table.form {
 
 .header-chat .photo{
 	border-radius: 50%;
-	border: 1px solid black;
+	/*border: 1px solid black;*/
 	height: 60px;
 	width: 60px;
 }

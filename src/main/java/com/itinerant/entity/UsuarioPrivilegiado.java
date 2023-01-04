@@ -49,9 +49,9 @@ public class UsuarioPrivilegiado extends UsuarioInterno {
 
 	public UsuarioPrivilegiado(String login, String password, String email, String nombre, 
 			String apellidos, String rol, Date fechaNac, String telefono, String nss, String organismoCoordinador,
-			byte[] fotoPerfil, Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
+			String imagenRuta, Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
 			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
-		super(login, password, email, nombre, apellidos, rol, fechaNac, fotoPerfil, chatMensajesForIdRecipient, alertas, 
+		super(login, password, email, nombre, apellidos, rol, fechaNac, imagenRuta, chatMensajesForIdRecipient, alertas, 
 				chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 		this.telefono = telefono;
 		this.nss = nss;

@@ -42,7 +42,7 @@ public class UsuarioInterno implements java.io.Serializable {
 	protected String apellidos;
 	protected String rol;
 	protected Date fechaNac;
-	protected byte[] fotoPerfil;
+	protected String imagenRuta;
 	private Set<ChatMensaje> chatMensajesForIdRecipient = new HashSet<ChatMensaje>(0);
 	private Set<Alerta> alertas = new HashSet<Alerta>(0);
 	private Set<Chat> chatsForIdRecipient = new HashSet<Chat>(0);
@@ -61,10 +61,11 @@ public class UsuarioInterno implements java.io.Serializable {
 		this.apellidos = apellidos;
 		this.rol = rol;
 		this.fechaNac = fechaNac;
+		this.imagenRuta = "../img/default.jp";
 	}
 
 	public UsuarioInterno(String login, String password, String email, String nombre, String apellidos, String rol,
-						  Date fechaNac, byte[] fotoPerfil,Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
+						  Date fechaNac, String imagenRuta,Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
 						  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
 		this.login = login;
 		this.password = password;
@@ -73,7 +74,8 @@ public class UsuarioInterno implements java.io.Serializable {
 		this.apellidos = apellidos;
 		this.fechaNac = fechaNac;
 		this.rol = rol;
-		this.fotoPerfil = fotoPerfil;this.alertas = alertas;
+		this.imagenRuta = imagenRuta;
+		this.alertas = alertas;
 		this.chatsForIdRecipient = chatsForIdRecipient;
 		this.chatsForIdSender = chatsForIdSender;
 		this.chatMensajesForIdSender = chatMensajesForIdSender;
@@ -144,13 +146,13 @@ public class UsuarioInterno implements java.io.Serializable {
 		this.fechaNac = fechaNac;
 	}
 
-	@Column(name = "foto_perfil")
-	public byte[] getFotoPerfil() {
-		return this.fotoPerfil;
+	@Column(name = "imagen_ruta", nullable = false, length = 200)
+	public String getImagenRuta() {
+		return this.imagenRuta;
 	}
 
-	public void setFotoPerfil(byte[] fotoPerfil) {
-		this.fotoPerfil = fotoPerfil;
+	public void setImagenRuta(String imagenRuta) {
+		this.imagenRuta = imagenRuta;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuarioInternoByIdRecipient")
