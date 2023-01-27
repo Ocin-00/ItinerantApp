@@ -17,11 +17,13 @@ public class GetNumberMessagesServlet extends BaseServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		MensajeServicios mensajeServicios = new MensajeServicios(entityManager, request, response);
 		mensajeServicios.getNumeroMensajes();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		doGet(request, response);
 	}
 

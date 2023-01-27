@@ -84,7 +84,7 @@ public class MensajeServicios {
 				jobj.put("idChat", mensaje.getChat().getIdChat());
 			    jobj.put("sender", senderId);
 			    jobj.put("recipient", mensaje.getUsuarioInternoByIdRecipient().getLogin());
-			    jobj.put("cuerpo", StringEscapeUtils.escapeHtml4(mensaje.getCuerpo()));
+			    jobj.put("cuerpo", mensaje.getCuerpo());
 			    jobj.put("status", mensaje.getStatus().toString());
 			    jobj.put("hora", mensaje.getHora());
 			    jobj.toString();
@@ -116,12 +116,15 @@ public class MensajeServicios {
 	}
 
 	public void sendMensaje() {
+		String oricuerpoMensaje = request.getParameter("mensaje");
+		System.out.println(oricuerpoMensaje);
 		String cuerpoMensaje = StringEscapeUtils.escapeHtml4(request.getParameter("mensaje"));
+		System.out.println(cuerpoMensaje);
 		if(!cuerpoMensaje.isBlank() && !cuerpoMensaje.isEmpty() && cuerpoMensaje != null) {
 			Integer idChat = Integer.parseInt(request.getParameter("id"));
 			Chat chat = chatDAO.get(idChat);
 			
-			String recipientLogin = request.getParameter("usuario");
+			String recipientLogin = StringEscapeUtils.escapeHtml4(request.getParameter("usuario"));
 			UsuarioInterno recipient = usuarioInternoDAO.get(recipientLogin);
 			
 			String senderLogin = (String) request.getSession().getAttribute("userLogin");
@@ -165,8 +168,10 @@ public class MensajeServicios {
 		List<Chat> misChats = chats.get(login);
 		
 		int numeroMensajes = 0;
-		for(Chat chat : misChats) {
-			numeroMensajes += mensajesPendientes(chat);
+		if(misChats != null && misChats.size() > 0) {
+			for(Chat chat : misChats) {
+				numeroMensajes += mensajesPendientes(chat);
+			}
 		}
 		JSONArray jsArray = new JSONArray();
 		JSONObject jobj = new JSONObject();

@@ -22,6 +22,8 @@ public class BuscarServlet extends BaseServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		
 		VisitaServicios visitaServicios = new VisitaServicios(entityManager, request, response);
 		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
 		String keywordOriginal = request.getParameter("keyword");
@@ -29,7 +31,7 @@ public class BuscarServlet extends BaseServlet {
 		visitaServicios.buscar(keyword);
 		profesionalServicios.buscar(keyword);
 		
-		String homepage = "/frontend/busqueda_externa.jsp";;
+		String homepage = "/frontend/busqueda_externa.jsp";
 		if(request.getSession().getAttribute("userLogin") != null) {
 			homepage = "../frontend/busqueda_interna.jsp";
 		}

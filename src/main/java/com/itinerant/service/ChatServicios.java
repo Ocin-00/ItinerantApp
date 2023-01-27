@@ -65,8 +65,8 @@ public class ChatServicios {
 				JSONObject jobj = new JSONObject();
 				jobj.put("idChat", chat.getIdChat());
 			    jobj.put("login", usuario.getLogin());
-			    jobj.put("nombre", StringEscapeUtils.escapeHtml4(usuario.getNombre()));
-			    jobj.put("apellidos", StringEscapeUtils.escapeHtml4(usuario.getApellidos()));
+			    jobj.put("nombre", usuario.getNombre());
+			    jobj.put("apellidos", usuario.getApellidos());
 			    jobj.put("foto_perfil", usuario.getImagenRuta());
 			    jobj.put("email", usuario.getEmail());
 			    jobj.put("nuevo", chat.getNuevo());
@@ -102,8 +102,8 @@ public class ChatServicios {
 	}
 
 	public void inicializarChat() throws ServletException, IOException {
-		String recipient = request.getParameter("usuario");
-		String id = request.getParameter("id");
+		String recipient = StringEscapeUtils.escapeHtml4(request.getParameter("usuario"));
+		String id = StringEscapeUtils.escapeHtml4(request.getParameter("id"));
 		if(recipient != null) {
 			inicializarChat(recipient, id);
 		} else {
@@ -125,7 +125,7 @@ public class ChatServicios {
 	}
 
 	public void contactar() throws ServletException, IOException {
-		String idRecipient = request.getParameter("id");
+		String idRecipient = StringEscapeUtils.escapeHtml4(request.getParameter("id"));
 		String login = (String) request.getSession().getAttribute("userLogin");		
 		
 		Chat chat = chatDAO.findBySenderAndRecipient(login, idRecipient);
@@ -142,6 +142,9 @@ public class ChatServicios {
 			List<Chat> susChats = chats.get(idRecipient);
 			
 			misChats.add(chat);
+			if(susChats == null) {
+				susChats = new ArrayList<>();
+			}
 			susChats.add(chat);
 			chats.put(login, misChats);
 			chats.put(idRecipient, susChats);

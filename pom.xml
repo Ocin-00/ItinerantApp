@@ -66,6 +66,14 @@
 		    <artifactId>commons-text</artifactId>
 		    <version>1.10.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.gwtopenmaps.openlayers</groupId>
+		    <artifactId>gwt-openlayers</artifactId>
+		    <version>1.1.0</version>
+		    <type>pom</type>
+		</dependency>
+
+				
 		
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>

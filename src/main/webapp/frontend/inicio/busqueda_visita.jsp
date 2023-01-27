@@ -1,4 +1,5 @@
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="org.apache.commons.text.StringEscapeUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -45,15 +46,19 @@
 		</c:if>
 		
 		<c:set var="imagenRuta" value="${visita.imagenRuta}"></c:set>
+		<c:set var="nombre" value="${visita.nombre}"></c:set>
 		<div id="main-content-split">
 			<div>
 				<h2>Detalles de la visita</h2>
 				<table>
 					<tr>
 						<td rowspan="5">
-							<img src="<%String imagePath = request.getContextPath();
-		 						 out.println(imagePath + pageContext.getAttribute("imagenRuta").toString().substring(2)); 
-								 %>" id="thumbnail" alt="No hay imagen disponible" width="200"/>
+							<img src="<%String imgPath = request.getContextPath();
+								   Object imagenRuta = pageContext.getAttribute("imagenRuta");
+								   if(imagenRuta != null) {
+									   out.println(imgPath + imagenRuta.toString().substring(2)); 
+								   }
+								%>" id="thumbnail" alt="No hay imagen disponible" width="200"/>
 						</td>
 						<td>Nombre: ${visita.nombre}</td>
 					</tr>

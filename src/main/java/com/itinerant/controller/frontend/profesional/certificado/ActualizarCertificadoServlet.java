@@ -26,6 +26,7 @@ public class ActualizarCertificadoServlet extends BaseServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		CertificadoServicios certificadoServicios = new CertificadoServicios(entityManager, request, response);
 		try {
 			certificadoServicios.actualizarCertificado();

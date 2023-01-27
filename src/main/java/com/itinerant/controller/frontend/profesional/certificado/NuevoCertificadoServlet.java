@@ -24,6 +24,7 @@ public class NuevoCertificadoServlet extends BaseServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		String listpage = "../frontend/profesional/certificado_form.jsp";
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(listpage);
 		requestDispatcher.forward(request, response);

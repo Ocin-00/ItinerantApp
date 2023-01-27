@@ -49,8 +49,6 @@ public class CertificadoServicios {
 	private UsuarioInternoDAO usuarioInternoDAO;
 	private EntityManager entityManager;
 	
-	private final String FILE_FOLDER = "C:/Users/Nico/git/repository/ItinerantApp/src/main/webapp/files/";
-
 	public CertificadoServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		certificadoDAO = new CertificadoDAO(entityManager);
 		profesionalDAO = new ProfesionalDAO(entityManager);
@@ -70,6 +68,7 @@ public class CertificadoServicios {
 		List<Certificado> certificadosSinValidar = certificadoDAO.listAllNotValid();
 		request.setAttribute("certificadosSinValidar", certificadosSinValidar);
 		if(message != null) {
+			System.out.println(message);
 			request.setAttribute("message", message);
 		}
 		
@@ -79,14 +78,22 @@ public class CertificadoServicios {
 	}
 
 	public void anularCertificado() throws ServletException, IOException {
-		String login = (String) request.getSession().getAttribute("userLogin");
+		String login = StringEscapeUtils.escapeHtml4((String) request.getSession().getAttribute("userLogin"));
 		UsuarioInterno usuario = usuarioInternoDAO.get(login);
-		
 		Integer id =Integer.parseInt(request.getParameter("id"));
 		Certificado certificado = certificadoDAO.get(id);
 		if(borrarArchivo(certificado.getRuta())) {
 			certificadoDAO.delete(id);
 			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
+				String cuerpoAlerta = "Lo sentimos, pero el certificado de título " + certificado.getTitulo()
+										+" emitido por la institución " + certificado.getEntidadEmisora() + " el año "+ certificado.getAnyo() + " no ha sido validado. ";								
+				Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado no validado", cuerpoAlerta, false);
+				
+				alerta = alertaDAO.create(alerta);
+				
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
+				
 				listarCertificadosNoValidados("El certificado ha sido borrado con éxito.");
 			} else {
 				listarCertificados("El certificado ha sido borrado con éxito.");
@@ -95,7 +102,7 @@ public class CertificadoServicios {
 			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
 				listarCertificadosNoValidados("El certificado no ha podido ser borrado con éxito.");
 			} else {
-				listarCertificados("l certificado no ha podido ser borrado con éxito.");
+				listarCertificados("El certificado no ha podido ser borrado con éxito.");
 			}
 		}
 		
@@ -103,8 +110,11 @@ public class CertificadoServicios {
 
 	private boolean borrarArchivo(String ruta) {
 		String path = request.getServletContext().getRealPath("/") + ruta.substring(2);
+		System.out.println(path);
 		File file = new File(path);
-		return file.delete();
+		boolean a = file.delete();
+		System.out.println(a);
+		return a;
 	}
 	
 	public void validarCertificado() throws ServletException, IOException {
@@ -112,7 +122,16 @@ public class CertificadoServicios {
 		Certificado certificado = certificadoDAO.get(id);
 		certificado.setValidez(true);
 		certificadoDAO.update(certificado);
-		listarCertificadosNoValidados("La cuenta del profesional ha sido validada con éxito.");
+		String cuerpoAlerta = "El certificado de título " + certificado.getTitulo()
+		+" emitido por la institución " + certificado.getEntidadEmisora() + " el año "+ certificado.getAnyo() + " ha sido validado. ";								
+		Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado validado", cuerpoAlerta, false);
+		
+		alerta = alertaDAO.create(alerta);
+		
+		AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+		alertaServicios.mandarNotificacion(alerta);
+		
+		listarCertificadosNoValidados("El certificado ha sido validado con éxito.");
 	}
 
 	public void listarCertificados() throws ServletException, IOException {
@@ -120,7 +139,7 @@ public class CertificadoServicios {
 	}
 	
 	public void listarCertificados(String message) throws ServletException, IOException {
-		String login = (String) request.getSession().getAttribute("userLogin");
+		String login = StringEscapeUtils.escapeHtml4((String) request.getSession().getAttribute("userLogin"));
 		Profesional profesional = profesionalDAO.get(login);
 		List<Certificado> certificados = new ArrayList<>(profesional.getCertificados());
 		
@@ -144,16 +163,16 @@ public class CertificadoServicios {
 			for(int i = 0; i < admins.size(); i++) {
 				Alerta alerta = new Alerta(admins.get(i), "Nuevo certificado", cuerpoAlerta, false);
 				
+				alerta = alertaDAO.create(alerta);
+				
 				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
 				alertaServicios.mandarNotificacion(alerta);
-				
-				alertaDAO.create(alerta);
 			}
 			
 			listarCertificados("El certificado se ha registrado con éxito.");
 		} catch (Exception e) {
 			throw e;
-			//listarCertificados("Lo sentimos, no se ha podido realizar con éxito.");
+			//listarCertificados("Lo sentimos, no se ha podido registrar con éxito.");
 		}
 	}
 
@@ -168,7 +187,7 @@ public class CertificadoServicios {
 	}
 
 	private Certificado inicializarDatos() throws IOException, ServletException {
-		String login = (String) request.getSession().getAttribute("userLogin");
+		String login = StringEscapeUtils.escapeHtml4((String) request.getSession().getAttribute("userLogin"));
 		Profesional profesional = profesionalDAO.get(login);
 		
 		String titulo = StringEscapeUtils.escapeHtml4(request.getParameter("titulo"));
@@ -188,7 +207,7 @@ public class CertificadoServicios {
 			
 			InputStream inputStream = part.getInputStream();
 			String nombreFichero = nombrarFichero();
-			String src = FILE_FOLDER + nombreFichero;
+			String src = request.getServletContext().getRealPath("/") + "/files/" + nombreFichero;
 			OutputStream outputStream = new FileOutputStream(src);
 			int length; 
 			

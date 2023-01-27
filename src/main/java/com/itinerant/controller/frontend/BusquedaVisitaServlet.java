@@ -17,6 +17,7 @@ public class BusquedaVisitaServlet extends BaseServlet {
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		VisitaServicios visitaServicios = new VisitaServicios(entityManager, request, response);
 		visitaServicios.VerVisitaBusqueda();
 	}

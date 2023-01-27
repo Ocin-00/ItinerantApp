@@ -21,7 +21,9 @@ public class ActualizarSupervisorServlet extends BaseServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-		SupervisorServicios supervisorServicios = new SupervisorServicios(entityManager, request, response);
+    	request.setCharacterEncoding("UTF-8");
+    	
+    	SupervisorServicios supervisorServicios = new SupervisorServicios(entityManager, request, response);
 		supervisorServicios.actualizarSupervisor();
 	}
 

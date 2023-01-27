@@ -50,9 +50,6 @@ public class VisitaServicios {
 	private VisitaDAO visitaDAO;
 	private CitaDAO citaDAO;
 	private AlertaDAO alertaDAO;
-	private final String IMAGE_FOLDER = "C:/Users/Nico/git/repository/ItinerantApp/src/main/webapp/img/"; //Si se cambia esta ruta cambiar la de visita.setImagenRuta();
-	//private final String IMAGE_FOLDER = "../../../../webapp/img/";
-	
 	
 	public VisitaServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		visitaDAO = new VisitaDAO(entityManager);
@@ -83,7 +80,7 @@ public class VisitaServicios {
 			}
 		}
 		
-		request.setAttribute("visitasPendiente", visitasPendientes);
+		request.setAttribute("visitasPendientes", visitasPendientes);
 		request.setAttribute("historialVisitas", historialVisitas);
 		if(message != null) {
 			request.setAttribute("message", message);
@@ -95,43 +92,47 @@ public class VisitaServicios {
 	}
 	
 	public void borrarVisita() throws ServletException, IOException {
-		int visitaId = Integer.parseInt(request.getParameter("id"));
+		Integer visitaId = Integer.parseInt(request.getParameter("id"));
 		Visita visita = visitaDAO.get(visitaId);
-		List<Cita> citas = new ArrayList<>(visita.getCitas());
+		List<Cita> citas = citaDAO.listAllById(visitaId);
 		
 		Date fechaCita = visita.getHoraInicio();
 		
 		Date ahora = new Date();
 		Date tiempoLimite = new Date(fechaCita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
 		
-		String urgenciaTexto = request.getParameter("urgencia"); //FALTA AÑADIR URGENCIA EN HTTP
+		String urgenciaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("urgencia"));
 		boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
 		boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
 		
 		if(urgencia || !pasadoTiempoLimite) {
-			for(int i = 0; i < citas.size(); i++) {
-				Cita cita = citas.get(i);
-				citaDAO.delete(cita.getId());
-				SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
-				
-				String cuerpoAlerta = null;
-				
-				if(urgencia) { 
-					cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
-										+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada por el siguiente motivo:" + urgenciaTexto;
-				} else {
-					cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
-										+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";
+			if(citas != null) {
+				for(int i = 0; i < citas.size(); i++) {
+					Cita cita = citas.get(i);
+					citaDAO.delete(cita.getId());
+					SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
+					
+					String cuerpoAlerta = null;
+					
+					if(urgencia) { 
+						cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+											+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada por el siguiente motivo:" + urgenciaTexto;
+					} else {
+						cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+											+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";
+					}
+					Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", cuerpoAlerta, false);
+					alertaDAO.create(alerta);
+					//Mandar notificación
+					AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+					alertaServicios.mandarNotificacion(alerta);
+					
 				}
-				Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", cuerpoAlerta, false);
-				alertaDAO.create(alerta);
-				//Mandar notificación
-				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
-				alertaServicios.mandarNotificacion(alerta);
-				
 			}
-			borrarImagen(visita.getImagenRuta());
+			if(visita.getImagenRuta() != null) {
+				borrarImagen(visita.getImagenRuta());
+			}
 			visitaDAO.delete(visitaId);
 			listarVisitas("La visita ha sido borrada con éxito.");
 		} else {
@@ -163,10 +164,12 @@ public class VisitaServicios {
 	public void crearVisita() throws ServletException, IOException {		
 		Visita visita = inicializarDatos();
 		if(!hayIncompatibilidades()) {
-			visitaDAO.create(visita);
+			//visitaDAO.create(visita);
 			listarVisitas("La visita ha sido creada con éxito");
+		} else {
+			listarVisitas("La visita no se ha podido crear");
 		}
-		listarVisitas("La visita no se ha podido crear");
+		
 	}
 
 	private boolean hayIncompatibilidades() {
@@ -174,18 +177,16 @@ public class VisitaServicios {
 	}
 
 	private Visita inicializarDatos() throws IOException, ServletException {
-		String nombre = StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));		
-		int codPostal = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("codPostal")));
-		String fechaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("fecha"));
-		int tiempo = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("tiempo")));
-		String horaInicioTexto = StringEscapeUtils.escapeHtml4(request.getParameter("horaInicio"));
-		String horaFinTexto = StringEscapeUtils.escapeHtml4(request.getParameter("horaFin"));
+		String nombre =  StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));	
+		int codPostal = Integer.parseInt(request.getParameter("codPostal"));
+		String fechaTexto = request.getParameter("fecha");
+		int tiempo = Integer.parseInt(request.getParameter("tiempo"));
+		String horaInicioTexto = request.getParameter("horaInicio");
+		String horaFinTexto = request.getParameter("horaFin");
 		String descripcion = StringEscapeUtils.escapeHtml4(request.getParameter("descripcion"));
-		double desplazamiento = Double.parseDouble(StringEscapeUtils.escapeHtml4(request.getParameter("desplazamiento")));
-		double precio = Double.parseDouble(StringEscapeUtils.escapeHtml4(request.getParameter("precio")));
-		
-		System.out.println(horaInicioTexto);
-		
+		double desplazamiento = Double.parseDouble(request.getParameter("desplazamiento"));
+		double precio = Double.parseDouble(request.getParameter("precio"));
+				
 		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
 		Localidad localidad = localidadDAO.get(codPostal);
 		
@@ -222,7 +223,7 @@ public class VisitaServicios {
 			
 			InputStream inputStream = part.getInputStream();
 			String nombreImagen = nombrarImagen();
-			String src = IMAGE_FOLDER + nombreImagen;
+			String src = request.getServletContext().getRealPath("/") + "/img/" + nombreImagen;
 			OutputStream outputStream = new FileOutputStream(src);
 			int length; 
 			
@@ -244,7 +245,7 @@ public class VisitaServicios {
 		    }
 		    visita.setCategorias(categorias);
 		}
-		
+		visitaDAO.create(visita);
 		return visita;
 	}
 

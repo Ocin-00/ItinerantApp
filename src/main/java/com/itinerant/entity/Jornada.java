@@ -1,5 +1,5 @@
 package com.itinerant.entity;
-// Generated 5 jul 2022 14:47:27 by Hibernate Tools 4.3.6.Final
+// Generated 26 ene 2023 10:48:55 by Hibernate Tools 4.3.6.Final
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -28,14 +28,7 @@ public class Jornada implements java.io.Serializable {
 
 	@AttributeOverrides({
 			@AttributeOverride(name = "idProfesional", column = @Column(name = "id_profesional", nullable = false, length = 30)),
-			@AttributeOverride(name = "idLocalidad", column = @Column(name = "id_localidad", nullable = false)),
-			@AttributeOverride(name = "fecha", column = @Column(name = "fecha", nullable = false, length = 10)),
-			@AttributeOverride(name = "horaInicio", column = @Column(name = "hora_inicio", nullable = false, length = 19)),
-			@AttributeOverride(name = "horaFin", column = @Column(name = "hora_fin", nullable = false, length = 19)),
-			@AttributeOverride(name = "descripcion", column = @Column(name = "descripcion", nullable = false, length = 200)),
-			@AttributeOverride(name = "duracionCitas", column = @Column(name = "duracion_citas", nullable = false)),
-			@AttributeOverride(name = "duracionDesplazamiento", column = @Column(name = "duracion_desplazamiento", nullable = false, precision = 22, scale = 0)),
-			@AttributeOverride(name = "precio", column = @Column(name = "precio", nullable = false, precision = 22, scale = 0)) })
+			@AttributeOverride(name = "fecha", column = @Column(name = "fecha", nullable = false, length = 10)) })
 	public JornadaId getId() {
 		return this.id;
 	}

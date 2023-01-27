@@ -25,6 +25,7 @@ public class EditarCertificadoServlet extends BaseServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		CertificadoServicios certificadoServicios = new CertificadoServicios(entityManager, request, response);
 		certificadoServicios.editarCertificado();
 	}

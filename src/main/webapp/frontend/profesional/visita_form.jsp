@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -197,6 +196,14 @@
 				precio: "Por favor introduzca el precio por cita.",
 			}
 		});
+
+		$("#tiempo").bind("keypress", function (e) {
+	          var keyCode = e.which ? e.which : e.keyCode
+	               
+	          if (!(keyCode >= 48 && keyCode <= 57)) {
+	        	  event.preventDefault();
+	          }
+	      });
 		
 		$("#imagenVisita").change(function() {
 			showImageThumbnail(this);

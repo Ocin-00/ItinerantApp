@@ -16,12 +16,14 @@ public class GetNotificationsServlet extends BaseServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
 		alertaServicios.getAlertas();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		//doGet(request, response);
 		/*AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
 		alertaServicios.getAlertas();*/

@@ -85,11 +85,12 @@ public class CitaServicios {
 			listarCitas(message, homepage, citasPendientes);
 			
 		} else if(usuario.getRol().equals(Rol.PROFESIONAL.toString())){
-			Profesional profesional = profesionalDAO.get(login);
+			/*Profesional profesional = profesionalDAO.get(login);
 			List<Visita> visitas = new ArrayList<Visita>(profesional.getVisitas());
 			for(Visita visita : visitas) {
 				citas.addAll(visita.getCitas());
-			}
+			}*/
+			citas = citaDAO.listAllByLogin(login);
 			List<Cita> citasPendientes = buscarCitasPendientes(citas);
 			request.setAttribute("citasPendientes", citasPendientes);
 		} else {
@@ -205,7 +206,8 @@ public class CitaServicios {
 			cita.setAnotaciones(anotaciones);
 		}
 		try {
-			citaDAO.create(cita);							  
+			citaDAO.create(cita);	
+			visita.getCitas().add(cita);
 			message = "La cita se ha guardado con éxito.";
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
@@ -234,7 +236,7 @@ public class CitaServicios {
 
 	
 	public void anularCitaProfesional() throws ServletException, IOException {
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		
 		CitaId citaId = new CitaId(idVisita, login);
@@ -279,7 +281,7 @@ public class CitaServicios {
 	}
 	
 	public void anularCitaCiudadano() throws ServletException, IOException {
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		
 		CitaId citaId = new CitaId(idVisita, login);
@@ -317,8 +319,10 @@ public class CitaServicios {
 	}
 	
 	public void verCita(String message) throws ServletException, IOException {
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
+		System.out.println(login);
 		int idVisita = Integer.parseInt(request.getParameter("id"));
+		System.out.println(idVisita);
 		Visita visita = visitaDAO.get(idVisita);
 		
 		CitaId citaId = new CitaId(idVisita, login);
@@ -342,7 +346,7 @@ public class CitaServicios {
 	}
 	
 	public void detallesCitaPendiente(String message) throws ServletException, IOException {
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		Visita visita = visitaDAO.get(idVisita);
 		
@@ -360,7 +364,7 @@ public class CitaServicios {
 	}
 
 	public void modificarCita() throws ServletException, IOException {
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		
 		CitaId citaId = new CitaId(idVisita, login);
@@ -401,7 +405,7 @@ public class CitaServicios {
 	}
 	
 	public void detallesCitaHistorial(String message) throws ServletException, IOException {
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		Visita visita = visitaDAO.get(idVisita);
 		
@@ -419,7 +423,7 @@ public class CitaServicios {
 	}
 
 	public void dejarReview() throws ServletException, IOException {	
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		
 		CitaId citaId = new CitaId(idVisita, login);
@@ -435,7 +439,7 @@ public class CitaServicios {
 	}
 
 	public void informarAusencia() throws ServletException, IOException, NumberFormatException {
-		String login = request.getParameter("login");
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		int idVisita = Integer.parseInt(request.getParameter("id"));
 		
 		CitaId citaId = new CitaId(idVisita, login);

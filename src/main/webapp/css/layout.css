@@ -138,6 +138,8 @@
 	flex-direction: row;
 	justify-content:center;
 	align-items: baseline;
+	align-items: flex-start;
+	position: relative;
 }
 
 .main-content-split-items {
@@ -145,7 +147,7 @@
 }
 
 .main-content-split-items * {
-	padding-top: 5px;	
+	padding-bottom: 5px;	
 }
 
 .main-button {
@@ -379,6 +381,7 @@ table.form {
     right: 7%;
     width: 500px;
     display: none;
+    z-index: 1;
 }
 
 #notifications{
@@ -763,4 +766,9 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 
 .tab-parent {
 	overflow: hidden;
+}
+
+.map {
+	height: 100%;
+	width: 100%;
 }

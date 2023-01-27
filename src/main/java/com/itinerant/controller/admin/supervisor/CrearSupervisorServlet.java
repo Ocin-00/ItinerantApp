@@ -21,6 +21,8 @@ public class CrearSupervisorServlet extends BaseServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+		request.setCharacterEncoding("UTF-8");
+		
 		SupervisorServicios supervisorServicios = new SupervisorServicios(entityManager, request, response);
 		supervisorServicios.crearSupervisor();
 	}

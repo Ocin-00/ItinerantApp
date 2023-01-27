@@ -46,7 +46,12 @@
 						<td>${certificado.titulo}</td>
 						<td>${certificado.entidadEmisora}</td>
 						<td>${certificado.anyo}</td>
-						<td>${certificado.validez}</td>
+						<c:if test="${certificado.validez == true}">
+							<td>Sí</td>
+						</c:if>
+						<c:if test="${certificado.validez == false}">
+							<td>No</td>
+						</c:if>
 						<td align="center">
 							<a href="${certificado.ruta}">Ver</a> | 
 							<a href="editar_certificado?id=${certificado.idCertificado}">Editar</a> |

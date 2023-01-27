@@ -16,6 +16,10 @@
     <script type="text/javascript" src="../js/my-notifications.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+	<script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.2.2/ol.css">
+	<script type="text/javascript" src="../js/maps.js"></script>	
+	
 </head>
 <style>
 	#side-menu a:nth-child(2){ background-color: #e0e0e0 }
@@ -24,108 +28,114 @@
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
 	<div id="main">
 		<jsp:directive.include file="side_menu.jsp"/>
-		<div id="main-content">
-			<h4>Bienvenido, <c:out value="${sessionScope.userLogin}"></c:out></h4>
-			<h3>Visitas programadas</h3>
-		
-			<c:if test="${message != null}">
-				<div><h4>${message}</h4></div>
-			</c:if>
-			<div class="tab-parent">
-				<ul class="tabs">
-					<li id="visitasPendientes" class="option option-active"><a href="#contenidoVisitasPendientes">Visitas Pendientes</a></li>
-					<li id="historicoVisitas" class="option"><a href="#contenidoHistorialVisitas">Histórico de Visitas</a></li>
-				</ul>
-				
-				<div class="tab-container">
-					<div id="contenidoVisitasPendientes" class="tab_content">
-						<table border="1">
-							<tr>
-								<th>Índice</th>
-								<th>Localidad</th>
-								<th>Fecha</th>
-								<th>Hora inicio</th>
-								<th>Hora fin</th>
-								<th>Acciones</th>
-							</tr>
-							<c:forEach var="visita" items="${visitasPendientes}" varStatus="status">
+		<div id="main-content-split">
+			<div class="main-content-split-items">
+				<h4>Bienvenido, <c:out value="${sessionScope.userLogin}"></c:out></h4>
+				<h3>Visitas programadas</h3>
+			
+				<c:if test="${message != null}">
+					<div><h4>${message}</h4></div>
+				</c:if>
+				<div class="tab-parent">
+					<ul class="tabs">
+						<li id="visitasPendientes" class="option option-active"><a href="#contenidoVisitasPendientes">Visitas Pendientes</a></li>
+						<li id="historicoVisitas" class="option"><a href="#contenidoHistorialVisitas">Histórico de Visitas</a></li>
+					</ul>
+					
+					<div class="tab-container">
+						<div id="contenidoVisitasPendientes" class="tab_content">
+							<table border="1">
 								<tr>
-									<td>${status.index + 1}</td>
-									<td>${visita.localidad.nombre}</td>
-									<td>${visita.fecha}</td>
-									<td><c:set var="hora" value="${visita.horaInicio}"></c:set>
-										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-										String hora = format.format(pageContext.getAttribute("hora"));
-										out.println(hora);  
-										%>
-									</td>
-									<td><c:set var="hora" value="${visita.horaFin}"></c:set>
-										<%
-										hora = format.format(pageContext.getAttribute("hora"));
-										out.println(hora);  
-										%>
-									</td>
-									<td align="center">
-										<a href="ver_visita?id=${visita.idVisita}">Ver detalles</a> |
-										<a href="javascript:void(0);" class="deleteLink" id="${visita.idVisita}">Borrar</a>
-									</td>
+									<th>Índice</th>
+									<th>Localidad</th>
+									<th>Fecha</th>
+									<th>Hora inicio</th>
+									<th>Hora fin</th>
+									<th>Acciones</th>
 								</tr>
-							</c:forEach>
+								<c:forEach var="visita" items="${visitasPendientes}" varStatus="status">
+									<tr>
+										<td>${status.index + 1}</td>
+										<td>${visita.localidad.nombre}</td>
+										<td>${visita.fecha}</td>
+										<td><c:set var="hora" value="${visita.horaInicio}"></c:set>
+											<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+											String hora = format.format(pageContext.getAttribute("hora"));
+											out.println(hora);  
+											%>
+										</td>
+										<td><c:set var="hora" value="${visita.horaFin}"></c:set>
+											<%
+											hora = format.format(pageContext.getAttribute("hora"));
+											out.println(hora);  
+											%>
+										</td>
+										<td align="center">
+											<a href="ver_visita?id=${visita.idVisita}">Ver detalles</a> |
+											<a href="javascript:void(0);" class="deleteLink" id="${visita.idVisita}">Borrar</a>
+										</td>
+									</tr>
+								</c:forEach>
+									<tr>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td align="center">
+											<a href="nueva_visita">Añadir</a>
+										</td>
+									</tr>
+							</table>
+						</div>
+						<div id="contenidoHistorialVisitas"  class="tab_content">
+							<table border="1">
 								<tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td align="center">
-										<a href="nueva_visita">Añadir</a>
-									</td>
+									<th>Índice</th>
+									<th>Localidad</th>
+									<th>Fecha</th>
+									<th>Hora inicio</th>
+									<th>Hora fin</th>
+									<th>Acciones</th>
 								</tr>
-						</table>
-					</div>
-					<div id="contenidoHistorialVisitas"  class="tab_content">
-						<table border="1">
-							<tr>
-								<th>Índice</th>
-								<th>Localidad</th>
-								<th>Fecha</th>
-								<th>Hora inicio</th>
-								<th>Hora fin</th>
-								<th>Acciones</th>
-							</tr>
-							<c:forEach var="visita" items="${historialVisitas}" varStatus="status">
-								<tr>
-									<td>${status.index + 1}</td>
-									<td>${visita.localidad.nombre}</td>
-									<td>${visita.fecha}</td>
-									<td><c:set var="hora" value="${visita.horaInicio}"></c:set>
-										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-										String hora = format.format(pageContext.getAttribute("hora"));
-										out.println(hora);  
-										%>
-									</td>
-									<td><c:set var="hora" value="${visita.horaFin}"></c:set>
-										<%
-										hora = format.format(pageContext.getAttribute("hora"));
-										out.println(hora);  
-										%>
-									</td>
-									<td align="center">
-										<a href="ver_visita?id=${visita.idVisita}">Ver detalles</a>
-									</td>
-								</tr>
-							</c:forEach>
-						</table>
+								<c:forEach var="visita" items="${historialVisitas}" varStatus="status">
+									<tr>
+										<td>${status.index + 1}</td>
+										<td>${visita.localidad.nombre}</td>
+										<td>${visita.fecha}</td>
+										<td><c:set var="hora" value="${visita.horaInicio}"></c:set>
+											<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+											String hora = format.format(pageContext.getAttribute("hora"));
+											out.println(hora);  
+											%>
+										</td>
+										<td><c:set var="hora" value="${visita.horaFin}"></c:set>
+											<%
+											hora = format.format(pageContext.getAttribute("hora"));
+											out.println(hora);  
+											%>
+										</td>
+										<td align="center">
+											<a href="ver_visita?id=${visita.idVisita}">Ver detalles</a>
+										</td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
-			
+			<div class="main-content-split-items" style="height: 60vh; width: 80vh;">
+				<div id="js-map" class="map"></div>
+			</div>
 		</div>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
 <script type="text/javascript">
-		$(document).ready(function() {
+
+		$(document).ready(function() {					
+			
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
 					id = $(this).attr("id");

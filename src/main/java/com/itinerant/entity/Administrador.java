@@ -34,11 +34,11 @@ public class Administrador extends UsuarioPrivilegiado {
 	}
 	
 	public Administrador(String login, String password, String email, String nombre,String apellidos, 
-			Date fechaNac, String telefono, String nss,String organismoCoordinador,byte[] fotoPerfil, 
+			Date fechaNac, String telefono, String nss,String organismoCoordinador,String imagenRuta, 
 			Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas, Set<Chat> chatsForIdRecipient, 
 			Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
 		super(login, password, email, nombre, apellidos, Rol.ADMINISTRADOR.toString(), fechaNac, telefono, nss, organismoCoordinador,
-				fotoPerfil, chatMensajesForIdRecipient, alertas, chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
+				imagenRuta, chatMensajesForIdRecipient, alertas, chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 	}
 
 }

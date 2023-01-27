@@ -21,7 +21,8 @@ public class AnularProfesionalServlet extends BaseServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
+		
 		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
 		
 		profesionalServicios.borrarProfesional();

@@ -25,6 +25,9 @@
 		
 		<div id="main-content">
 			<h2>Profesionales pendientes de verificación</h2>
+			<c:if test="${message != null}">
+				<div><h4>${message}</h4></div>
+			</c:if>
 			<table border="1">
 				<tr>
 					<th>Índice</th>

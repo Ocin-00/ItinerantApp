@@ -22,6 +22,7 @@ public class NuevaVisitaServlet extends BaseServlet {
 
     @Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	req.setCharacterEncoding("UTF-8");
 		VisitaServicios visitaServicios = new VisitaServicios(entityManager, req, resp);
 		visitaServicios.nuevaVisitaFormulario();
 	}

@@ -21,7 +21,8 @@ public class ValidarCertificadoServlet extends BaseServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
+		
 		CertificadoServicios certificadoServicios = new CertificadoServicios(entityManager, request, response);
 		
 		certificadoServicios.validarCertificado();

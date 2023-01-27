@@ -22,6 +22,8 @@ public class ListaProfesionalesServlet extends BaseServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		request.setCharacterEncoding("UTF-8");
+		
 		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
 		profesionalServicios.listarProfesionalesNoValidados();
 	}

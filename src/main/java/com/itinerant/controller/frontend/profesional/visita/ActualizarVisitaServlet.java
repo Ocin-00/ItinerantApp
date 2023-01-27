@@ -27,6 +27,7 @@ public class ActualizarVisitaServlet extends BaseServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		VisitaServicios visitaServicios = new VisitaServicios(entityManager, request, response);
 		visitaServicios.actualizarVisita();
 	}

@@ -53,7 +53,7 @@ public class SupervisorServicios {
 		String telefono = StringEscapeUtils.escapeHtml4(request.getParameter("telefono"));
 		String orgCoord= StringEscapeUtils.escapeHtml4(request.getParameter("organismoCoordinador"));
 		String nss = StringEscapeUtils.escapeHtml4(request.getParameter("nss"));	
-		String fechaNacTexto = StringEscapeUtils.escapeHtml4(request.getParameter("fechaNac"));
+		String fechaNacTexto = request.getParameter("fechaNac");
 		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
 		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
@@ -91,7 +91,7 @@ public class SupervisorServicios {
 	}
 
 	public void editarSupervisor() throws ServletException, IOException {
-		String supervisorId = request.getParameter("id");
+		String supervisorId = StringEscapeUtils.escapeHtml4(request.getParameter("id"));
 		Supervisor supervisor = supervisorDAO.get(supervisorId);
 		
 		String editpage = "supervisor_form.jsp";

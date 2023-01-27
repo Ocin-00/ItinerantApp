@@ -8,7 +8,10 @@
 					<tr>
 						<td rowspan="4"><img id="thumbnail" alt="" height="150"
 							src="<%String path = request.getContextPath();
-		 						 out.println(path + pageContext.getAttribute("imagenRuta").toString().substring(2)); 
+								   Object imagenRuta = pageContext.getAttribute("imagenRuta");
+								   if(imagenRuta != null) {
+									   out.println(path + imagenRuta.toString().substring(2)); 
+								   }
 								%>" /></td>
 						<td>${visita.nombre} | ${visita.precio} &euro;</td>
 					</tr>
@@ -36,10 +39,16 @@
 	<c:forEach var="profesional" items="${listaProfesionales}" varStatus="status">
 	<div class="search-results">
 		<a href="xx">
+		<c:set var="imagenProfesional" value="${profesional.imagenRuta}"></c:set>
 			<table>			
 				<tr>
 					<td rowspan="4"><img id="thumbnail" alt="" height="150"
-						src="${profesional.fotoPerfil}" /></td>
+						src="<%String path = request.getContextPath();
+								Object imagenProf = pageContext.getAttribute("imagenProfesional");
+								   if(imagenProf != null) {
+									   out.println(path + imagenProf.toString().substring(2)); 
+								   }
+								%>" /></td>
 					<td>${profesional.nombre} ${profesional.apellidos}</td>
 				</tr>
 				<tr>

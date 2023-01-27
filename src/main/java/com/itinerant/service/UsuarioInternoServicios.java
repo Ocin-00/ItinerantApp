@@ -173,8 +173,8 @@ public class UsuarioInternoServicios {
 		String apellidos = StringEscapeUtils.escapeHtml4(request.getParameter("apellidos"));
 		String telefono = StringEscapeUtils.escapeHtml4(request.getParameter("telefono"));
 		String direccion = StringEscapeUtils.escapeHtml4(request.getParameter("direccion"));
-		int codPostal = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("codPostal")));
-		String fechaNacTexto = StringEscapeUtils.escapeHtml4(request.getParameter("fechaNac"));
+		int codPostal = Integer.parseInt(request.getParameter("codPostal"));
+		String fechaNacTexto = request.getParameter("fechaNac");
 		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
 		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
@@ -206,7 +206,10 @@ public class UsuarioInternoServicios {
 			request.setAttribute("message", message);
 			registerView();
 		} else if(rol.equals(Rol.PROFESIONAL.toString())) {
-			Profesional profesional = new Profesional(login, password, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, sexo, estadoCivil, null, false, fechaRegistro, null, null, null, null, null, null, null, null);
+			Profesional profesional = new Profesional(login, password, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, false, fechaRegistro);
+			profesional.setEstadoCivil(estadoCivil);
+			profesional.setSexo(sexo);
+			
 			ProfesionalDAO profesionalDAO = new ProfesionalDAO(entityManager);
 			profesionalDAO.create(profesional);
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -223,7 +226,12 @@ public class UsuarioInternoServicios {
 				alertaDAO.create(alerta);
 			}
 		} else {
-			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, 0, sexo, estadoCivil, formacion, telefono, null, null, null, null, null, null, null);
+			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, 0);
+			ciudadano.setTelefono(telefono);
+			ciudadano.setEstadoCivil(estadoCivil);
+			ciudadano.setFormacion(formacion);
+			ciudadano.setSexo(sexo);
+			
 			CiudadanoDAO ciudadanoDAO = new CiudadanoDAO(entityManager);
 			ciudadanoDAO.create(ciudadano);
 		}

@@ -3,5 +3,5 @@
 	<a href="listar_visitas">Mis visitas</a> 
 	<a href="listar_citas">Mis citas</a> 
 	<a href="listar_certificados" class="active">Mis certificados</a> 
-	<a href="xx">Mis jornadas</a>
+	<a href="listar_jornadas">Mis jornadas</a>
 </div>

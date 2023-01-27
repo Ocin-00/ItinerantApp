@@ -44,11 +44,13 @@ public class AlertaServicios {
 			
 			request.getSession().setAttribute("misAlertas", alertas);
 			
-		    for (Alerta alerta: alertas) {
+		    //for (Alerta alerta: alertas) {
+			for(int i = alertas.size() - 1; i > -1; i--) {
+				Alerta alerta = alertas.get(i);
 		    	JSONObject jobj = new JSONObject();
 			    jobj.put("idAlerta", alerta.getIdAlerta());
-			    jobj.put("titulo", StringEscapeUtils.escapeHtml4(alerta.getTitulo()));
-			    jobj.put("cuerpo", StringEscapeUtils.escapeHtml4(alerta.getCuerpo()));
+			    jobj.put("titulo", alerta.getTitulo());
+			    jobj.put("cuerpo", alerta.getCuerpo());
 			    jobj.put("visto", alerta.getVisto());
 			    jobj.put("nuevo", alerta.getNuevo());
 			    jobj.put("usuarioInterno", alerta.getUsuarioInterno().getLogin());

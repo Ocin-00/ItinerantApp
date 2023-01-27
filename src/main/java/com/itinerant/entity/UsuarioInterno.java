@@ -61,7 +61,7 @@ public class UsuarioInterno implements java.io.Serializable {
 		this.apellidos = apellidos;
 		this.rol = rol;
 		this.fechaNac = fechaNac;
-		this.imagenRuta = "../img/default.jp";
+		this.imagenRuta = "../img/default.jpg";
 	}
 
 	public UsuarioInterno(String login, String password, String email, String nombre, String apellidos, String rol,

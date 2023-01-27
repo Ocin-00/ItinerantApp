@@ -20,10 +20,12 @@ public class CrearVisitaServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 
     public CrearVisitaServlet() {
-
+    	
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		
 		VisitaServicios visitaServicios = new VisitaServicios(entityManager, request, response);
 		visitaServicios.crearVisita();
 	}

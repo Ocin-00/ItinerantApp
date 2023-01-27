@@ -21,6 +21,8 @@ public class EditarSupervisorServlet extends BaseServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		
 		SupervisorServicios supervisorServicios = new SupervisorServicios(entityManager, request, response);
 		supervisorServicios.editarSupervisor();
 	}

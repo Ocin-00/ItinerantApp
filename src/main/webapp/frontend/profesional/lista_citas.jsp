@@ -62,7 +62,7 @@
 									</td>
 									<td align="center">
 										<a href="ver_cita?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a> |
-										<a href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular</a>
+										<a href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${cita.id.idVisita}">Anular</a>
 									</td>
 								</tr>
 							</c:forEach>

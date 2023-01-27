@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +40,11 @@
 						<td>Fecha: ${visita.fecha}</td>
 					</tr>
 					<tr>
-						<td>Hora: ${cita.horaInicio.hours}:${cita.horaInicio.minutes}</td>
+						<td>Hora: <c:set var="hora" value="${cita.horaInicio}"></c:set>
+										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+										String hora = format.format(pageContext.getAttribute("hora"));
+										out.println(hora);  
+										%></td>
 					</tr>
 				</table>
 			</div>

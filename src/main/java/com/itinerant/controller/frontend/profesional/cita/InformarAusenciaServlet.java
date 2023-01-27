@@ -22,12 +22,14 @@ public class InformarAusenciaServlet extends BaseServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		CitaServicios citaServicios = new CitaServicios(entityManager, request, response);	
 		citaServicios.informarAusencia();
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		CitaServicios citaServicios = new CitaServicios(entityManager, request, response);	
 		citaServicios.informarAusencia();
 	}
