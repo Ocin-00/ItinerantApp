@@ -28,19 +28,21 @@ public class Localidad implements java.io.Serializable {
 	private String comarca;
 	private int poblacion;
 	private String mancomunidad;
+	private String provincia;
 	private Set<Visita> visitas = new HashSet<Visita>(0);
 
 	public Localidad() {
 	}
 
-	public Localidad(int codigoPostal, String nombre, String comarca, int poblacion) {
+	public Localidad(int codigoPostal, String nombre, String comarca, String provincia, int poblacion) {
 		this.codigoPostal = codigoPostal;
 		this.nombre = nombre;
 		this.comarca = comarca;
 		this.poblacion = poblacion;
+		this.provincia = provincia;
 	}
 
-	public Localidad(int codigoPostal, String nombre, String comarca, int poblacion, String mancomunidad,
+	public Localidad(int codigoPostal, String nombre, String comarca, String provincia, int poblacion, String mancomunidad, 
 			Set<Visita> visitas) {
 		this.codigoPostal = codigoPostal;
 		this.nombre = nombre;
@@ -48,6 +50,7 @@ public class Localidad implements java.io.Serializable {
 		this.poblacion = poblacion;
 		this.mancomunidad = mancomunidad;
 		this.visitas = visitas;
+		this.provincia = provincia;
 	}
 
 	@Id
@@ -77,6 +80,15 @@ public class Localidad implements java.io.Serializable {
 
 	public void setComarca(String comarca) {
 		this.comarca = comarca;
+	}
+	
+	@Column(name = "provincia", nullable = false, length = 100)
+	public String getProvincia() {
+		return this.provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
 	}
 
 	@Column(name = "poblacion", nullable = false)

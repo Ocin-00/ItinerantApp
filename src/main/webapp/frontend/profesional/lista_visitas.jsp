@@ -16,10 +16,7 @@
     <script type="text/javascript" src="../js/my-notifications.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
-	<script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.2.2/ol.css">
-	<script type="text/javascript" src="../js/maps.js"></script>	
-	
+
 </head>
 <style>
 	#side-menu a:nth-child(2){ background-color: #e0e0e0 }
@@ -28,8 +25,7 @@
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
 	<div id="main">
 		<jsp:directive.include file="side_menu.jsp"/>
-		<div id="main-content-split">
-			<div class="main-content-split-items">
+		<div id="main-content">
 				<h4>Bienvenido, <c:out value="${sessionScope.userLogin}"></c:out></h4>
 				<h3>Visitas programadas</h3>
 			
@@ -124,10 +120,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="main-content-split-items" style="height: 60vh; width: 80vh;">
-				<div id="js-map" class="map"></div>
-			</div>
 		</div>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>

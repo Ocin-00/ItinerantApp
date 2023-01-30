@@ -29,7 +29,7 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "Visita.findAll", query = "SELECT v FROM Visita v"),
-	 @NamedQuery(name = "Visita.findAllByLogin", query = "SELECT v FROM Visita v WHERE v.profesional.login = :login"),
+	 @NamedQuery(name = "Visita.findAllByLogin", query = "SELECT v FROM Visita v WHERE v.profesional.login = :login ORDER BY v.fecha, v.horaInicio"),
 	 @NamedQuery(name = "Visita.countAll", query = "SELECT count(*) FROM Visita v"),
 	 @NamedQuery(name = "Visita.search", query = "SELECT v FROM Visita v WHERE v.nombre LIKE '%' || :keyword || '%'"
 	 											+ "OR v.descripcion LIKE '%' || :keyword || '%'"

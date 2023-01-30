@@ -18,6 +18,7 @@ import com.itinerant.dao.SerieDAO;
 import com.itinerant.dao.SerieJornadasDAO;
 import com.itinerant.dao.VisitaDAO;
 import com.itinerant.entity.Jornada;
+import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
 import com.itinerant.entity.Serie;
 import com.itinerant.entity.SerieJornadas;
@@ -25,6 +26,8 @@ import com.itinerant.entity.SerieJornadasId;
 import com.itinerant.entity.Visita;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class JornadaServicios {
 	private HttpServletRequest request;
@@ -148,6 +151,35 @@ public class JornadaServicios {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+
+	public void getLocalidades() throws IOException {
+		String fechaTexto = request.getParameter("fecha");
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");	
+		Date fecha = null;
+		
+		try {
+			fecha = dateformat.parse(fechaTexto);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		String login = (String) request.getSession().getAttribute("userLogin");
+		List<Visita> listaVisitas = visitaDAO.listAllByLogin(login);
+		JSONArray jsArray = new JSONArray();
+		for(Visita visita: listaVisitas) {
+			if(dateformat.format(fecha).equals(dateformat.format(visita.getFecha()))) {
+				JSONObject jobj = new JSONObject();
+				jobj.put("codPostal", visita.getLocalidad().getCodigoPostal());
+				jobj.put("nombre", visita.getLocalidad().getNombre());
+				jobj.put("comarca", visita.getLocalidad().getComarca());
+				jobj.put("provincia", visita.getLocalidad().getProvincia());
+				jobj.toString();
+			    jsArray.put(jobj);
+			}
+		}
+		response.getWriter().write(jsArray.toString());
+		
 	}
 
 }
