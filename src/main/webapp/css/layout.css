@@ -381,7 +381,7 @@ table.form {
     right: 7%;
     width: 500px;
     display: none;
-    z-index: 1;
+    z-index: 500;
 }
 
 #notifications{
@@ -771,4 +771,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 .map {
 	height: 100%;
 	width: 100%;
+}
+
+.dialog {
+	z-index: 600;
 }

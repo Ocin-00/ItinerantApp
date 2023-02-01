@@ -26,6 +26,9 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 	
+	 <link rel="stylesheet" href="../css/Control.FullScreen.css" />
+ 	<script src="../js/Control.FullScreen.js"></script>
+	
 	<script type="text/javascript" src="../js/maps.js"></script>	
 </head>
 <style>
@@ -48,7 +51,7 @@
 						<button id="replicarJornada">Replicar jornada</button>
 					</div>
 				</div>
-				<dialog id="addDialog">
+				<dialog id="addDialog" class="dialog">
 				  <form method="dialog">
 				    <p>
 				      <label>Seleccione la serie:
@@ -66,7 +69,7 @@
 				    </div>
 				  </form>
 				</dialog>
-				<dialog id="newDialog">
+				<dialog id="newDialog" class="dialog">
 				  <form method="dialog" id="newDialogForm">
 				    <p>
 				      <label>Nombre a la serie:
@@ -161,7 +164,9 @@
 				}
 			}
 			var idSerie = $("#selectSerie").val();
-			window.location = "add_jornada?id=" + idSerie + "&fecha=" + date;
+			if(idSerie != "newSerie") {
+				window.location = "add_jornada?id=" + idSerie + "&fecha=" + date;
+			}
 			
 		});
 		

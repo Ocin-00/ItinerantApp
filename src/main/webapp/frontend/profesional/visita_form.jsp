@@ -21,6 +21,7 @@
     <script type="text/javascript" src="../js/my-notifications.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+	
 </head>
 <body>
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
@@ -170,6 +171,7 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function(){
+		
 		$("#visitaForm").validate({
 			rules: {
 				nombre: "required",
@@ -197,6 +199,19 @@
 			}
 		});
 
+		$("#visitaForm").submit(function(event) {
+			var horaInicio = $('#horaInicio').val();
+			var horaFin = $('#horaFin').val();
+			var horaInicioDate = new Date("1970-01-01 " + horaInicio);
+			var horaFinDate = new Date("1970-01-01 " + horaFin);
+			if(horaInicioDate.getTime() >= horaFinDate.getTime()) {
+				event.preventDefault();
+				 $("#horaInicio").after("<label id='hora-error' class='error' for='horaInicio'>La hora de inicio debe ser anterior a la de fin.</label>");
+			} else {
+				event.preventDefault = null;
+			}
+		});
+		
 		$("#tiempo").bind("keypress", function (e) {
 	          var keyCode = e.which ? e.which : e.keyCode
 	               
@@ -212,7 +227,8 @@
 		$("#buttonCancel").click(function() {
 			history.go(-1);
 		});
-	});
+		
+	});	
 
 	function showImageThumbnail(fileInput) {
         var file = fileInput.files.item(0);

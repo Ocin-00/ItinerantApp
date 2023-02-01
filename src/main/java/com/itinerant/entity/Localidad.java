@@ -121,4 +121,5 @@ public class Localidad implements java.io.Serializable {
 	public String toString() {
 		return this.nombre;
 	}
+
 }

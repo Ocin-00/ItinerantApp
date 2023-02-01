@@ -3,10 +3,15 @@
  $(document).ready(function() {	
 
 	var apikey='5b3ce3597851110001cf62488e46d28f49534f3094ceb181a7bfe9cc';
-	var map = L.map('map').setView([39.469809, -0.376397], 7.5);
+	var map = L.map('map', {
+		fullscreenControl: true,
+	  	fullscreenControlOptions: {
+	    	position: 'topleft'
+	  	}
+	}).setView([39.469809, -0.376397], 7.5);
 	
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
         maxZoom: 15
 	}).addTo(map);
 	
@@ -18,19 +23,22 @@
 			url:'get_localidades',	
 			success: function(result){
 				let localidades = JSON.parse(result);
-				var waypoints = [];
-				//var javaWaypoints = [];
+				//var waypoints = [];
+				var javaWaypoints = [];
 				
 				for (var i = 0; i < localidades.length; i++) {
 					var localidad = localidades[i];
-					let direccion = localidad.nombre + ', ' + localidad.comarca + ', ' + localidad.provincia + ', Comunitat Valenciana, ' + localidad.codPostal + ', España';
+					//let direccion = localidad.nombre + ', ' + localidad.comarca + ', ' + localidad.provincia + ', Comunitat Valenciana, ' + localidad.codPostal + ', España';
+					let direccion = localidad.nombre + ", VC, España";
 				    geocoder.geocode(direccion, function(results) {
 				        var coords = results[0].center;
-				        waypoints.push(L.latLng(coords.lat, coords.lng));
-				        //javaWaypoints.push(coords.lat + ',' + coords.lng)
+				        //waypoints.push(L.latLng(coords.lat, coords.lng));
+				        javaWaypoints.push(coords.lng + ',' + coords.lat);
+				        var marker = new L.Marker([coords.lat, coords.lng]).addTo(map);
 				        
-				        if (waypoints.length === localidades.length) {
-								
+				        if (javaWaypoints.length === localidades.length) {
+					
+							/*	
 				            var control = L.Routing.control({
 					            waypoints: waypoints,
 					            routeWhileDragging: false,
@@ -41,9 +49,8 @@
 								draggableWaypoints: false,
 								language: 'es'
 					        }).addTo(map);
-					       
-					       //Usar esto si se quiere usar el servidor de OpenRouteService, pero a día de hoy no soporta búsquedas en pueblos pequeños
-					       /*
+					        */
+					       					       
 					       $.ajax({
 							    type: "POST",
 							    url: "get_ruta",
@@ -51,25 +58,13 @@
 							        waypoints: javaWaypoints.join(';')
 							    },
 							    success: function(response) {
-							        // The "response" variable contains the server response
-							        // You can parse the response data and use it as needed
-							        console.log(response);
-							        var route = JSON.parse(response);
-							        alert(response);
-							        // For example, you could display the route on a map using leaflet-routing-machine
-							        L.Routing.control({
-							            waypoints: waypoints,
-							            routeWhileDragging: false,
-							            collapsible: true,
-										show:false,
-										addwaypoints: false,
-										geocoder: geocoder,
-										draggableWaypoints: false,
-										language: 'es'
-							        }).addTo(map).route(route);
+							        console.log(response); 
+							        
+							        var polyline = L.polyline(L.GeoJSON.coordsToLatLngs(response.features[0].geometry.coordinates,0,false), {color: 'red'}).addTo(map);
+									map.fitBounds(polyline.getBounds());
 							    }
 							});
-							*/
+							
 					    }
 					});
 				}

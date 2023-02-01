@@ -57,10 +57,11 @@ public class GetRutaServlet extends BaseServlet {
 	        }
 	        JSONObject payloadjson = new JSONObject();
 	        payloadjson.put("coordinates", waypoints);
+	        payloadjson.put("language", "es-es");
 	        String payloadStr = payloadjson.toString();
 	        Entity<String> payload = Entity.json(payloadStr);
 
-	        Response resp = client.target("https://api.openrouteservice.org/v2/directions/driving-car/json")
+	        Response resp = client.target("https://api.openrouteservice.org/v2/directions/driving-car/geojson")
 	        		  .request()
 	        		  .header("Authorization", "5b3ce3597851110001cf62488e46d28f49534f3094ceb181a7bfe9cc")
 	        		  .header("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8")
