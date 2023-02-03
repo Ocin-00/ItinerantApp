@@ -20,6 +20,7 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "SerieJornadas.findAll", query = "SELECT j FROM SerieJornadas j"),
 	 @NamedQuery(name = "SerieJornadas.findAllById", query = "SELECT j FROM SerieJornadas j WHERE j.id.idSerie = :id"),
+	 @NamedQuery(name = "SerieJornadas.findAllByLogin", query = "SELECT j FROM SerieJornadas j WHERE j.serie.profesional.login = :login"),
 	 @NamedQuery(name = "SerieJornadas.countAll", query = "SELECT count(*) FROM SerieJornadas j"),
 })
 @Table(name = "serie_jornadas", catalog = "itinerant_db")

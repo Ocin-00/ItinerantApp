@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,6 +32,8 @@
  	<script src="../js/Control.FullScreen.js"></script>
 	
 	<script type="text/javascript" src="../js/maps.js"></script>	
+	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
 </head>
 <style>
 	#side-menu a:nth-child(5){ background-color: #e0e0e0 }
@@ -37,6 +41,7 @@
 <body localidades="${localidades }">
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
 	<div id="main">
+		<input type="hidden" value="${numVisitas}" id="numVisitas">
 		<jsp:directive.include file="side_menu.jsp"/>
 		<div id="main-content-split">
 			<div class="main-content-split-items">
@@ -82,6 +87,47 @@
 				    </div>
 				  </form>
 				</dialog>
+				<dialog id="changeNameDialog" class="dialog">
+				  <form method="dialog" id="changeNameDialogForm">
+				    <p>
+				      <label>Nombre a la serie:
+				        <input id="nuevoNombreSerie" name="nuevoNombreSerie">
+				        <input type="hidden" id="idSerie" name="idSerie">
+				      </label>
+				    </p>
+				    <div>
+				    	<button id="changeConfirmar">Confirmar</button>
+				      	<button class="cancelBtn">Cancelar</button>
+				    </div>
+				  </form>
+				</dialog>
+				<dialog id="replicarDialog" class="dialog">
+				  <form method="dialog" id="replicarDialogForm">
+				    <p>
+				      <label>Elige un día para replicar esta jornada:
+				        <input type="date" id="fechaReplicar" name="fechaReplicar">
+				      </label>
+				    </p>
+				    <div>
+				    	<button id="replicarConfirmar">Confirmar</button>
+				      	<button class="cancelBtn">Cancelar</button>
+				    </div>
+				  </form>
+				</dialog>
+				<dialog id="replicarSerieDialog" class="dialog">
+				  <form method="dialog" id="replicarSerieDialogForm">
+				    <p>
+				      <label>Elige un día a partir del que replicar esta serie:
+				        <input type="date" id="fechaReplicarSerie" name="fechaReplicarSerie">
+				        <input type="hidden" id="idSerieReplicar" name="idSerie">
+				      </label>
+				    </p>
+				    <div>
+				    	<button id="replicarSerieConfirmar">Confirmar</button>
+				      	<button class="cancelBtn">Cancelar</button>
+				    </div>
+				  </form>
+				</dialog>
 				<c:if test="${message != null}">
 					<div>
 						<h4>${message}</h4>
@@ -120,10 +166,47 @@
 					</c:forEach>
 				</table>
 			</div>
-			<div class="main-content-split-items" style="height: 60vh; width: 80vh;">
+			<div class="main-content-split-items" style="height: 60vh; width: 65vh;">
 				<div id="map" class="map"></div>
 			</div>
 		</div>
+		<div class="side-bar">
+				<h3>Series de Jornadas</h3>
+				<div id="seriesMenu" class="seriesMenu">
+					<c:forEach var="serie" items="${series}" varStatus="status">
+						<div id="${serie.idSerie}" class="serie">
+							<a class="serie-btn" href="#">
+								<i class="fa-solid fa-angle-down dropdown"></i>
+								${serie.nombre}
+								
+							</a>
+							<i class="fa-solid fa-pen-to-square edit" serie="${serie.idSerie}" serieNombre="${serie.nombre}"></i>
+							<i class="fa-solid fa-clone clone" serie="${serie.idSerie}" serieNombre="${serie.nombre}"></i>
+							<i class="fa-solid fa-trash delete-serie" serie="${serie.idSerie}" serieNombre="${serie.nombre}"></i>
+							
+							<div class="submenu">
+								<ul>
+								<c:forEach var="serieJornada" items="${serieJornadas}" varStatus="status">
+									<c:if test="${serie.idSerie == serieJornada.serie.idSerie}">
+										<li><a class="sub-item" href="listar_jornadas?fecha=${serieJornada.id.fecha}">
+										Jornada del 
+										<fmt:formatDate value="${serieJornada.id.fecha}" pattern="dd-MM-yyyy" />
+										</a>
+										<i class="fa-solid fa-trash delete" serie="${serie.idSerie}" fecha=<fmt:formatDate value="${serieJornada.id.fecha}" pattern="yyyy-MM-dd" /> serieNombre="${serie.nombre}"></i>
+									</c:if>
+								</c:forEach>
+								</li></ul>
+							</div>
+						</div>
+					</c:forEach>
+					<div id="${serie.idSerie}" class="serie">
+						<a class="serie-btn" href="#" id="crearBtn">
+								<i class="fa-regular fa-square-plus nueva-serie"></i> 
+								Crear serie
+						</a>
+					</div>
+				</div>
+			</div>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>
 </body>
@@ -154,12 +237,16 @@
 			
 		});
 
+		$("#replicarJornada").on("click", function() {
+			$("#replicarDialog").show();
+		});
+
 		$("#addConfirmar").on("click", function() {
 			var date = $("#fecha").val();
-			var visitas = "${visitas}";
-			if(visitas.length < 1) {
+			var numVisitas = $("#numVisitas").val();
+			if(numVisitas < 1) {
+				$("#addDialog").hide();
 				if(!confirm("¿Está seguro de que quiere añadir una jornada vacía a su serie?")) {
-					$("#addDialog").hide();
 					return;
 				}
 			}
@@ -185,8 +272,26 @@
 			}
 		});
 		
+		$("#replicarConfirmar").on("click", function() {
+			var fechaReplicarTexto = $("#fechaReplicar").val();
+			var fechaTexto = $("#fecha").val();
+			var fechaReplicar = new Date(fechaReplicarTexto);
+			var ahora = new Date();
+			if(fechaReplicar.getTime() > ahora) {
+				//alert("adios");
+				window.location = "replicar_jornada?fecha=" + fechaTexto + "&replica=" + fechaReplicarTexto;
+			} else {
+				//alert("hola");
+				$("#fechaReplicar").after("<label id='fechaReplicar-error' class='error' for='fechaReplicar'>La fecha en la que replicará la jornada deber ser posteior a la original.</label>");
+			}
+		});
+		
 		$(".cancelBtn").on("click", function(){
 			$(this).parent().parent().parent().hide();
+		});
+
+		$("#crearBtn").on("click", function(){
+			$("#newDialog").show();
 		});
 
 		$("#newDialogForm").validate({
@@ -195,6 +300,108 @@
 			},
 			messages: {	
 				nombreSerie: "Por favor introduzca el nombre de la serie."
+			}
+		});
+		
+		$("#changeNameDialogForm").validate({
+			rules: {
+				nuevoNombreSerie: "required"
+			},
+			messages: {	
+				nuevoNombreSerie: "Por favor introduzca el nuevo nombre de la serie."
+			}
+		});
+
+		$("#replicarDialogForm").validate({
+			rules: {
+				fechaReplicar: "required"
+			},
+			messages: {	
+				fechaReplicar: "Por favor elija un día en el que replicar la jornada."
+			}
+		});
+
+		$("#replicarSerieDialogForm").validate({
+			rules: {
+				fechaSerieReplicar: "required"
+			},
+			messages: {	
+				fechaSerieReplicar: "Por favor elija un día a partir del que replicar la serie."
+			}
+		});
+		/*
+		$(".side-bar .seriesMenu .serie").each(function() {
+			var menuItem = $(this);
+		    var subMenu = menuItem.next().next().next().next(".submenu");
+		    var isExpanded = localStorage.getItem("menu-" + menuItem.text().trim());
+		    console.log(localStorage.getItem("menu-" + menuItem.text()));
+		    if (isExpanded == "true") {
+		      subMenu.show();
+		    }
+		  });*/
+		
+		$(".serie-btn").click(function() {
+			/*
+			var menuItem = $(this);
+		    var subMenu = menuItem.next().next().next().next(".submenu");
+		    subMenu.slideToggle();
+		    localStorage.setItem("menu-" + menuItem.text().trim(), subMenu.is(":visible"));
+		    console.log(localStorage.getItem("menu-" + menuItem.text()));*/
+		 
+			$(this).next().next().next().next(".submenu").slideToggle();
+			$(this).find(".dropdown").toggleClass("rotate");
+		});
+
+		$(".side-bar .seriesMenu .serie .submenu .delete").click(function() {
+			var serie = $(this).attr("serie");
+			var serieNombre = $(this).attr("serieNombre");
+			var fecha = $(this).attr("fecha");
+			if(confirm("¿Desea eliminar la jornada del " + fecha + " de la serie " + serieNombre + "?")) {
+				window.location = "borrar_jornada?id=" + serie + "&fecha=" + fecha;
+			}
+		});
+
+		$(".side-bar .seriesMenu .serie .delete-serie").click(function() {
+			var serie = $(this).attr("serie");
+			var serieNombre = $(this).attr("serieNombre");
+			if(confirm("¿Desea eliminar la serie " + serieNombre + "?")) {
+				window.location = "borrar_serie?id=" + serie;
+			}
+		});
+
+		$(".side-bar .seriesMenu .serie .edit").click(function() {
+			var serie = $(this).attr("serie");
+			var serieNombre = $(this).attr("serieNombre");
+			$("#nuevoNombreSerie").attr("value",serieNombre);
+			$("#idSerie").attr("value",serie);
+			$("#changeNameDialog").show();
+		});
+
+		$("#changeConfirmar").on("click", function() {
+			var nombre = $("#nuevoNombreSerie").val();
+			var serie = $("#idSerie").val();
+			if(nombre != "") {
+				window.location = "cambiar_nombre_serie?id=" + serie + "&nombre=" + nombre;
+			}
+		});
+
+		$(".side-bar .seriesMenu .serie .clone").on("click", function() {
+			var serie = $(this).attr("serie");
+			$("#idSerieReplicar").attr("value",serie);
+			$("#replicarSerieDialog").show();
+		});
+
+		$("#replicarSerieConfirmar").on("click", function() {
+			var serie = $("#idSerieReplicar").val()
+			var fechaReplicarTexto = $("#fechaReplicarSerie").val();
+			var fechaReplicar = new Date(fechaReplicarTexto);
+			var ahora = new Date();
+			if(fechaReplicar.getTime() > ahora) {
+				//alert("adios");
+				window.location = "replicar_serie?id=" + serie + "&fecha=" + fechaReplicarTexto;
+			} else {
+				//alert("hola");
+				$("#fechaReplicarSerie").after("<label id='fechaReplicar-error' class='error' for='fechaReplicar'>La fecha en la que replicará la serie deber ser posteior a la original.</label>");
 			}
 		});
 	});

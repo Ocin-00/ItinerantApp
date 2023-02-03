@@ -1,6 +1,7 @@
 @charset "utf-8";
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
+
 #header {
 	grid-row-start: 1;
 	border-bottom: 1px solid black;
@@ -115,6 +116,17 @@
 	grid-row-start: 2;
 	grid-row-end: 3;
 	grid-template-columns: 1fr 7fr;
+	grid-template-rows: 1fr;
+	display: grid;
+	min-height: 75vh;
+	max-height: 75vh;
+	overflow: auto;
+}
+
+#main-two-side-bars{
+	grid-row-start: 2;
+	grid-row-end: 3;
+	grid-template-columns: 1fr 5fr 2fr;
 	grid-template-rows: 1fr;
 	display: grid;
 	min-height: 75vh;
@@ -775,4 +787,129 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 
 .dialog {
 	z-index: 600;
+}
+
+/*
+.side-bar{
+	width: 290px;
+	height: 75vh;
+	position: fixed;
+	top: 10;
+	right: 0;
+	border-left: 1px solid black;	
+}
+
+.side-bar .seriesmenu{
+	width: 100%;
+	margin-top: 0px;
+	
+}
+
+.side-bar .seriesmenu .serie{
+	position: relative;
+	cursor: pointer;
+}
+
+.side-bar .seriesmenu .serie a{
+	color: black;
+	font-size: 16px;
+	text-decoration: none;
+	display: block;
+	padding: 5px 30px;
+	line-height: 60px;
+}
+
+.side-bar .seriesmenu .serie .submenu{
+	background: rgba(255, 255, 255, 01);
+	display: none;
+}
+
+.side-bar .seriesmenu .serie .submenu a{
+	padding-left: 80px;
+	color: black;
+}*/
+
+.side-bar{
+	grid-column-start: 3;
+	border-left: 1px solid black;	
+	overflow: auto;
+	margin-left: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 33vh;
+}
+
+.submenu {
+	/*display: none;*/
+}
+
+.seriesMenu {
+	margin: 1px;
+	line-height: 30px;
+}
+
+.seriesMenu a {
+	margin: 10px;
+	color: black;
+	text-decoration: none;
+	/*padding-left: 20px;*/
+}
+
+.seriesMenu a:hover {
+	background-color: #f2f2f2;
+}
+.side-bar .seriesMenu .serie a .dropdown {
+	margin: 5px;
+}
+
+.side-bar .seriesMenu .serie a .nueva-serie {
+	margin: 5px;
+}
+
+.side-bar .seriesMenu .serie .submenu .delete {
+	margin: 5px;
+	color: gray;
+}
+
+.side-bar .seriesMenu .serie .submenu .delete:hover {
+	color: black;
+	cursor:pointer;
+}
+/*
+.side-bar .seriesMenu .serie .edit {
+	margin: 5px;
+	color: gray;
+}
+
+.side-bar .seriesMenu .serie .edit:hover {
+	color: black;
+	cursor:pointer;
+}
+
+.side-bar .seriesMenu .serie .clone {
+	margin: 5px;
+	color: gray;
+}
+
+.side-bar .seriesMenu .serie .clone:hover {
+	color: black;
+	cursor:pointer;
+}*/
+
+.side-bar .seriesMenu .serie a i{
+	color: black;
+}
+
+.side-bar .seriesMenu .serie i {
+	margin: 5px;
+	color: gray;
+}
+
+.side-bar .seriesMenu .serie i:hover {
+	color: black;
+	cursor:pointer;
+}
+
+.rotate {
+	transform: rotate(-90deg);
 }

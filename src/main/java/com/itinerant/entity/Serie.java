@@ -32,7 +32,7 @@ public class Serie implements java.io.Serializable {
 	private Integer idSerie;
 	private Profesional profesional;
 	private String nombre;
-	private Set<SerieJornadas> serieJornadases = new HashSet<SerieJornadas>(0);
+	private Set<SerieJornadas> serieJornadas = new HashSet<SerieJornadas>(0);
 
 	public Serie() {
 	}
@@ -45,7 +45,7 @@ public class Serie implements java.io.Serializable {
 	public Serie(Profesional profesional, String nombre, Set<SerieJornadas> serieJornadases) {
 		this.profesional = profesional;
 		this.nombre = nombre;
-		this.serieJornadases = serieJornadases;
+		this.serieJornadas = serieJornadases;
 	}
 
 	@Id
@@ -79,12 +79,12 @@ public class Serie implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "serie")
-	public Set<SerieJornadas> getSerieJornadases() {
-		return this.serieJornadases;
+	public Set<SerieJornadas> getSerieJornadas() {
+		return this.serieJornadas;
 	}
 
-	public void setSerieJornadases(Set<SerieJornadas> serieJornadases) {
-		this.serieJornadases = serieJornadases;
+	public void setSerieJornadas(Set<SerieJornadas> serieJornadases) {
+		this.serieJornadas = serieJornadases;
 	}
 
 }

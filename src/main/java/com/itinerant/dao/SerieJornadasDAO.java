@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.itinerant.entity.Serie;
 import com.itinerant.entity.SerieJornadas;
 
 public class SerieJornadasDAO extends JpaDAO<SerieJornadas> implements GenericDAO<SerieJornadas> {
@@ -40,6 +41,16 @@ public class SerieJornadasDAO extends JpaDAO<SerieJornadas> implements GenericDA
 	
 	public List<SerieJornadas> listAllById(Integer id) {
 		List<SerieJornadas> serieJornadas = super.findWithNamedQuery("SerieJornadas.findAllById", "id", id);
+		
+		if(serieJornadas != null && serieJornadas.size() > 0) {
+			return serieJornadas;
+		}
+		
+		return null;
+	}
+	
+	public List<SerieJornadas> listAllByLogin(String login) {
+		List<SerieJornadas> serieJornadas = super.findWithNamedQuery("SerieJornadas.findAllByLogin", "login", login);
 		
 		if(serieJornadas != null && serieJornadas.size() > 0) {
 			return serieJornadas;

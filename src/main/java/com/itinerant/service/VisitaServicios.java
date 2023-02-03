@@ -58,11 +58,13 @@ public class VisitaServicios {
 	private VisitaDAO visitaDAO;
 	private CitaDAO citaDAO;
 	private AlertaDAO alertaDAO;
+	private LocalidadDAO localidadDAO;
 	
 	public VisitaServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		visitaDAO = new VisitaDAO(entityManager);
 		citaDAO = new CitaDAO(entityManager);
 		alertaDAO = new AlertaDAO(entityManager);
+		localidadDAO = new LocalidadDAO(entityManager);
 		this.entityManager = entityManager;
 		this.request = request;
 		this.response = response;
@@ -204,31 +206,59 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 		Visita[] visitasContiguas = new Visita[2];
 		boolean encontrado = false;
 		for(int i = 0; !encontrado && i < visitas.size(); i++) {
+			
 			Visita visita1 = visitas.get(i);
-			if(visita1.getHoraInicio().before(visitaNueva.getHoraInicio())) {
-				if(i == visitas.size() - 1){
-					visitasContiguas[0] = visita1;
-					visitasContiguas[1] = null;
-					encontrado = true;
-				} else {
-					Visita visita2 = visitas.get(i + 1);
-					if(visita2.getHoraInicio().after(visitaNueva.getHoraInicio())) {
+			if(visitaNueva.getIdVisita() == null || visitaNueva.getIdVisita().intValue() != visita1.getIdVisita().intValue()) {
+				if(visita1.getHoraInicio().before(visitaNueva.getHoraInicio())) {
+					if(i == visitas.size() - 1){
 						visitasContiguas[0] = visita1;
-						visitasContiguas[1] = visita2;
+						visitasContiguas[1] = null;
 						encontrado = true;
+						System.out.println("IF 1");
+					} else {
+						Visita visita2 = visitas.get(i + 1);
+						if(visitaNueva.getIdVisita() == null || visitaNueva.getIdVisita().intValue() != visita2.getIdVisita().intValue()) {
+							if(visita2.getHoraInicio().after(visitaNueva.getHoraInicio())) {
+								visitasContiguas[0] = visita1;
+								visitasContiguas[1] = visita2;
+								encontrado = true;
+								System.out.println("IF 2");
+							}
+						}
 					}
+				} else {
+					visitasContiguas[1] = visita1;
+					visitasContiguas[0] = null;
+					encontrado = true;
+					System.out.println("IF 3");
 				}
 			} else {
-				visitasContiguas[1] = visita1;
-				visitasContiguas[0] = null;
 				encontrado = true;
+				if(i == 0 && visitas.size() > 1) {
+					visitasContiguas[1] = visitas.get(i + 1);;
+					visitasContiguas[0] = null;
+					System.out.println("IF 4");
+				} else if(i == visitas.size() - 1 && visitas.size() > 1) {
+					visitasContiguas[0] = visitas.get(i - 1);;
+					visitasContiguas[1] = null;
+					System.out.println("IF 5");
+				} else if(visitas.size() > 2){
+					visitasContiguas[0] = visitas.get(i - 1);
+					visitasContiguas[1] = visitas.get(i + 1);
+					System.out.println("IF 6");
+				} else {
+					visitasContiguas[0] = null;
+					visitasContiguas[1] = null;
+					System.out.println("IF 7");
+				}
 			}
 		}
 		
-		double[] coordsVisitaNueva = getCoordenadas(getDireccion(visitaNueva.getLocalidad()));
+		LocalidadServicios localidadServicios = new LocalidadServicios(entityManager, request, response);
+		double[] coordsVisitaNueva = localidadServicios.getCoordenadas(visitaNueva.getLocalidad());
 		for(int i = 0; i < visitasContiguas.length; i++) {
 			if(visitasContiguas[i] != null) {
-				double[] coordsVisitaContigua = getCoordenadas(getDireccion(visitasContiguas[i].getLocalidad()));
+				double[] coordsVisitaContigua = localidadServicios.getCoordenadas(visitasContiguas[i].getLocalidad());
 				double tiempoViaje = getTiempoRuta(coordsVisitaNueva, coordsVisitaContigua);
 				if(i == 0) {
 					double diferencia = (visitaNueva.getHoraInicio().getTime() - visitasContiguas[i].getHoraFin().getTime())/1000;
@@ -247,35 +277,6 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 		}
 		
 		return true;
-	}
-	
-	private double[] getCoordenadas(String direccion) {
-		String encodedDireccion = URLEncoder.encode(direccion, StandardCharsets.UTF_8);
-		Client client = ClientBuilder.newClient();
-		Response response = client.target(
-		"https://api.openrouteservice.org/geocode/search"
-		+ "?api_key=5b3ce3597851110001cf62488e46d28f49534f3094ceb181a7bfe9cc"
-		+ "&text=" + encodedDireccion)
-				.request(MediaType.TEXT_PLAIN_TYPE)
-				.header("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8")
-				.get();
-
-		String responseString = response.readEntity(String.class);
-		System.out.println(responseString);
-		JSONObject json = new JSONObject(responseString);
-		JSONArray features = json.getJSONArray("features");
-		JSONObject feature = features.getJSONObject(0);
-		JSONObject geometry = feature.getJSONObject("geometry");
-		double[] coords = new double[2];
-		coords[0] = geometry.getJSONArray("coordinates").getDouble(0);
-		coords[1] = geometry.getJSONArray("coordinates").getDouble(1);
-		System.out.println(coords[0] + "; " + coords[1]);
-		
-		return coords;
-	}
-	
-	public String getDireccion(Localidad localidad) {
-		return localidad.getNombre() + ", VC, España";
 	}
 	
 	private double getTiempoRuta(double[] coordsNuevo, double[] coordsContiguo) {
@@ -308,6 +309,9 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 	private boolean visitaRepetida(Visita visitaNueva) {
 		List<Visita> visitas = visitaDAO.listAllByLogin(visitaNueva.getProfesional().getLogin());
 		for(Visita visita: visitas) {
+			if(visitaNueva.getIdVisita() != null && visita.getIdVisita().intValue() == visitaNueva.getIdVisita().intValue()) {
+				return false;
+			}
 			if(visita.getLocalidad().equals(visitaNueva.getLocalidad()) && visita.getFecha().equals(visitaNueva.getFecha())) {
 				return true;
 			}
@@ -320,12 +324,14 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 		List<Visita> visitas = visitaDAO.listAllByLogin(visitaNueva.getProfesional().getLogin());
 		
 		for(Visita visita: visitas) {
-			if(visita.getFecha().equals(visitaNueva.getFecha())) {
-				if(visitaNueva.getHoraInicio().after(visita.getHoraInicio()) && visitaNueva.getHoraInicio().before(visita.getHoraFin())) {
-					return true;
-				}
-				if(visitaNueva.getHoraFin().after(visita.getHoraInicio()) && visitaNueva.getHoraFin().before(visita.getHoraFin())) {
-					return true;
+			if(visitaNueva.getIdVisita() == null || visita.getIdVisita().intValue() != visitaNueva.getIdVisita().intValue()) {
+				if(visita.getFecha().equals(visitaNueva.getFecha())) {
+					if(visitaNueva.getHoraInicio().after(visita.getHoraInicio()) && visitaNueva.getHoraInicio().before(visita.getHoraFin())) {
+						return true;
+					}
+					if(visitaNueva.getHoraFin().after(visita.getHoraInicio()) && visitaNueva.getHoraFin().before(visita.getHoraFin())) {
+						return true;
+					}
 				}
 			}
 		}		
@@ -508,8 +514,9 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 				request.setAttribute("pasadoTiempoLimite", pasadoTiempoLimite);
 				verVisita("Es demasiado tarde para modificar la cita a menos que se trate de una urgencia, si este es el caso por favor indíquelo.");	
 			}
+		} else {
+			listarVisitas(message);	
 		}
-		listarVisitas(message);	
 	}
 
 	public void buscar(String keyword) {
