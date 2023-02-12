@@ -89,6 +89,14 @@
 				</table>
 			</div>
 			<c:if test="${esCiudadano == true}">
+			<c:if test="${visitaFutura == true}">
+			<c:if test="${sancionado == true}">
+				<div class="main-content-split-items">
+					<h4>Pedir cita:</h4>
+						<div><h4>Lo sentimos, pero se le ha sancionado.</h4></div>
+				</div>
+			</c:if>
+			<c:if test="${sancionado == false}">
 				<div class="main-content-split-items">
 					<h4>Pedir cita:</h4>
 					<form action="pedir_cita" method="post" id="pedirCitaForm">
@@ -126,6 +134,8 @@
 						<button type="submit">Pedir cita</button>
 					</form>
 				</div>
+			</c:if>
+			</c:if>
 			</c:if>
 		</div>
 	</div>

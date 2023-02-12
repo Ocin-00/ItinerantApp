@@ -22,18 +22,20 @@ import com.itinerant.enums.Rol;
 	 @NamedQuery(name = "Ciudadano.findAll", query = "SELECT c FROM Ciudadano c ORDER BY c.apellidos"),
 	 @NamedQuery(name = "Ciudadano.findByEmail", query = "SELECT c FROM Ciudadano c WHERE c.email = :email"),
 	 @NamedQuery(name = "Ciudadano.countAll", query = "SELECT count(*) FROM Ciudadano c"),
-	 @NamedQuery(name = "Ciudadano.checkLogin", query = "SELECT c FROM Ciudadano c WHERE c.login = :login AND c.password = :password")
+	 @NamedQuery(name = "Ciudadano.checkLogin", query = "SELECT c FROM Ciudadano c WHERE c.login = :login AND c.password = :password"),
+	 @NamedQuery(name = "Ciudadano.findAllSanctioned", query = "SELECT c FROM Ciudadano c WHERE c.propuestoSancion is true")
 
 })
 @Table(name = "ciudadano", catalog = "itinerant_db")
 public class Ciudadano extends UsuarioInterno {
 
 	private String localizacion;
-	private int diasSancion;
+	private boolean propuestoSancion;
 	private String sexo;
 	private String estadoCivil;
 	private String formacion;
 	private String telefono;
+	private Date finSancion;
 	//private String direccion;
 	private Set<Cita> citas = new HashSet<Cita>(0);
 
@@ -41,25 +43,26 @@ public class Ciudadano extends UsuarioInterno {
 	}
 
 	public Ciudadano(String login, String password, String email, String nombre, 
-			String apellidos, Date fechaNac, String localizacion, int diasSancion) {
+			String apellidos, Date fechaNac, String localizacion, boolean propuestoSancion) {
 		super(login, password, email, nombre, apellidos, Rol.CIUDADANO.toString(), fechaNac);
 		this.localizacion = localizacion;
-		this.diasSancion = diasSancion;
+		this.propuestoSancion = propuestoSancion;
 	}
 
 	public Ciudadano(String login, String password, String email, String nombre, 
-			String apellidos, Date fechaNac,String localizacion, int diasSancion, String sexo,
-			String estadoCivil, String formacion, String telefono, String imagenRuta, 
+			String apellidos, Date fechaNac,String localizacion, boolean propuestoSancion, String sexo,
+			String estadoCivil, String formacion, String telefono, String imagenRuta, Date finSancion, 
 			Set<Cita> citas, Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
 			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
 		super(login, password, email, nombre, apellidos, Rol.CIUDADANO.toString(), fechaNac, imagenRuta, chatMensajesForIdRecipient, alertas, 
 				chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 		this.localizacion = localizacion;
-		this.diasSancion = diasSancion;
+		this.propuestoSancion = propuestoSancion;
 		this.sexo = sexo;
 		this.estadoCivil = estadoCivil;
 		this.formacion = formacion;
 		this.telefono = telefono;
+		this.finSancion = finSancion;
 		this.citas = citas;
 	}
 
@@ -72,13 +75,13 @@ public class Ciudadano extends UsuarioInterno {
 		this.localizacion = localizacion;
 	}
 
-	@Column(name = "dias_sancion", nullable = false)
-	public int getDiasSancion() {
-		return this.diasSancion;
+	@Column(name = "propuesto_sancion", nullable = false)
+	public boolean getPropuestoSancion() {
+		return this.propuestoSancion;
 	}
 
-	public void setDiasSancion(int diasSancion) {
-		this.diasSancion = diasSancion;
+	public void setPropuestoSancion(boolean propuestoSancion) {
+		this.propuestoSancion = propuestoSancion;
 	}
 
 	@Column(name = "sexo", length = 20)
@@ -115,6 +118,15 @@ public class Ciudadano extends UsuarioInterno {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+	
+	@Column(name = "fin_sancion", length = 10)
+	public Date getFinSancion() {
+		return this.finSancion;
+	}
+
+	public void setFinSancion(Date finSancion) {
+		this.finSancion = finSancion;
 	}
 	/*
 	@Column(name = "direccion", length = 100)

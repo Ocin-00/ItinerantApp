@@ -218,7 +218,7 @@ public class UsuarioInternoServicios {
 								+ " a las " + timeFormat.format(fechaRegistro);
 			List<Administrador> admins = administradorDAO.listAll();
 			for(int i = 0; i < admins.size(); i++) {
-				Alerta alerta = new Alerta(admins.get(i), "Nuevo profesional", cuerpoAlerta, false);
+				Alerta alerta = new Alerta(admins.get(i), "Nuevo profesional", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 				
 				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
 				alertaServicios.mandarNotificacion(alerta);
@@ -226,7 +226,7 @@ public class UsuarioInternoServicios {
 				alertaDAO.create(alerta);
 			}
 		} else {
-			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, 0);
+			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, false);
 			ciudadano.setTelefono(telefono);
 			ciudadano.setEstadoCivil(estadoCivil);
 			ciudadano.setFormacion(formacion);

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.itinerant.entity.Ciudadano;
+import com.itinerant.entity.Profesional;
 
 public class CiudadanoDAO extends JpaDAO<Ciudadano> implements GenericDAO<Ciudadano> {
 
@@ -36,6 +37,10 @@ public class CiudadanoDAO extends JpaDAO<Ciudadano> implements GenericDAO<Ciudad
 		
 		return null;
 			
+	}
+	
+	public List<Ciudadano> listAllSanctioned() {
+		return super.findWithNamedQuery("Ciudadano.findAllSanctioned");
 	}
 
 	@Override

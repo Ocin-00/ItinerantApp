@@ -211,11 +211,11 @@ public class CitaServicios {
 			message = "La cita se ha guardado con éxito.";
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
-			String cuerpoAlerta = "El usuario " + cita.getCiudadano() + " ha pedido cita el " 
+			String cuerpoAlerta = "El usuario " + StringEscapeUtils.unescapeHtml4(cita.getCiudadano().toString()) + " ha pedido cita el " 
 								+ dateFormat.format(cita.getHoraInicio()) + " a las " 
 								+ timeFormat.format(cita.getHoraInicio()) + " en el municipio " 
-								+ cita.getVisita().getLocalidad() + " con las siguientes anotaciones: " + anotaciones;
-			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Nueva cita", cuerpoAlerta, false);
+								+ cita.getVisita().getLocalidad() + " con las siguientes anotaciones: " + StringEscapeUtils.unescapeHtml4(anotaciones);
+			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Nueva cita", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 			alertaDAO.create(alerta);
 			
 			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
@@ -247,7 +247,7 @@ public class CitaServicios {
 		Date ahora = new Date();
 		Date tiempoLimite = new Date(fechaCita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
 		
-		String urgenciaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("urgencia")); //Construir alerta con esto.
+		String urgenciaTexto = request.getParameter("urgencia"); //Construir alerta con esto.
 		boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
 		boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
 		
@@ -265,7 +265,7 @@ public class CitaServicios {
 				cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
 									+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";
 			}
-			Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", cuerpoAlerta, false);
+			Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 			alertaDAO.create(alerta);
 			//Mandar notificación
 			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
@@ -302,7 +302,7 @@ public class CitaServicios {
 			String cuerpoAlerta = "La cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
 								+ timeFormat.format(cita.getHoraInicio()) + " en el municipio " 
 								+ cita.getVisita().getLocalidad() + " ha sido cancelada.";;
-			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita anulada", cuerpoAlerta, false);
+			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita anulada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 			alertaDAO.create(alerta);
 			//Mandar notificación
 			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
@@ -377,18 +377,18 @@ public class CitaServicios {
 		
 		boolean pasadoTiempoLimite = ahora.after(tiempoLimite); //Comprobar que esto funcione bien
 		
-		String anotaciones = StringEscapeUtils.escapeHtml4(request.getParameter("anotaciones"));
+		String anotaciones = request.getParameter("anotaciones");
 		cita.setAnotaciones(anotaciones);
 		
 		if(!pasadoTiempoLimite) {
 			citaDAO.update(cita);
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
-			String cuerpoAlerta = "El usuario " + cita.getCiudadano() + " ha modificado las anotaciones para su cita el " 
+			String cuerpoAlerta = "El usuario " + StringEscapeUtils.unescapeHtml4(cita.getCiudadano().toString()) + " ha modificado las anotaciones para su cita el " 
 								+ dateFormat.format(cita.getHoraInicio()) + " a las " 
 								+ timeFormat.format(cita.getHoraInicio()) + " en el municipio " 
 								+ cita.getVisita().getLocalidad() + " por las siguientes: " + anotaciones;
-			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita modificada", cuerpoAlerta, false);
+			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita modificada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 			alertaDAO.create(alerta);
 			//Mandar notificación
 			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
@@ -444,17 +444,19 @@ public class CitaServicios {
 		
 		CitaId citaId = new CitaId(idVisita, login);
 		Cita cita = citaDAO.get(citaId);
+		cita.getCiudadano().setPropuestoSancion(true);
+		ciudadanoDAO.update(cita.getCiudadano());
 		
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
-		String cuerpoAlerta = "El profesional " + cita.getVisita().getProfesional() + " ha notificado que el usuario " 
-							+ cita.getCiudadano() + ", de login: " + cita.getCiudadano().getLogin() 
+		String cuerpoAlerta = "El profesional " + StringEscapeUtils.unescapeHtml4(cita.getVisita().getProfesional().toString()) + " ha notificado que el usuario " 
+							+ StringEscapeUtils.unescapeHtml4(cita.getCiudadano().toString()) + ", de login: " + StringEscapeUtils.unescapeHtml4(cita.getCiudadano().getLogin())
 							+ " no ha asistido a la cita prevista el día " + dateFormat.format(cita.getHoraInicio())
 							+ " a las " + timeFormat.format(cita.getHoraInicio()) 
 							+ " en el municipio " + cita.getVisita().getLocalidad();
 		List<Administrador> admins = administradorDAO.listAll();
 		for(int i = 0; i < admins.size(); i++) {
-			Alerta alerta = new Alerta(admins.get(i), "Ausencia en cita", cuerpoAlerta, false);
+			Alerta alerta = new Alerta(admins.get(i), "Ausencia en cita", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 			
 			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
 			alertaServicios.mandarNotificacion(alerta);

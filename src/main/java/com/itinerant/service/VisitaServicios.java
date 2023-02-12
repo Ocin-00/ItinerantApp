@@ -34,6 +34,7 @@ import javax.ws.rs.core.Response;
 import com.itinerant.dao.AlertaDAO;
 import com.itinerant.dao.CategoriaDAO;
 import com.itinerant.dao.CitaDAO;
+import com.itinerant.dao.CiudadanoDAO;
 import com.itinerant.dao.LocalidadDAO;
 import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.dao.SupervisorDAO;
@@ -41,6 +42,7 @@ import com.itinerant.dao.VisitaDAO;
 import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Categoria;
 import com.itinerant.entity.Cita;
+import com.itinerant.entity.Ciudadano;
 import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
 import com.itinerant.entity.Supervisor;
@@ -59,12 +61,14 @@ public class VisitaServicios {
 	private CitaDAO citaDAO;
 	private AlertaDAO alertaDAO;
 	private LocalidadDAO localidadDAO;
+	private CiudadanoDAO ciudadanoDAO;
 	
 	public VisitaServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		visitaDAO = new VisitaDAO(entityManager);
 		citaDAO = new CitaDAO(entityManager);
 		alertaDAO = new AlertaDAO(entityManager);
 		localidadDAO = new LocalidadDAO(entityManager);
+		ciudadanoDAO = new CiudadanoDAO(entityManager);
 		this.entityManager = entityManager;
 		this.request = request;
 		this.response = response;
@@ -111,7 +115,7 @@ public class VisitaServicios {
 		Date ahora = new Date();
 		Date tiempoLimite = new Date(fechaCita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
 		
-		String urgenciaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("urgencia"));
+		String urgenciaTexto = request.getParameter("urgencia");
 		boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
 		boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
 		
@@ -132,7 +136,7 @@ public class VisitaServicios {
 						cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
 											+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";
 					}
-					Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", cuerpoAlerta, false);
+					Alerta alerta = new Alerta(cita.getCiudadano(), "Cita anulada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 					alertaDAO.create(alerta);
 					//Mandar notificación
 					AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
@@ -479,7 +483,7 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 			Date ahora = new Date();
 			Date tiempoLimite = new Date(fechaVisita.getTime() - 3 * 60 * 60 * 1000); //Tiempo límite = 3 horas antes de la cita
 			
-			String urgenciaTexto = StringEscapeUtils.escapeHtml4(request.getParameter("urgencia")); //FALTA AÑADIR URGENCIA EN HTTP
+			String urgenciaTexto = request.getParameter("urgencia"); 
 			boolean urgencia = !((urgenciaTexto == null) || urgenciaTexto.isBlank());
 			boolean pasadoTiempoLimite = ahora.after(tiempoLimite);
 			
@@ -498,7 +502,7 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 						cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
 											+ timeFormat.format(cita.getHoraInicio()) + " ha sido modificada.";
 					}
-					Alerta alerta = new Alerta(cita.getCiudadano(), "Cita modificada", cuerpoAlerta, false);
+					Alerta alerta = new Alerta(cita.getCiudadano(), "Cita modificada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 					alertaDAO.create(alerta);
 					//Mandar notificación
 					AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
@@ -531,8 +535,12 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 
 	public void VerVisitaBusqueda() throws ServletException, IOException {
 		int visitaId = Integer.parseInt(request.getParameter("id"));
+		String login = (String) request.getSession().getAttribute("userLogin");
 		Visita visita = visitaDAO.get(visitaId);
 		request.setAttribute("visita", visita);
+		Date ahora = new Date();
+		boolean visitaFutura = visita.getFecha().after(ahora);
+		request.setAttribute("visitaFutura", visitaFutura);
 		
 		List<Date> listaHorasPosibles = calcularHorarios(visita);
 		List<Cita> citasPedidas = new ArrayList(visita.getCitas());		
@@ -545,6 +553,9 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 			request.setAttribute("esCiudadano", false);
 		} else if(rol.equals(Rol.CIUDADANO.toString())) {
 			request.setAttribute("esCiudadano", true);
+			Ciudadano ciudadano = ciudadanoDAO.get(login);
+			boolean sancionado = ciudadano.getFinSancion() != null && ciudadano.getFinSancion().after(ahora);
+			request.setAttribute("sancionado", sancionado);
 			homepage = "../frontend/inicio/busqueda_visita.jsp";
 		} else {
 			request.setAttribute("esCiudadano", false);

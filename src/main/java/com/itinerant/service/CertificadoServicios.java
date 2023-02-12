@@ -85,9 +85,9 @@ public class CertificadoServicios {
 		if(borrarArchivo(certificado.getRuta())) {
 			certificadoDAO.delete(id);
 			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
-				String cuerpoAlerta = "Lo sentimos, pero el certificado de título " + certificado.getTitulo()
-										+" emitido por la institución " + certificado.getEntidadEmisora() + " el año "+ certificado.getAnyo() + " no ha sido validado. ";								
-				Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado no validado", cuerpoAlerta, false);
+				String cuerpoAlerta = "Lo sentimos, pero el certificado de título " + StringEscapeUtils.unescapeHtml4(certificado.getTitulo())
+										+" emitido por la institución " + StringEscapeUtils.unescapeHtml4(certificado.getEntidadEmisora()) + " el año "+ certificado.getAnyo() + " no ha sido validado. ";								
+				Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado no validado", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 				
 				alerta = alertaDAO.create(alerta);
 				
@@ -122,9 +122,9 @@ public class CertificadoServicios {
 		Certificado certificado = certificadoDAO.get(id);
 		certificado.setValidez(true);
 		certificadoDAO.update(certificado);
-		String cuerpoAlerta = "El certificado de título " + certificado.getTitulo()
-		+" emitido por la institución " + certificado.getEntidadEmisora() + " el año "+ certificado.getAnyo() + " ha sido validado. ";								
-		Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado validado", cuerpoAlerta, false);
+		String cuerpoAlerta = "El certificado de título " + StringEscapeUtils.unescapeHtml4(certificado.getTitulo())
+		+" emitido por la institución " + StringEscapeUtils.unescapeHtml4(certificado.getEntidadEmisora()) + " el año "+ certificado.getAnyo() + " ha sido validado. ";								
+		Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado validado", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 		
 		alerta = alertaDAO.create(alerta);
 		
@@ -158,10 +158,10 @@ public class CertificadoServicios {
 			Certificado certificado = inicializarDatos();
 			certificadoDAO.create(certificado);
 			
-			String cuerpoAlerta = "El profesional " + certificado.getProfesional().toString() + " ha subido un nuevo certificado que está pendiente de validación.";
+			String cuerpoAlerta = "El profesional " + StringEscapeUtils.unescapeHtml4(certificado.getProfesional().toString()) + " ha subido un nuevo certificado que está pendiente de validación.";
 			List<Administrador> admins = administradorDAO.listAll();
 			for(int i = 0; i < admins.size(); i++) {
-				Alerta alerta = new Alerta(admins.get(i), "Nuevo certificado", cuerpoAlerta, false);
+				Alerta alerta = new Alerta(admins.get(i), "Nuevo certificado", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 				
 				alerta = alertaDAO.create(alerta);
 				
