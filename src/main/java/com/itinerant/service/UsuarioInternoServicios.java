@@ -1,7 +1,13 @@
 package com.itinerant.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
@@ -17,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import com.itinerant.dao.AdministradorDAO;
 import com.itinerant.dao.AlertaDAO;
@@ -25,6 +33,7 @@ import com.itinerant.dao.ChatDAO;
 import com.itinerant.dao.CiudadanoDAO;
 import com.itinerant.dao.LocalidadDAO;
 import com.itinerant.dao.ProfesionalDAO;
+import com.itinerant.dao.SupervisorDAO;
 import com.itinerant.dao.UsuarioInternoDAO;
 import com.itinerant.entity.Administrador;
 import com.itinerant.entity.Alerta;
@@ -34,6 +43,7 @@ import com.itinerant.entity.ChatMensaje;
 import com.itinerant.entity.Ciudadano;
 import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
+import com.itinerant.entity.Supervisor;
 import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.enums.Rol;
 import com.itinerant.enums.Sexo;
@@ -50,12 +60,19 @@ public class UsuarioInternoServicios {
 	private AdministradorDAO administradorDAO;
 	private ChatDAO chatDAO;
 	private MensajeServicios mensajeServicios;
+	private CiudadanoDAO ciudadanoDAO;
+	private ProfesionalDAO profesionalDAO;
+	private SupervisorDAO supervisorDAO;
+	private final String DEFAULT_IMAGE = "../img/default.jpg";
 
 	public UsuarioInternoServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		usuarioInternoDAO = new UsuarioInternoDAO(entityManager);
 		alertaDAO = new AlertaDAO(entityManager);
 		administradorDAO = new AdministradorDAO(entityManager);
 		chatDAO = new ChatDAO(entityManager);
+		ciudadanoDAO = new CiudadanoDAO(entityManager);
+		profesionalDAO = new ProfesionalDAO(entityManager);
+		supervisorDAO = new SupervisorDAO(entityManager);
 		this.request = request;
 		this.response = response;
 		this.entityManager = entityManager;
@@ -209,8 +226,8 @@ public class UsuarioInternoServicios {
 			Profesional profesional = new Profesional(login, password, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, false, fechaRegistro);
 			profesional.setEstadoCivil(estadoCivil);
 			profesional.setSexo(sexo);
+			profesional.setImagenRuta(DEFAULT_IMAGE);
 			
-			ProfesionalDAO profesionalDAO = new ProfesionalDAO(entityManager);
 			profesionalDAO.create(profesional);
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
@@ -231,8 +248,8 @@ public class UsuarioInternoServicios {
 			ciudadano.setEstadoCivil(estadoCivil);
 			ciudadano.setFormacion(formacion);
 			ciudadano.setSexo(sexo);
+			ciudadano.setImagenRuta(DEFAULT_IMAGE);
 			
-			CiudadanoDAO ciudadanoDAO = new CiudadanoDAO(entityManager);
 			ciudadanoDAO.create(ciudadano);
 		}
 		login(login, password);
@@ -241,8 +258,9 @@ public class UsuarioInternoServicios {
 	private Administrador elegirAdmin() {
 		return null;
 	}
-
-	public void registerView() throws ServletException, IOException {
+	
+	private void inicializarUsuarioForm() {
+		System.out.println("inicializar");
 		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
 		List<Localidad> localidades = localidadDAO.listAll();
 		request.setAttribute("listaLocalidades", localidades);
@@ -254,10 +272,235 @@ public class UsuarioInternoServicios {
 		String[] listaEstadosCivilesArray = new String[]{"Casado/a", "Divorciado/a", "Soltero/a","Viudo/a", "Prefiere no decir"};
 		List<String> listaEstadosCiviles = Arrays.asList(listaEstadosCivilesArray);
 		request.setAttribute("listaEstadosCiviles", listaEstadosCiviles);
+	}
+
+	public void registerView() throws ServletException, IOException {
+		System.out.println("register");
+		inicializarUsuarioForm();
 		
 		String homepage = "frontend/register_form.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
 		dispatcher.forward(request, response);
 	}
 
+	public void modificarCuentaView() throws ServletException, IOException {
+		inicializarUsuarioForm();
+		String login = (String) request.getSession().getAttribute("userLogin");
+		String rol = (String) request.getSession().getAttribute("rol");
+		request.setAttribute("rol", rol);
+		System.out.println(login);
+		System.out.println(rol);
+		if(rol.equals(Rol.CIUDADANO.toString())) {
+			Ciudadano usuario = ciudadanoDAO.get(login);
+			request.setAttribute("usuario", usuario);
+			System.out.println(usuario);
+		} else if(rol.equals(Rol.PROFESIONAL.toString())) {
+			Profesional usuario = profesionalDAO.get(login);
+			request.setAttribute("usuario", usuario);
+			System.out.println(usuario);
+		} else if(rol.equals(Rol.ADMINISTRADOR.toString())) {
+			Administrador usuario = administradorDAO.get(login);
+			request.setAttribute("usuario", usuario);
+			System.out.println(usuario);
+		} else if(rol.equals(Rol.SUPERVISOR.toString())) {
+			Supervisor usuario = supervisorDAO.get(login);
+			request.setAttribute("usuario", usuario);
+			System.out.println(usuario);
+		}
+		
+		
+		String homepage = "../frontend/register_form.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		dispatcher.forward(request, response);
+		
+	}
+
+	public void eliminarCuenta() throws IOException {
+		removeSessionAttributes();
+		
+		String login = (String) request.getSession().getAttribute("userLogin");
+		UsuarioInterno usuario = usuarioInternoDAO.get(login);
+		usuarioInternoDAO.delete(login);
+		String imagenActual = usuario.getImagenRuta();
+		if(!imagenActual.equals("../default.jpg")) {
+			borrarArchivo(imagenActual);
+		}
+		//BORRAR COSAS DE LA BASE DE DATOS
+		response.sendRedirect(request.getContextPath());
+	}
+
+	public void actualizarCuenta() throws ServletException, IOException {
+		String nombre = StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));
+		String apellidos = StringEscapeUtils.escapeHtml4(request.getParameter("apellidos"));
+		String telefono = StringEscapeUtils.escapeHtml4(request.getParameter("telefono"));
+		String localizacion = StringEscapeUtils.escapeHtml4(request.getParameter("direccion"));
+		//int codPostal = Integer.parseInt(request.getParameter("codPostal"));
+		String fechaNacTexto = request.getParameter("fechaNac");
+		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
+		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
+		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
+		String rol = (String) request.getSession().getAttribute("rol");
+		String parte = (String) request.getSession().getAttribute("imagenPerfil");
+		System.out.println(parte);
+		Part part = request.getPart("imagenPerfil");
+		
+		
+		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
+		//Localidad municipio = localidadDAO.get(codPostal);
+		//String localizacion = direccion;
+		
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");	
+		Date fechaNac = null;
+		try {
+			fechaNac = dateformat.parse(fechaNacTexto);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		//Date fechaRegistro = new Date();
+		
+		if(rol.equals(Rol.PROFESIONAL.toString())) {
+			String sexo = StringEscapeUtils.escapeHtml4(request.getParameter("sexo"));
+			String estadoCivil = StringEscapeUtils.escapeHtml4(request.getParameter("estadoCivil"));
+			String formacion = StringEscapeUtils.escapeHtml4(request.getParameter("formacion"));
+			String descripcion = StringEscapeUtils.escapeHtml4(request.getParameter("descripcion"));
+			
+			Profesional profesional = profesionalDAO.get(login);
+			profesional.setApellidos(apellidos);
+			profesional.setEmail(email);
+			profesional.setEstadoCivil(estadoCivil);
+			profesional.setFechaNac(fechaNac);
+			profesional.setFormacion(formacion);
+			String imagenRuta = setImagen(part, profesional.getImagenRuta());
+			profesional.setImagenRuta(imagenRuta);
+			profesional.setLocalizacion(localizacion);
+			profesional.setNombre(nombre);
+			profesional.setRol(rol);
+			profesional.setSexo(sexo);
+			profesional.setTelefono(telefono);
+			profesional.setDescripcion(descripcion);
+			
+			profesionalDAO.update(profesional);
+			/*
+			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
+			String cuerpoAlerta = "Un nuevo usuario profesional se registró el día " + dateFormat.format(fechaRegistro) 
+								+ " a las " + timeFormat.format(fechaRegistro);
+			List<Administrador> admins = administradorDAO.listAll();
+			for(int i = 0; i < admins.size(); i++) {
+				Alerta alerta = new Alerta(admins.get(i), "Nuevo profesional", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+				
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
+				
+				alertaDAO.create(alerta);
+			}
+			*/
+		} else if(rol.equals(Rol.CIUDADANO.toString())){
+			String sexo = StringEscapeUtils.escapeHtml4(request.getParameter("sexo"));
+			String estadoCivil = StringEscapeUtils.escapeHtml4(request.getParameter("estadoCivil"));
+			String formacion = StringEscapeUtils.escapeHtml4(request.getParameter("formacion"));
+			
+			Ciudadano ciudadano = ciudadanoDAO.get(login);
+			ciudadano.setApellidos(apellidos);
+			ciudadano.setEmail(email);
+			ciudadano.setEstadoCivil(estadoCivil);
+			ciudadano.setFechaNac(fechaNac);
+			ciudadano.setFormacion(formacion);
+			String imagenRuta = setImagen(part, ciudadano.getImagenRuta());
+			ciudadano.setImagenRuta(imagenRuta);
+			ciudadano.setLocalizacion(localizacion);
+			ciudadano.setNombre(nombre);
+			ciudadano.setPassword(password);
+			ciudadano.setRol(rol);
+			ciudadano.setSexo(sexo);
+			ciudadano.setTelefono(telefono);
+			
+			ciudadanoDAO.update(ciudadano);
+		} else if(rol.equals(Rol.ADMINISTRADOR.toString())) {
+			Administrador admin = administradorDAO.get(login);
+			admin.setApellidos(apellidos);
+			admin.setEmail(email);
+			admin.setFechaNac(fechaNac);
+			String imagenRuta = setImagen(part, admin.getImagenRuta());
+			admin.setImagenRuta(imagenRuta);
+			admin.setNombre(nombre);
+			String nss = StringEscapeUtils.escapeHtml4(request.getParameter("nss"));
+			String organismoCoordinador = StringEscapeUtils.escapeHtml4(request.getParameter("organismoCoordinador"));
+			admin.setNss(nss);
+			admin.setOrganismoCoordinador(organismoCoordinador);
+			admin.setPassword(password);
+			admin.setRol(rol);
+			admin.setTelefono(telefono);
+			
+			administradorDAO.update(admin);
+		} else if(rol.equals(Rol.SUPERVISOR.toString())) {
+			Supervisor supervisor = supervisorDAO.get(login);
+			supervisor.setApellidos(apellidos);
+			supervisor.setEmail(email);
+			supervisor.setFechaNac(fechaNac);
+			String imagenRuta = setImagen(part, supervisor.getImagenRuta());
+			supervisor.setImagenRuta(imagenRuta);
+			supervisor.setNombre(nombre);
+			String nss = StringEscapeUtils.escapeHtml4(request.getParameter("nss"));
+			String organismoCoordinador = StringEscapeUtils.escapeHtml4(request.getParameter("organismoCoordinador"));
+			supervisor.setNss(nss);
+			supervisor.setOrganismoCoordinador(organismoCoordinador);
+			supervisor.setPassword(password);
+			supervisor.setRol(rol);
+			supervisor.setTelefono(telefono);
+			
+			supervisorDAO.update(supervisor);
+		}
+		
+		login(login, password);
+	}
+	
+	private String setImagen(Part part, String imagenActual) throws IOException, ServletException {
+		//Part part = request.getPart("imagenPerfil");
+		String imagenRuta = DEFAULT_IMAGE;
+		System.out.println("AQUI");
+		if(!imagenActual.equals(DEFAULT_IMAGE)) {
+			borrarArchivo(imagenActual);
+		}
+		if(part != null && part.getSize() > 0) {
+			System.out.println("hola");
+			long size = part.getSize();
+			byte[] imageBytes = new byte[(int) size];
+			
+			InputStream inputStream = part.getInputStream();
+			String nombreImagen = nombrarImagen();
+			String src = request.getServletContext().getRealPath("/") + "/img/" + nombreImagen;
+			OutputStream outputStream = new FileOutputStream(src);
+			int length; 
+			
+			while ((length = inputStream.read(imageBytes)) != -1) {
+				outputStream.write(imageBytes, 0, length);
+			}
+
+			inputStream.close();
+			outputStream.close();
+			imagenRuta = "../img/" + nombreImagen;
+		}
+		return imagenRuta;
+	}
+	
+	private String nombrarImagen() throws IOException {
+		String path = request.getServletContext().getRealPath("/") + "/img/number.txt";
+		List<Integer> ints = Files.lines(Paths.get(path)).map(Integer::parseInt).collect(Collectors.toList());
+		Integer number = ints.get(0) + 1;
+		Files.write(Paths.get(path), number.toString().getBytes());
+		// El path de verdad es C:\Users\Nico\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ItinerantApp\img
+		//System.out.println(path);
+		return "img" + number + ".jpg";
+	}
+	
+	private boolean borrarArchivo(String ruta) {
+		String path = request.getServletContext().getRealPath("/") + ruta.substring(2);
+		System.out.println(path);
+		File file = new File(path);
+		boolean a = file.delete();
+		System.out.println(a);
+		return a;
+	}
 }

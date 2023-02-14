@@ -10,41 +10,29 @@
 			Registrarse
 		</c:if>	
 		<c:if test="${usuario != null}">
-			Modificar cuenta
+			Editar cuenta
 		</c:if>
 	</title>
-	<c:if test="${usuario == null}">
-		<link rel="stylesheet" href="css/layout.css">
-		<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-		<script type="text/javascript" src="js/jquery.validate.min.js"></script>
-		</c:if>	
-	<c:if test="${usuario != null}">
-		<link rel="stylesheet" href="../css/layout.css">
-		<link rel="stylesheet" href="../css/side-bar-style.css">
-		<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
-		<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
-		<script type="text/javascript" src="../js/notify.js"></script>
-	    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
-	    <script type="text/javascript" src="../js/my-notifications.js"></script>
-	    <script type="text/javascript" src="js/general.js"></script>
-	    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-		<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
-	</c:if>
+	<link rel="stylesheet" href="../css/layout.css">
+	<link rel="stylesheet" href="../css/side-bar-style.css">
+	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="../js/notify.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../js/my-notifications.js"></script>
+    <script type="text/javascript" src="js/general.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-	<c:if test="${usuario == null}">
-			<jsp:directive.include file="/frontend/header.jsp"/>
-	</c:if>	
-	<c:if test="${usuario != null}">
-		<jsp:directive.include file="../frontend/header_user.jsp"/>
-	</c:if>
+	<jsp:directive.include file="/frontend/header.jsp"/>
 
 	<div id="main-centered">
 		<c:if test="${usuario == null}">
 			<form action="nuevo_usuario" method="post" id="usuarioForm">
 		</c:if>	
 		<c:if test="${usuario != null}">
-			<form action="actualizar_usuario" method="post" id="usuarioForm"  enctype="multipart/form-data">
+			<form action="actualizar_usuario" method="post" id="usuarioForm"">
 		</c:if>
 		<div class="main-centered-register">
 			<div class="main-centered-register-items">
@@ -61,70 +49,37 @@
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
-					<tr>
-						<td align="right">Teléfono:</td>
-						<c:if test="${usuario.telefono != 'null'}">
+					<c:if test="${rol != 'ADMINISTRADOR'}">					
+						<tr>
+							<td align="right">Teléfono:</td>
 							<td><input type="tel" name="telefono" id="telefono" size="20" value="${usuario.telefono}"/></td>
-						</c:if>
-						<c:if test="${usuario.telefono == 'null'}">
-							<td><input type="tel" name="telefono" id="telefono" size="20"/></td>
-						</c:if>
-					</tr>
-					<c:if test="${rol != 'ADMINISTRADOR' || 'SUPERVISOR'}">	
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td align="right">Dirección:</td>
-						<c:if test="${usuario.localizacion != 'null'}">
-							<td><input type="text" name="direccion" id="direccion" size="20" value="${usuario.localizacion}"/></td>
-						</c:if>
-						<c:if test="${usuario.localizacion == 'null'}">
-							<td><input type="text" name="direccion" id="direccion" size="20"/></td>
-						</c:if>
-					</tr>
-					
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<c:if test="${usuario == null}">
-					<tr>
-						<td align="right">Municipio: </td>
-						<td>
-							<select name="codPostal" id="codPostal">
-								<c:forEach items="${listaLocalidades}" var="localidad">
-									<option value="${localidad.codigoPostal}">
-										${localidad.nombre}
-									</option>
-								</c:forEach>
-							</select> 
-						</td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					</c:if>	
-					</c:if>	
-					
-					<c:if test="${rol == 'ADMINISTRADOR' || 'SUPERVISOR'}">	
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td align="right">Organismo coordinador:</td>
-						<td><input type="text" name="organismoCoordinador" id="organismoCoordinador" size="20" value="${usuario.organismoCoordinador}"/></td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<tr>
-						<td align="right">Número de la seguridad social: </td>
-						<td><input type="text" name="nss" id="nss" size="20" value="${usuario.nss}"/></td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td align="right">Dirección:</td>
+							<td><input type="text" name="direccion" id="direccion" size="20" value="${usuario.direccion}"/></td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td align="right">Municipio: </td>
+							<td>
+								<select name="codPostal" id="codPostal">
+									<c:forEach items="${listaLocalidades}" var="localidad">
+										<option value="${localidad.codigoPostal}">
+											${localidad.nombre}
+										</option>
+									</c:forEach>
+								</select> 
+							</td>
+						</tr>
 					</c:if>
+					<tr>
+						<td>&nbsp;</td>
+					</tr>
 					<tr>
 						<td align="right">Fecha de nacimiento:</td>
 						<td><input type="date" name="fechaNac" id="fechaNac" size="20" value="${usuario.fechaNac}"/></td>
@@ -138,32 +93,22 @@
 			<div class="main-centered-register-items"class="main-centered-register-items">
 				<h2>Datos de cuenta: </h2>
 				<table>
-					<c:if test="${usuario != null}">
-						<tr>
-							<td rowspan="8">
-								<img id="thumbnail" alt="" height="250" src="${usuario.imagenRuta}"/>
-								<label for="imagenPerfil">
-									<img src="../images/pencil.png"/>
-								</label>
-							</td>
-						</tr>
-					</c:if>
 					<tr>
 						<td>Email:</td>
 						<td>Nombre de usuario:</td>
 					</tr>
 					<tr>
 					<c:if test="${usuario == null}">
-						<td><input type="text" name="email" id="email" size="20"/></td>
-						<td><input type="text" name="login" id="login" size="20"/></td>
+						<td><input type="text" name="email" id="email" size="20" value="${usuario.email}" disabled="disabled"/></td>
+						<td><input type="text" name="login" id="login" size="20" value="${usuario.login}" disabled="disabled"/></td>
 					</c:if>
 					<c:if test="${usuario != null}">
 						<td>
-							<input type="text" name="email" id="showemail" size="20" value="${usuario.email}" disabled/>
-							<input type="hidden" name="email" id="mail" size="20" value="${usuario.email}"/>
+							<input type="text" name="email" id="email" size="20" value="${usuario.email}" disabled/>
+							<input type="hidden" name="email" id="email" size="20" value="${usuario.email}"/>
 						</td>
 						<td>
-							<input type="text" name="login" id="showlogin" size="20" value="${usuario.login}" disabled/>
+							<input type="text" name="login" id="login" size="20" value="${usuario.login}" disabled/>
 							<input type="hidden" name="login" id="login" size="20" value="${usuario.login}"/>
 						</td>
 					</c:if>
@@ -178,14 +123,10 @@
 						<c:if test="${usuario == null}">
 						<td><input type="password" name="password" id="password" size="25" value="${usuario.password}"/></td>
 						</c:if>
-						<c:if test="${usuario != null}">
+						<c:if test="${supervisor != null}">
 						<td>
-							<input type="password" name="password" id="showpassword" size="25" value="${usuario.password}" disabled/>
+							<input type="password" name="password" id="password" size="25" value="${usuario.password}" disabled/>
 							<input type="hidden" name="password" id="password" size="25" value="${usuario.password}"/>
-							<input type="hidden" name="comfirmPassword" id="comfirmPassword" size="25" value="${usuario.password}" />
-						</td>
-						<td>
-							<button>Cambiar contraseña</button>
 						</td>
 						</c:if>
 					</tr>
@@ -221,7 +162,6 @@
 				</c:if>
 			</div>
 			
-			<c:if test="${rol != 'ADMINISTRADOR' || 'SUPERVISOR'}">	
 			<div class="main-centered-register-items">
 				<h2>Ayúdanos a conocerte mejor:</h2>
 				<table>
@@ -230,16 +170,9 @@
 						<td>
 							<select name="sexo" id="sexo">
 								<c:forEach items="${listaSexo}" var="sexo">
-								<c:if test="${usuario.sexo == sexo}">
-									<option value="${sexo}" selected="selected">
-										${sexo}
-									</option>
-								</c:if>
-								<c:if test="${usuario.sexo != sexo}">
 									<option value="${sexo}">
 										${sexo}
 									</option>
-								</c:if>
 								</c:forEach>
 							</select> 
 						</td>
@@ -249,16 +182,9 @@
 						<td>
 							<select name="estadoCivil" id="estadoCivil">
 								<c:forEach items="${listaEstadosCiviles}" var="estadoCivil">
-									<c:if test="${usuario.estadoCivil == estadoCivil}">
-										<option value="${estadoCivil}" selected="selected">
-											${estadoCivil}
-										</option>
-									</c:if>
-									<c:if test="${usuario.estadoCivil != estadoCivil}">
-										<option value="${estadoCivil}">
-											${estadoCivil}
-										</option>
-									</c:if>
+									<option value="${estadoCivil}">
+										${estadoCivil}
+									</option>
 								</c:forEach>
 							</select> 
 						</td>
@@ -269,59 +195,21 @@
 						<td>Formación:</td>
 					</tr>
 					<tr>
-						<c:if test="${usuario.formacion == 'null'}">
-							<td>
-								<textarea rows="5" cols="50" name="formacion" id="formacion"></textarea>
-							</td>
-						</c:if>
-						<c:if test="${usuario.formacion != 'null'}">
-							<td>
-								<textarea rows="5" cols="50" name="formacion" id="formacion">${usuario.formacion}</textarea>
-							</td>
-						</c:if>
+						<td>
+							<textarea rows="5" cols="50" name="formacion" id="formacion">${usuario.formacion}</textarea>
+						</td>
 					</tr>
 				</table>
-				<c:if test="${rol == 'PROFESIONAL'}">
-					<table>
-						<tr>
-							<td>Descripcion:</td>
-						</tr>
-						<tr>
-							<c:if test="${usuario.descripcion == 'null'}">
-								<td>
-									<textarea rows="5" cols="50" name="descripcion" id="descripcion"></textarea>
-								</td>
-							</c:if>
-							<c:if test="${usuario.descripcion != 'null'}">
-								<td>
-									<textarea rows="5" cols="50" name="descripcion" id="descripcion">${usuario.descripcion}</textarea>
-								</td>
-							</c:if>
-						</tr>
-					</table>
-				</c:if>
 			</div>
-			</c:if>
 			</div>
 			<div align="center">
-				<c:if test="${usuario == null}">
-					<button type="submit">Crear cuenta</button>
-				</c:if>
-				<c:if test="${usuario != null}">
-					<button type="submit">Modificar cuenta</button>	
-					&nbsp;&nbsp;
-					<button id="buttonCancel" type="button">Cancelar</button>
-					<div>
-						<button type="button">Eliminar cuenta</button>
-					</div>
-				</c:if>	
+				<button type="submit">Crear cuenta</button>
 			</div>
 			<c:if test="${message != null}">
 				<div align = "center">
 					${message}
 				</div>
 			</c:if>
-			<div class="image-input"><input type="file" id="imagenPerfil" name="imagenPerfil"/></div>
 		</form>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp" />
@@ -329,7 +217,6 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		/*
 		$("#usuarioForm").validate({
 				rules: {
 					email: {
@@ -392,28 +279,7 @@
 					tipoCuenta: "Por favor indique qué tipo de cuenta desea."
 				}
 			});
-*/
-		$("#imagenPerfil").change(function() {
-			showImageThumbnail(this);
-		});
-
-		$("#buttonCancel").click(function() {
-			history.go(-1);
-		});
-		
-	});	
-
-	function showImageThumbnail(fileInput) {
-
-        var file = fileInput.files.item(0);
-        var reader = new FileReader();
-		
-        reader.onload = function(e) {
-            $('#thumbnail').attr('src', e.target.result);
-        };
- 
-        reader.readAsDataURL(file);
-    }
+	}); 
 /*
 	$(document).ready(function(){
 		$("#usuarioForm").validate({
@@ -455,5 +321,8 @@
 				}
 			});
 	});*/
+	$("#buttonCancel").click(function() {
+		history.go(-1);
+	});
 </script>
 </html>

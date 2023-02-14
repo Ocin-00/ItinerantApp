@@ -43,7 +43,7 @@
 				<img src="../images/Usuario.png" height="50" />
 			</label>
 			<div class="dropdown-content">
-				<a href="#">Configuración</a>
+				<a href="modificar_cuenta">Modificar cuenta</a>
 				<hr width="80%" />
 				<a href="../logout">Cerrar sesión</a>
 			</div>
