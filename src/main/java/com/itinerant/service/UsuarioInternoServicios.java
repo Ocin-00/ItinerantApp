@@ -29,22 +29,28 @@ import javax.servlet.http.Part;
 import com.itinerant.dao.AdministradorDAO;
 import com.itinerant.dao.AlertaDAO;
 import com.itinerant.dao.CategoriaDAO;
+import com.itinerant.dao.CertificadoDAO;
 import com.itinerant.dao.ChatDAO;
+import com.itinerant.dao.CitaDAO;
 import com.itinerant.dao.CiudadanoDAO;
 import com.itinerant.dao.LocalidadDAO;
 import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.dao.SupervisorDAO;
 import com.itinerant.dao.UsuarioInternoDAO;
+import com.itinerant.dao.VisitaDAO;
 import com.itinerant.entity.Administrador;
 import com.itinerant.entity.Alerta;
 import com.itinerant.entity.Categoria;
+import com.itinerant.entity.Certificado;
 import com.itinerant.entity.Chat;
 import com.itinerant.entity.ChatMensaje;
+import com.itinerant.entity.Cita;
 import com.itinerant.entity.Ciudadano;
 import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
 import com.itinerant.entity.Supervisor;
 import com.itinerant.entity.UsuarioInterno;
+import com.itinerant.entity.Visita;
 import com.itinerant.enums.Rol;
 import com.itinerant.enums.Sexo;
 
@@ -57,6 +63,8 @@ public class UsuarioInternoServicios {
 	private HttpServletResponse response;
 	private EntityManager entityManager;
 	private AlertaDAO alertaDAO;
+	private VisitaDAO visitaDAO;
+	private CitaDAO citaDAO;
 	private AdministradorDAO administradorDAO;
 	private ChatDAO chatDAO;
 	private MensajeServicios mensajeServicios;
@@ -73,6 +81,8 @@ public class UsuarioInternoServicios {
 		ciudadanoDAO = new CiudadanoDAO(entityManager);
 		profesionalDAO = new ProfesionalDAO(entityManager);
 		supervisorDAO = new SupervisorDAO(entityManager);
+		visitaDAO = new VisitaDAO(entityManager);
+		citaDAO = new CitaDAO(entityManager);
 		this.request = request;
 		this.response = response;
 		this.entityManager = entityManager;
@@ -316,16 +326,59 @@ public class UsuarioInternoServicios {
 	}
 
 	public void eliminarCuenta() throws IOException {
-		removeSessionAttributes();
-		
 		String login = (String) request.getSession().getAttribute("userLogin");
+		String rol = (String) request.getSession().getAttribute("rol");
 		UsuarioInterno usuario = usuarioInternoDAO.get(login);
-		usuarioInternoDAO.delete(login);
 		String imagenActual = usuario.getImagenRuta();
 		if(!imagenActual.equals("../default.jpg")) {
 			borrarArchivo(imagenActual);
 		}
 		//BORRAR COSAS DE LA BASE DE DATOS
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
+		if(rol.equals(Rol.PROFESIONAL.toString())) {
+			List<Visita> visitas = visitaDAO.listAllByLogin(login);
+			if(visitas != null) {
+				for(Visita visita : visitas) {
+					List<Cita> citas = new ArrayList<>(visita.getCitas());
+					for(Cita cita : citas) {	
+						Date ahora = new Date();
+						if(ahora.before(cita.getHoraInicio())) {
+							String cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+									+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";								
+							Alerta alerta = new Alerta(visita.getProfesional(), "Cita cancelada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+							
+							alerta = alertaDAO.create(alerta);
+							
+							AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+							alertaServicios.mandarNotificacion(alerta);
+						}
+						citaDAO.delete(cita);
+					}
+					visitaDAO.delete(visita);
+				}
+			}
+		} else if(rol.equals(Rol.CIUDADANO.toString())) {
+			List<Cita> citas = citaDAO.listAllByLogin(login);
+			if(citas != null) {
+				for(Cita cita : citas) {	
+					Date ahora = new Date();
+					if(ahora.before(cita.getHoraInicio())) {	
+						String cuerpoAlerta = "La cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
+								+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";								
+						Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Cita cancelada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+							
+						alerta = alertaDAO.create(alerta);
+							
+						AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+						alertaServicios.mandarNotificacion(alerta);
+					}
+					citaDAO.delete(cita);
+				}
+			}
+		}
+		usuarioInternoDAO.delete(login);
+		removeSessionAttributes();
 		response.sendRedirect(request.getContextPath());
 	}
 
@@ -340,8 +393,6 @@ public class UsuarioInternoServicios {
 		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
 		String rol = (String) request.getSession().getAttribute("rol");
-		String parte = (String) request.getSession().getAttribute("imagenPerfil");
-		System.out.println(parte);
 		Part part = request.getPart("imagenPerfil");
 		
 		
@@ -464,7 +515,6 @@ public class UsuarioInternoServicios {
 			borrarArchivo(imagenActual);
 		}
 		if(part != null && part.getSize() > 0) {
-			System.out.println("hola");
 			long size = part.getSize();
 			byte[] imageBytes = new byte[(int) size];
 			

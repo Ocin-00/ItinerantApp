@@ -27,6 +27,7 @@ import javax.persistence.Table;
 	 @NamedQuery(name = "Certificado.findAll", query = "SELECT c FROM Certificado c ORDER BY c.anyo"),
 	 @NamedQuery(name = "Certificado.findAllNotValid", query = "SELECT c FROM Certificado c WHERE c.validez is not true ORDER BY c.fechaRegistro"),
 	 @NamedQuery(name = "Certificado.countAll", query = "SELECT count(*) FROM Certificado c"),
+	 @NamedQuery(name = "Certificado.findAllByLogin", query = "SELECT c FROM Certificado c WHERE c.profesional.login = :login"),
 })
 @Table(name = "certificado", catalog = "itinerant_db")
 public class Certificado implements java.io.Serializable {

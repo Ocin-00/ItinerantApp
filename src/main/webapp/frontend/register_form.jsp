@@ -185,7 +185,7 @@
 							<input type="hidden" name="comfirmPassword" id="comfirmPassword" size="25" value="${usuario.password}" />
 						</td>
 						<td>
-							<button>Cambiar contraseña</button>
+							<button id="changePassword" type="button">Cambiar contraseña</button>
 						</td>
 						</c:if>
 					</tr>
@@ -312,7 +312,7 @@
 					&nbsp;&nbsp;
 					<button id="buttonCancel" type="button">Cancelar</button>
 					<div>
-						<button type="button">Eliminar cuenta</button>
+						<button type="button" id="eliminarCuenta">Eliminar cuenta</button>
 					</div>
 				</c:if>	
 			</div>
@@ -322,14 +322,33 @@
 				</div>
 			</c:if>
 			<div class="image-input"><input type="file" id="imagenPerfil" name="imagenPerfil"/></div>
+			<input type="hidden" value="${rol}" id="rol">
 		</form>
 	</div>
+				<dialog id="newDialog" class="dialog">
+				  <form method="dialog" id="newDialogForm">
+				    <p align="right">
+				      <label>Nueva contraseña:
+				        <input id="newPassword" name="newPassword" type="password">
+				      </label>
+				     </p>
+				     <p align="right">
+				      <label>Confirmar contraseña:
+				        <input id="comfirmNewPassword" name=comfirmNewPassword type="password">
+				      </label>
+				    </p>
+				    <div align="center">
+				    	<button id="newConfirmar" type="button">Confirmar</button>
+				      	<button class="cancelBtn"  type="button">Cancelar</button>
+				    </div>
+				  </form>
+				</dialog>
 	<jsp:directive.include file="/frontend/footer.jsp" />
 </body>
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		/*
+		
 		$("#usuarioForm").validate({
 				rules: {
 					email: {
@@ -341,18 +360,17 @@
 					telefono: {
 						required: {
 							depends: function(element) {
-								return $("#profesional").is(":checked");
+								return $("#rol").val() != 'CIUDADANO';
 							}
 						}				
 					},
 					formacion: {
 						required: {
 							depends: function(element) {
-								return $("#profesional").is(":checked");
+								return $("#rol").val() == 'PROFESIONAL';
 							}
 						}	
 					},
-					codPostal: "required",
 					fechaNac: "required",
 					login: "required",
 					password: {
@@ -364,7 +382,20 @@
 			            minlength: 5,
 			            equalTo: "#password"
 			        },
-					tipoCuenta: "required"
+			        organismoCoordinador: {
+						required: {
+							depends: function(element) {
+								return $("#rol").val() == 'ADMINISTRADOR' || 'SUPERVISOR';
+							}
+						}				
+					},
+					nss: {
+						required: {
+							depends: function(element) {
+								return $("#rol").val() == 'ADMINISTRADOR' || 'SUPERVISOR';
+							}
+						}				
+					},
 				},
 				
 				messages: {
@@ -377,7 +408,6 @@
 					apellidos: "Por favor introduzca sus apellidos.",
 					telefono: "Por favor introduzca el número de teléfono.",
 					formacion: "Por favor indique su formación.",
-					codPostal: "Por favor introduzca el municipio en el que vive.",
 					fechaNac: "Por favor introduzca su fecha de nacimiento.",
 					login: "Por favor introduzca un nombre de usuario válido.",
 					password: {
@@ -389,16 +419,62 @@
 						minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres."),
 						equalTo: "Los campos no coinciden."
 					},
-					tipoCuenta: "Por favor indique qué tipo de cuenta desea."
+					organismoCoordinador: "Por favor introduzca su organismo coordinador.",
+					nss: "Por favor introduzca su número de la seguridad social",
 				}
 			});
-*/
+
 		$("#imagenPerfil").change(function() {
 			showImageThumbnail(this);
 		});
 
 		$("#buttonCancel").click(function() {
 			history.go(-1);
+		});
+
+		$("#newDialogForm").validate({
+			rules: {
+				newPassword: {
+		            required: true,
+		            minlength: 5
+		        },
+		        comfirmNewPassword: {
+		            required: true,
+		            minlength: 5,
+		            equalTo: "#newPassword"
+		        },
+			},
+			messages: {	
+				newPassword: {
+					required: "Por favor introduzca la contraseña.",
+					minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres.")
+				},
+				comfirmNewPassword: {
+					required: "Por favor repita la contraseña.",
+					minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres."),
+					equalTo: "Los campos no coinciden."
+				},
+			}
+		});
+
+		$("#changePassword").on("click", function(){
+			$("#newDialog").show();
+		});
+		
+		$(".cancelBtn").on("click", function(){
+			$(this).parent().parent().parent().hide();
+		});
+
+		$("#newConfirmar").on("click", function() {
+			$("#password").val($("#newPassword").val());
+			$("#confirmPassword").val($("#confirmNewPassword").val());
+			$(this).parent().parent().parent().hide();
+		});
+
+		$("#eliminarCuenta").on("click", function() {
+			if(confirm("¿Desea eliminar su cuenta?")) {
+				window.location = "eliminar_cuenta";
+			}
 		});
 		
 	});	

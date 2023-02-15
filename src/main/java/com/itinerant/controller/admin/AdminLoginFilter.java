@@ -45,7 +45,7 @@ public class AdminLoginFilter extends HttpFilter implements Filter {
 			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ItinerantApp");
 			EntityManager entityManager = entityManagerFactory.createEntityManager();
 			UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, httpRequest, httpResponse);
-			Boolean esAdmin = usuarioInternoServicios.getRol(login).equals(Rol.ADMINISTRADOR.toString());
+			boolean esAdmin = usuarioInternoServicios.getRol(login).equals(Rol.ADMINISTRADOR.toString());
 			if(esAdmin) {
 				chain.doFilter(request, response);
 			} else {

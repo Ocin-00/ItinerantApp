@@ -46,7 +46,7 @@ public class ProfesionalLoginFilter extends HttpFilter implements Filter {
 			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ItinerantApp");
 			EntityManager entityManager = entityManagerFactory.createEntityManager();
 			UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, httpRequest, httpResponse);
-			Boolean esProfesional = usuarioInternoServicios.getRol(login).equals(Rol.PROFESIONAL.toString());
+			boolean esProfesional = usuarioInternoServicios.getRol(login).equals(Rol.PROFESIONAL.toString());
 			if(esProfesional) {
 				chain.doFilter(request, response);
 			} else {

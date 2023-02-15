@@ -27,7 +27,7 @@ public class EliminarCuentaServlet extends BaseServlet {
 		request.setCharacterEncoding("UTF-8");
 		
 		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, request, response);
-		usuarioInternoServicios.eliminarCuentaView();
+		usuarioInternoServicios.eliminarCuenta();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
