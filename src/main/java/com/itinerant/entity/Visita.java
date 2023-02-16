@@ -29,14 +29,17 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "Visita.findAll", query = "SELECT v FROM Visita v"),
+	 @NamedQuery(name = "Visita.searchAll", query = "SELECT v FROM Visita v ORDER BY v.fecha DESC, v.horaInicio DESC"),
 	 @NamedQuery(name = "Visita.findAllByLogin", query = "SELECT v FROM Visita v WHERE v.profesional.login = :login ORDER BY v.fecha, v.horaInicio"),
 	 @NamedQuery(name = "Visita.countAll", query = "SELECT count(*) FROM Visita v"),
-	 @NamedQuery(name = "Visita.search", query = "SELECT v FROM Visita v WHERE v.nombre LIKE '%' || :keyword || '%'"
-	 											+ "OR v.descripcion LIKE '%' || :keyword || '%'"
-	 											+ "OR v.localidad.nombre LIKE '%' || :keyword || '%'"
-	 											+ "OR v.profesional.nombre LIKE '%' || :keyword || '%'"
-	 											+ "OR v.profesional.apellidos LIKE '%' || :keyword || '%'"
-	 											+ "ORDER BY v.fecha, v.horaInicio")
+	 @NamedQuery(name = "Visita.search", query = "SELECT DISTINCT v FROM Visita v JOIN v.categorias c WHERE "
+	 											+ "lower(v.nombre) LIKE '%' || :keyword || '%'"
+	 											+ "OR lower(v.descripcion) LIKE '%' || :keyword || '%'"
+	 											+ "OR lower(v.localidad.nombre) LIKE '%' || :keyword || '%'"
+	 											+ "OR lower(v.profesional.nombre) LIKE '%' || :keyword || '%'"
+	 											+ "OR lower(v.profesional.apellidos) LIKE '%' || :keyword || '%'"
+	 											+ "OR lower(c.nombre) LIKE '%' || :keyword || '%'"
+	 											+ "ORDER BY v.fecha DESC, v.horaInicio DESC"),
 })
 @Table(name = "visita", catalog = "itinerant_db")
 public class Visita implements java.io.Serializable {

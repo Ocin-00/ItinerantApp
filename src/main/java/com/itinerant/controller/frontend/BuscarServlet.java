@@ -28,8 +28,8 @@ public class BuscarServlet extends BaseServlet {
 		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
 		String keywordOriginal = request.getParameter("keyword");
 		String keyword =StringEscapeUtils.escapeHtml4(keywordOriginal);
-		visitaServicios.buscar(keyword);
-		profesionalServicios.buscar(keyword);
+		visitaServicios.buscar(keyword.toLowerCase());
+		profesionalServicios.buscar(keyword.toLowerCase());
 		
 		String homepage = "/frontend/busqueda_externa.jsp";
 		if(request.getSession().getAttribute("userLogin") != null) {

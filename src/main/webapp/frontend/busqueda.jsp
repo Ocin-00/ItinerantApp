@@ -1,5 +1,5 @@
 <div>
-	<h3 style="margin-left: 5px">Resultados de búsqueda: ${keyword}</h3>
+	<h3>Resultados de búsqueda: ${keyword}</h3>
 	<c:forEach var="visita" items="${listaVisitas}" varStatus="status">
 		<div class="search-results">
 			<a href="visita?id=${visita.idVisita}">
@@ -38,7 +38,7 @@
 	</c:forEach>
 	<c:forEach var="profesional" items="${listaProfesionales}" varStatus="status">
 	<div class="search-results">
-		<a href="xx">
+		<a href="ver_profesional?id=${profesional.login}">
 		<c:set var="imagenProfesional" value="${profesional.imagenRuta}"></c:set>
 			<table>			
 				<tr>
@@ -52,14 +52,8 @@
 					<td>${profesional.nombre} ${profesional.apellidos}</td>
 				</tr>
 				<tr>
-					<td>${visita.descripcion}</td>
-				</tr>
-				<tr>
-					<td>${visita.formacion}</td>
-				</tr>
-				<tr>
-					<td>${visita.localidad.nombre}</td>
-				</tr>				
+					<td>${profesional.descripcion}</td>
+				</tr>		
 			</table>
 		</a>
 	</div>

@@ -65,4 +65,31 @@ public class LocalidadServicios {
 		
 		return coords;
 	}
+	
+	public double getTiempoRuta(double[] coordsNuevo, double[] coordsContiguo) {
+		Client client = ClientBuilder.newClient();
+		Response response = client.target(
+		"https://api.openrouteservice.org/v2/directions/driving-car"
+		+ "?api_key=5b3ce3597851110001cf62488e46d28f49534f3094ceb181a7bfe9cc&start="
+		+ coordsNuevo[0] + "," + coordsNuevo[1] + "&end=" + coordsContiguo[0] + "," + coordsContiguo[1])
+		  .request(MediaType.TEXT_PLAIN_TYPE)
+		  .header("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8")
+		  .get();
+
+		//System.out.println("status: " + response.getStatus());
+		//System.out.println("headers: " + response.getHeaders());
+		//System.out.println("body:" + response.readEntity(String.class));
+		
+		String responseString = response.readEntity(String.class);
+		System.out.println(responseString);
+		JSONObject json = new JSONObject(responseString);
+		JSONArray features = json.getJSONArray("features");
+		JSONObject feature = features.getJSONObject(0);
+		JSONArray segments = feature.getJSONObject("properties").getJSONArray("segments");
+		JSONObject segment = segments.getJSONObject(0);
+		double travelTime = segment.getDouble("duration");
+		System.out.println(travelTime);
+		
+		return travelTime;
+	}
 }

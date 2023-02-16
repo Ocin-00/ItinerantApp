@@ -1,16 +1,14 @@
 <div id="header">
 	<div>
-		<img src="../images/itinerant.jpg" height="100" />
-		
-		
+		<img src="../images/itinerant.jpg" height="100" />	
 	</div>
 
 	<div id="header-center">
 		<div class="header-pictures">
-			<img src="../images/logo_gva.png" height="50"/>
+			<a href="https://www.gva.es/va/inicio/presentacion"><img src="../images/logo_gva.png" height="50"/></a>
 		</div>
 		<div class="header-pictures">
-			<img src="../images/Logo AVANT.png" height="50"/>
+			<a href="https://avant.gva.es/es/"><img src="../images/Logo AVANT.png" height="50"/></a>
 		</div>
 		<div class="header-items">
 			<form action="buscar" method="get" id="buscarForm">
@@ -48,6 +46,5 @@
 				<a href="../logout">Cerrar sesión</a>
 			</div>
 		</div>
-		<a href="../logout"></a>
 	</div>
 </div>

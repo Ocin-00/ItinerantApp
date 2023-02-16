@@ -1,10 +1,10 @@
 <div id="footer">	
 	<div class="footer-pictures">
-		<img src="
+		<a href="https://www.fvmp.es/"><img src="
 		<%String path = request.getContextPath();
 		  out.println(path + "/"); 
 		%>
-		images/logo-fvmp.png" height="100"/>
+		images/logo-fvmp.png" height="100"/></a>
 	</div>
 	<div class="footer-items">
 		<a href=".jsp">Quiénes somos</a> |

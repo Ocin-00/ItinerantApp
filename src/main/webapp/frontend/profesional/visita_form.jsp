@@ -231,7 +231,6 @@
 	});	
 
 	function showImageThumbnail(fileInput) {
-		alert($("#imagenVisita").val());
         var file = fileInput.files.item(0);
         var reader = new FileReader();
 		

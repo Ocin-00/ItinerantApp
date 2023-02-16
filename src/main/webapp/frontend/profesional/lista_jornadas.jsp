@@ -54,6 +54,7 @@
 					<div>
 						<button id="addToSerie">Añadir a serie</button>
 						<button id="replicarJornada">Replicar jornada</button>
+						<button id="verInforme"  onclick="location.href='ver_informe?fecha=${fecha}';">Ver informe</button>
 					</div>
 				</div>
 				<dialog id="addDialog" class="dialog">

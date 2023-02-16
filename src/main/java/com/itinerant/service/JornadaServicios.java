@@ -1,6 +1,7 @@
 package com.itinerant.service;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.itinerant.auxClasses.Viaje;
 import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.dao.SerieDAO;
 import com.itinerant.dao.SerieJornadasDAO;
@@ -330,4 +332,51 @@ public class JornadaServicios {
 		listarJornadas("La serie se ha replicado con éxito.");
 	}
 
+	public void verInforme() throws ServletException, IOException {
+		String fechaTexto = request.getParameter("fecha");
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");	
+		Date fecha = null;
+		if(fechaTexto != null) {
+			try {
+				fecha = dateformat.parse(fechaTexto);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		String login = (String) request.getSession().getAttribute("userLogin");
+		List<Visita> listaVisitas = visitaDAO.listAllByLogin(login);
+		List<Visita> listaVisitasJornada = new ArrayList<>();
+		for(Visita visita: listaVisitas) {
+			if(dateformat.format(fecha).equals(dateformat.format(visita.getFecha()))) {
+				listaVisitasJornada.add(visita);
+			}
+		}
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		request.setAttribute("fecha", format.format(fecha));
+		request.setAttribute("visitas", listaVisitasJornada);
+		request.setAttribute("numVisitas", listaVisitasJornada.size());
+		request.setAttribute("fecha", dateformat.format(fecha));
+		
+		//CALCULAR TIEMPOS
+		LocalidadServicios localidadServicios = new LocalidadServicios(entityManager, request, response);
+		if(listaVisitasJornada.size() > 1) {
+			//double[] viajes = new double[listaVisitasJornada.size() - 1];
+			List<Viaje> viajes = new ArrayList<>();
+			for(int i = 0; i < listaVisitasJornada.size() - 1; i++) {
+				double[] coords1 = localidadServicios.getCoordenadas(listaVisitasJornada.get(i).getLocalidad());
+				double[] coords2 = localidadServicios.getCoordenadas(listaVisitasJornada.get(i + 1).getLocalidad());
+				double tiempoViaje = localidadServicios.getTiempoRuta(coords1, coords2);
+				Viaje viaje = new Viaje(listaVisitasJornada.get(i).getLocalidad().toString() + " - " + listaVisitasJornada.get(i + 1).getLocalidad().toString(), tiempoViaje / 60);
+				viajes.add(viaje);
+			}
+			request.setAttribute("viajes", viajes);
+		}
+		
+		String listpage = "../frontend/profesional/ver_informe.jsp";
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher(listpage);
+		requestDispatcher.forward(request, response);
+		
+	}
 }

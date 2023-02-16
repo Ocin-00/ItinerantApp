@@ -91,16 +91,16 @@
 								<label>Deja tu reseña:</label>
 							</div>
 							<div class="stars">
-								<input type="radio" id="uno" name="puntuacion" value="1">
-								<label for="uno"></label>
-								<input type="radio" id="dos" name="puntuacion" value="2">
-								<label for="dos"></label>
-								<input type="radio" id="tres" name="puntuacion" value="3">
-								<label for="tres"></label>
-								<input type="radio" id="cuatro" name="puntuacion" value="4">
-								<label for="cuatro"></label>
 								<input type="radio" id="cinco" name="puntuacion" value="5">
 								<label for="cinco"></label>
+								<input type="radio" id="cuatro" name="puntuacion" value="4">
+								<label for="cuatro"></label>
+								<input type="radio" id="tres" name="puntuacion" value="3">
+								<label for="tres"></label>
+								<input type="radio" id="dos" name="puntuacion" value="2">
+								<label for="dos"></label>
+								<input type="radio" id="uno" name="puntuacion" value="1">
+								<label for="uno"></label>
 							</div>
 							<textarea rows="5" cols="50" name="review" id="review">${cita.review}</textarea>
 							<div>				
@@ -115,16 +115,16 @@
 							<label>Tu reseña:</label>
 						</div>
 						<div class="blocked-stars">
-							<input type="radio" id="uno" name="puntuacion" value="1" disabled="disabled">
-							<label for="uno"></label>
-							<input type="radio" id="dos" name="puntuacion" value="2" disabled="disabled">
-							<label for="dos"></label>
-							<input type="radio" id="tres" name="puntuacion" value="3" disabled="disabled">
-							<label for="tres"></label>
-							<input type="radio" id="cuatro" name="puntuacion" value="4" disabled="disabled">
-							<label for="cuatro"></label>
 							<input type="radio" id="cinco" name="puntuacion" value="5" disabled="disabled">
 							<label for="cinco"></label>
+							<input type="radio" id="cuatro" name="puntuacion" value="4" disabled="disabled">
+							<label for="cuatro"></label>
+							<input type="radio" id="tres" name="puntuacion" value="3" disabled="disabled">
+							<label for="tres"></label>
+							<input type="radio" id="dos" name="puntuacion" value="2" disabled="disabled">
+							<label for="dos"></label>
+							<input type="radio" id="uno" name="puntuacion" value="1" disabled="disabled">
+							<label for="uno"></label>
 							<i></i>
 						</div>
 						<textarea rows="5" cols="50" name="review" id="review" readonly="readonly">${cita.review}</textarea>

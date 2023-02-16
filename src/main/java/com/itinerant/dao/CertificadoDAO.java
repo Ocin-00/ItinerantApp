@@ -56,5 +56,15 @@ public class CertificadoDAO extends JpaDAO<Certificado> implements GenericDAO<Ce
 		
 		return null;
 	}
+	
+	public List<Certificado> listAllValidByLogin(String login) {
+		List<Certificado> certificados = super.findWithNamedQuery("Certificado.findAllValidByLogin", "login", login);
+		
+		if(certificados != null && certificados.size() > 0) {
+			return certificados;
+		}
+		
+		return null;
+	}
 
 }

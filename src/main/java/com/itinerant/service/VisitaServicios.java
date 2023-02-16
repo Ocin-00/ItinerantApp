@@ -187,7 +187,7 @@ public class VisitaServicios {
 		
 	}
 
-private String hayIncompatibilidades(Visita visita) throws ServletException, IOException {		
+	private String hayIncompatibilidades(Visita visita) throws ServletException, IOException {		
 		Date ahora = new Date();
 		
 		if(ahora.after(visita.getHoraInicio())) {									//La visita debe ser a tiempo futuro.
@@ -263,7 +263,7 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 		for(int i = 0; i < visitasContiguas.length; i++) {
 			if(visitasContiguas[i] != null) {
 				double[] coordsVisitaContigua = localidadServicios.getCoordenadas(visitasContiguas[i].getLocalidad());
-				double tiempoViaje = getTiempoRuta(coordsVisitaNueva, coordsVisitaContigua);
+				double tiempoViaje = localidadServicios.getTiempoRuta(coordsVisitaNueva, coordsVisitaContigua);
 				if(i == 0) {
 					double diferencia = (visitaNueva.getHoraInicio().getTime() - visitasContiguas[i].getHoraFin().getTime())/1000;
 					System.out.println("Diferencia: " + diferencia);
@@ -281,33 +281,6 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 		}
 		
 		return true;
-	}
-	
-	private double getTiempoRuta(double[] coordsNuevo, double[] coordsContiguo) {
-		Client client = ClientBuilder.newClient();
-		Response response = client.target(
-		"https://api.openrouteservice.org/v2/directions/driving-car"
-		+ "?api_key=5b3ce3597851110001cf62488e46d28f49534f3094ceb181a7bfe9cc&start="
-		+ coordsNuevo[0] + "," + coordsNuevo[1] + "&end=" + coordsContiguo[0] + "," + coordsContiguo[1])
-		  .request(MediaType.TEXT_PLAIN_TYPE)
-		  .header("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8")
-		  .get();
-
-		//System.out.println("status: " + response.getStatus());
-		//System.out.println("headers: " + response.getHeaders());
-		//System.out.println("body:" + response.readEntity(String.class));
-		
-		String responseString = response.readEntity(String.class);
-		System.out.println(responseString);
-		JSONObject json = new JSONObject(responseString);
-		JSONArray features = json.getJSONArray("features");
-		JSONObject feature = features.getJSONObject(0);
-		JSONArray segments = feature.getJSONObject("properties").getJSONArray("segments");
-		JSONObject segment = segments.getJSONObject(0);
-		double travelTime = segment.getDouble("duration");
-		System.out.println(travelTime);
-		
-		return travelTime;
 	}
 
 	private boolean visitaRepetida(Visita visitaNueva) {
@@ -448,6 +421,9 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 		request.setAttribute("citas", citas);
 		request.setAttribute("numeroCitas", citas.size());
 		
+		List<Categoria> categorias = new ArrayList<>(visita.getCategorias());
+		request.setAttribute("categorias", categorias);
+		
 		request.setAttribute("message", message);
 		
 		String homepage = "../frontend/profesional/ver_visita.jsp";
@@ -526,7 +502,7 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 	public void buscar(String keyword) {
 		List<Visita> listaVisitas = null;
 		if(keyword.equals("")) {
-			listaVisitas = visitaDAO.listAll();
+			listaVisitas = visitaDAO.searchAll();
 		} else {
 			listaVisitas = visitaDAO.search(keyword);
 		}
@@ -546,6 +522,9 @@ private String hayIncompatibilidades(Visita visita) throws ServletException, IOE
 		List<Cita> citasPedidas = new ArrayList(visita.getCitas());		
 		List<Date> listaHoras = calcularHorasDisponibles(listaHorasPosibles, citasPedidas);
 		request.setAttribute("listaHoras", listaHoras);
+		
+		List<Categoria> categorias = new ArrayList<>(visita.getCategorias());
+		request.setAttribute("categorias", categorias);
 		
 		String homepage = "frontend/inicio/busqueda_visita.jsp";
 		String rol = (String) request.getSession().getAttribute("rol");

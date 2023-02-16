@@ -58,7 +58,11 @@
 						<td>Precio: ${visita.precio} &euro;</td>
 					</tr>
 					<tr>
-						<td>Categorias:</td>
+						<td>Categorias:
+						<c:forEach var="categoria" items="${categorias}" varStatus="status">
+							${categoria.nombre}, 
+						</c:forEach>
+						</td>
 					</tr>
 					<tr>
 						<td>Descripcion:</td>
