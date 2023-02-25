@@ -13,6 +13,8 @@
 		<script type="text/javascript" src="js/general.js"></script>
 		<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
 	</c:if>
 	<c:if test="${hayRol == true }">
 		<link rel="stylesheet" href="../css/layout.css">
@@ -22,23 +24,15 @@
 		<script type="text/javascript" src="../js/notify.js"></script>
 	    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
 	    <script type="text/javascript" src="../js/my-notifications.js"></script>
-	    <script type="text/javascript" src="js/general.js"></script>
+	    <script type="text/javascript" src="../js/general.js"></script>
 	    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 		<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
 		<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
 	</c:if>
 </head>
-<style>
-
-	#main-home * {
-		margin: 0px;
-		padding: 0px;
-		box-sizing: border-box;
-		/*height: 100%;*/
-	}
-	
-</style>
 <body>
 	<c:if test="${hayRol == false }">
 		<jsp:directive.include file="header.jsp"/>
@@ -88,6 +82,7 @@
 													   out.println(imgpath + imagenRuta.toString().substring(2)); 
 												   }
 												%>" height="450" width="450">
+									
 								</div>
 								<h1>${categoria.nombre}</h1>
 							</a>

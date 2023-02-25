@@ -147,7 +147,7 @@
 
 #main-plain{
 	grid-column-start: 1;
-	margin-top: 50px;
+	margin-top: 25px;
 	margin-left: 50px;
 	margin-right: auto;
 	justify-content: center;
@@ -959,6 +959,14 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 		width: 90vw;
 		height: 50%;
 	}
+	
+	#main-home * {
+		/*margin: 0px;*/
+		padding: 0px;
+		box-sizing: border-box;
+		/*height: 100%;*/
+	}
+	
 	.cover::after {
 		position: relative;
 		content: "";
@@ -975,7 +983,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 		display: flex;
 		justify-content: left;
 		align-items: center; 
-		overflow: auto;
+		/*overflow: auto;*/
+		overflow: hidden;
 		position: relative;
 		scroll-behavior: smooth;
 	}
