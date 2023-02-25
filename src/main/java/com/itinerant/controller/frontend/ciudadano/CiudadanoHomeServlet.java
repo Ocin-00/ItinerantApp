@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.itinerant.controller.BaseServlet;
+import com.itinerant.service.CategoriaServicios;
 import com.itinerant.service.CitaServicios;
 
 @WebServlet("/inicio/")
@@ -27,8 +28,10 @@ public class CiudadanoHomeServlet extends BaseServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		CitaServicios citaServicios = new CitaServicios(entityManager, request, response);
-		citaServicios.listarCitasPendientes();
+		//CitaServicios citaServicios = new CitaServicios(entityManager, request, response);
+		//citaServicios.listarCitasPendientes();
+		CategoriaServicios categoriaServicios = new CategoriaServicios(entityManager, request, response);
+		categoriaServicios.categoriasInicio();
 	}
 
 }

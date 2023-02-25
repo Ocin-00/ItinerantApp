@@ -1,8 +1,11 @@
 package com.itinerant.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import com.itinerant.entity.Categoria;
 import com.itinerant.entity.Visita;
@@ -51,5 +54,23 @@ public class CategoriaDAO extends JpaDAO<Categoria> implements GenericDAO<Catego
 	@Override
 	public long count() {
 		return super.countWithNamedQuery("Categoria.countAll");
+	}
+	
+	public List<Categoria> getByUse() {
+		TypedQuery<Object[]> query = entityManager.createNamedQuery("Categoria.getByUse", Object[].class);
+		List<Object[]> results = query.getResultList();
+		List<Categoria> categorias = new ArrayList<>();
+		
+		if(results != null && results.size() > 0) {
+			for (Object[] result : results) {
+			    Categoria categoria = (Categoria) result[0];
+			    categorias.add(categoria);
+			    //Long count = (Long) result[1];
+			    // process the Categoria and count here
+			}
+			return categorias;
+		}
+		
+		return null;
 	}
 }

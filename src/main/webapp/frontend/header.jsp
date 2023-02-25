@@ -1,5 +1,5 @@
 <div id="header">
-	<div>
+	<div class="home">
 		<img src="images/itinerant.jpg" height="100" />
 	</div>
 
@@ -24,5 +24,9 @@
 		<button onclick="location.href='register';">Registrarse</button>
 	</div>
 </div>
-
+<script type="text/javascript">
+	$(document).on("click", ".home", function(){
+		window.location = "${pageContext.request.contextPath}";
+	});
+</script>
 

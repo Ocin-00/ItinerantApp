@@ -39,7 +39,8 @@
 						<td>${status.index + 1}</td>
 						<td>${categoria.nombre}</td>
 						<td align="center">
-							<a href="#" class="changeBtn" idCategoria="${categoria.idCategoria}" nombre="${categoria.nombre}">Editar</a> |
+							<!-- <a href="#" class="changeBtn" idCategoria="${categoria.idCategoria}" nombre="${categoria.nombre}">Editar</a> | -->
+							<a href="editar_categoria?id=${categoria.idCategoria}">Editar</a> |
 							<a href="javascript:void(0);" class="deleteLink" id="${categoria.idCategoria}" nombre="${categoria.nombre}">Borrar</a>
 						</td>
 					</tr>
@@ -48,13 +49,19 @@
 					<td></td>
 					<td></td>
 					<td align="center">
-						<a href="#" id="crearBtn">Añadir</a>
+						<a href="nueva_categoria">Añadir</a>
 					</td>
 				</tr>
 			</table>
+			<!-- 
 			<dialog id="newDialog" class="dialog">
-				<form method="dialog" id="newDialogForm">
+				<form method="dialog" id="newDialogForm" enctype="multipart/form-data">
 				    <p>
+				    <div class="image-input"><input type="file" id="imagenCategoria" name="imagenCategoria"/></div>
+				    	<img id="thumbnail" alt="" height="250"/>
+								<label for="imagenCategoria">
+									<img src="../images/pencil.png"/>
+								</label>
 				      <label>Nombre a la categoria:
 				        <input id="nombreCategoria" name="nombreCategoria">
 				      </label>
@@ -66,8 +73,13 @@
 				</form>
 			</dialog>
 			<dialog id="changeNameDialog" class="dialog">
-				<form method="dialog" id="changeNameDialogForm">
+				<form method="dialog" id="changeNameDialogForm" enctype="multipart/form-data">
 				    <p>
+				    <div class="image-input"><input type="file" id="imagenCategoria" name="imagenCategoria"/></div>
+				    	<img id="thumbnail" alt="" height="250" src="${categoria.imagenRuta}"/>
+								<label for="imagenCategoria">
+									<img src="../images/pencil.png"/>
+								</label>
 				      <label>Nombre a la serie:
 				        <input id="nuevoNombreCategoria" name="nuevoNombreCategoria">
 				        <input type="hidden" id="idCategoria" name="idCategoria">
@@ -79,6 +91,7 @@
 				    </div>
 				</form>
 			</dialog>
+			 -->
 		</div>
 	</div>
 	
@@ -86,6 +99,7 @@
 </body>
 <script type="text/javascript">
 		$(document).ready(function() {
+			
 			$(".deleteLink").each(function() {
 				$(this).on("click", function() {
 					idCategoria = $(this).attr("id");
@@ -96,6 +110,7 @@
 				});
 			});
 
+			/*
 			$("#crearBtn").on("click", function(){
 				$("#newDialog").show();
 			});
@@ -129,20 +144,27 @@
 
 			$("#newDialogForm").validate({
 				rules: {
-					nombreCategoria: "required"
+					nombreCategoria: "required",
+					imagenCategoria: "required"
 				},
 				messages: {	
-					nombreCategoria: "Por favor introduzca el nombre de la serie."
+					nombreCategoria: "Por favor introduzca el nombre de la serie.",
+					imagenCategoria: "Por favor seleccione una imagen."
 				}
 			});
 			$("#changeNameDialogForm").validate({
 				rules: {
-					nuevoNombreCategoria: "required"
+					nuevoNombreCategoria: "required",
+					imagenCategoria: "required"
 				},
 				messages: {	
-					nuevoNombreCategoria: "Por favor introduzca el nuevo nombre de la serie."
+					nuevoNombreCategoria: "Por favor introduzca el nuevo nombre de la serie.",
+					imagenCategoria: "Por favor seleccione una imagen."
 				}
 			});
+			*/
 		});
+	
+	
 </script>
 </html>

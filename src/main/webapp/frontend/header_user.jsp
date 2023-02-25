@@ -1,6 +1,6 @@
 <div id="header">
-	<div>
-		<img src="../images/itinerant.jpg" height="100" />	
+	<div class="home" idRol="${sessionScope.rol}">
+		<img src="../images/itinerant.jpg" height="100" />
 	</div>
 
 	<div id="header-center">
@@ -48,3 +48,19 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$(document).on("click", ".home", function(){
+		rol = $(this).attr("idRol");
+		if(rol == 'ADMINISTRADOR') {
+			window.location = "../admin/";
+		} else if (rol == 'PROFESIONAL') {
+			window.location = "../profesional/";
+		} else if (rol == 'CIUDADANO') {
+			window.location = "../inicio/";
+		} else if (rol == 'SUPERVISOR') {
+			window.location = "../supervisor/";
+		} else {
+			alert("Error");
+		}
+	});
+</script>

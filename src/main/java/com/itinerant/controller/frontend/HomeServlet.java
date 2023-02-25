@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.itinerant.controller.BaseServlet;
 import com.itinerant.entity.Alerta;
+import com.itinerant.service.CategoriaServicios;
 
 @WebServlet("")
-public class HomeServlet extends HttpServlet {
+public class HomeServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
      
     public HomeServlet() {
@@ -24,9 +26,11 @@ public class HomeServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String homepage = "frontend/index.jsp";
-		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);
+		//String homepage = "frontend/index.jsp";
+		//RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		//dispatcher.forward(request, response);
+		CategoriaServicios categoriaServicios = new CategoriaServicios(entityManager, request, response);
+		categoriaServicios.categoriasInicio();
 	}
 
 }

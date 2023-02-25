@@ -6,39 +6,119 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Itinerant - Generalitat Valenciana</title>
-	<link href="/ItinerantApp/css/layout.css" rel="stylesheet" type="text/css"/>
-	<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="js/general.js"></script>
+	<c:if test="${hayRol == false }">
+		<link href="/ItinerantApp/css/layout.css" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+		<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="js/general.js"></script>
+		<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
+	</c:if>
+	<c:if test="${hayRol == true }">
+		<link rel="stylesheet" href="../css/layout.css">
+		<link rel="stylesheet" href="../css/side-bar-style.css">
+		<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="../js/notify.js"></script>
+	    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+	    <script type="text/javascript" src="../js/my-notifications.js"></script>
+	    <script type="text/javascript" src="js/general.js"></script>
+	    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+		<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+		<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
+	</c:if>
 </head>
-<body>
-	<jsp:directive.include file="header.jsp"/>
+<style>
+
+	#main-home * {
+		margin: 0px;
+		padding: 0px;
+		box-sizing: border-box;
+		/*height: 100%;*/
+	}
 	
-	<div id="main-centered">
-		<div>
-			<h1 align="center">Programa Itinerant</h1>
-		</div>
-		<div class="main-centered-items" style="align-content: center;">
-			<div>
-				<img src="images/Itinerant-mapa.jpg" height="500"/>
+</style>
+<body>
+	<c:if test="${hayRol == false }">
+		<jsp:directive.include file="header.jsp"/>
+	</c:if>
+	<c:if test="${hayRol == true }">
+		<jsp:directive.include file="header_user.jsp"/>
+	</c:if>
+	
+	<div id = "main">
+		<c:if test="${sessionScope.rol == 'ADMINISTRADOR'}">
+			<jsp:directive.include file="/../admin/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'PROFESIONAL'}">
+			<jsp:directive.include file="../frontend/profesional/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'CIUDADANO'}">
+			<jsp:directive.include file="../frontend/inicio/side_menu.jsp"/>
+		</c:if>
+		<c:if test="${sessionScope.rol == 'SUPERVISOR'}">
+			<jsp:directive.include file="../supervisor/side_menu.jsp"/>
+		</c:if>
+		
+		<c:if test="${hayRol == false }">
+			<div id="main-plain">
+		</c:if>
+		<c:if test="${hayRol == true }">
+			<div id="main-content">
+		</c:if>
+		<div id = "main-home">
+			<h1 style="margin-bottom: 20px;">
+				Servicios más ofertados: 
+			</h1>
+			<div class="main-scroll-div">
+				<div>
+					<button id="left-button" class="scroll-icon" type="button"><i class="fa-solid fa-angles-left"></i></i></button>
+				</div>
+				<div class="cover">
+					<div class="scroll-images">
+						<c:forEach var="categoria" items="${categorias}" varStatus="status">
+							<a href="buscar?keyword=${categoria.nombre}">
+								
+								<div class="child">
+								<c:set var="imagenRuta" value="${categoria.imagenRuta}"></c:set>
+									<img class="child-img" alt="" src="<%String imgpath = request.getContextPath();
+												   Object imagenRuta = pageContext.getAttribute("imagenRuta");
+												   if(imagenRuta != null) {
+													   out.println(imgpath + imagenRuta.toString().substring(2)); 
+												   }
+												%>" height="450" width="450">
+								</div>
+								<h1>${categoria.nombre}</h1>
+							</a>
+						</c:forEach>
+					</div>
+				</div>
+				<div>
+					<button id="right-button" class="scroll-icon" type="button"><i class="fa-solid fa-angles-right"></i></i></button>
+				</div>
 			</div>
-			<div class="main-centered-text">
-				<div>
-					<h4>¿Qué es Itinerant?</h4>
-					<label>Es un programa de servicios, promovido por la DG de la Agenda AVANT y la Federación Valenciana de Municipios y Provincias, con la colaboración de las Mancomunidades y municipios AVANT. El objetivo de este programa, es la investigación y movilización de profesionales itinerantes para prestar servicios básicos necesarios en los diferentes municipios.</label>
-				</div>	
-				<div>
-					<h4>¿Qué intenta la aplicación?</h4>
-					<label>Poner en contacto a los profesionales dispuestos a prestar sus servicios a domicilio en municipios AVANT con potenciales clientes residentes en dichos muncipios. La aplicación pretende ayudar en la implantación y popularización del programa para así facilitar el acceso a servicios en los municipios en riesgo de despoblación.</label>
-				</div>	
-				<div>
-					<h4>¿Dónde se ha implantado?</h4>
-					<label>En el mapa de la izquierda se pueden observar los municipios categorizacos como AVANT, es decir, en riesgo de despoblación. A su vez también son visibles los municpios en los que el programa Itinerant ya se ha implantado el programa. El objetivo es que Itinerant sea una realidad en todos los municipios que lo precisan.</label>
-					<label>En cuanto a la aplicación, todavía está en fase de desarrollo y aún no se ha podido poner en marcha.</label>
-				</div>	
-			</div>	
+		</div>
 		</div>
 	</div>
 	<jsp:directive.include file="footer.jsp"/>
 </body>
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('#right-button').click(function() {
+		event.preventDefault();
+		$('.scroll-images').animate({
+		    scrollLeft: "+=470px"
+		}, "fast");
+	});
+
+	$('#left-button').click(function() {
+		event.preventDefault();
+		$('.scroll-images').animate({
+			scrollLeft: "-=470px"
+		}, "fast");
+	});
+});
+</script>
 </html>
