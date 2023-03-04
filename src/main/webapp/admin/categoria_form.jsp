@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>
 		<c:if test="${categoria == null}">
 			Itinerant - Crear categoria
@@ -22,10 +22,16 @@
     <script type="text/javascript" src="../js/my-notifications.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+	
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+	
+	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
-	<div id="main">
+	<div class="container-fluid d-flex justify-content-center align-content-center" style="min-height: 75vh">
 		<c:if test="${categoria == null}">
 			<form action="crear_categoria" method="post" id="categoriaForm" enctype="multipart/form-data">
 		</c:if>	
@@ -33,30 +39,28 @@
 			<form action="actualizar_categoria" method="post" id="categoriaForm" enctype="multipart/form-data">
 			<input type="hidden" id="id" name="id" value="${categoria.idCategoria}">
 		</c:if>
-				<div>
-					<table>
-						<tr>
+				<div class = "">
+					<div class="m-2">
 							<td rowspan="8">
 								<img id="thumbnail" alt="" height="250" src="${categoria.imagenRuta}"/>
-								<label for="imagenCategoria">
-									<img src="../images/pencil.png"/>
+								<label for="imagenCategoria" class="img-pencil" >
+									<i class="fa-solid fa-pen"></i>
 								</label>
 							</td>
-						</tr>
+					</div>
+					<table>
+						
 						<tr>
-							<td>Nombre:</td>
-						</tr>
-						<tr>
-							<td colspan="2"><input type="text" name="nombre" id="nombre" size="40" value="${categoria.nombre}"/></td>					
+							<td><label for="nombre" class="form-label">Nombre:</label></td>
+							<td colspan="2"><input type="text" name="nombre" id="nombre" class="form-control border-dark-subtle" value="${categoria.nombre}" maxlength="30"/></td>
 						</tr>
 					</table>
+					<div class="d-flex justify-content-evenly">
+						<button type="submit">Guardar</button>
+						<button id="buttonCancel" type="button">Cancelar</button>				
+					</div>
 				</div>
 				
-				<div align="center">
-					<button type="submit">Guardar</button>
-					&nbsp;&nbsp;
-					<button id="buttonCancel" type="button">Cancelar</button>				
-				</div>
 				<div class="image-input"><input type="file" id="imagenCategoria" name="imagenCategoria"/></div>
 			</form>
 	</div>

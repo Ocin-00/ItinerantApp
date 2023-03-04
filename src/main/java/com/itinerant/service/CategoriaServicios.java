@@ -24,6 +24,7 @@ import com.itinerant.dao.ProfesionalDAO;
 import com.itinerant.entity.Categoria;
 import com.itinerant.entity.Localidad;
 import com.itinerant.entity.Profesional;
+import com.itinerant.enums.Rol;
 
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -33,11 +34,13 @@ public class CategoriaServicios {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private CategoriaDAO categoriaDAO;
+	private EntityManager entityManager;
 
 	public CategoriaServicios(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
 		categoriaDAO = new CategoriaDAO(entityManager);
 		this.request = request;
 		this.response = response;		
+		this.entityManager = entityManager;
 	}
 
 	public List<Categoria> listarCategorias() {
@@ -190,6 +193,22 @@ public class CategoriaServicios {
 		}	
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);
+		if(dispatcher != null) {
+			dispatcher.forward(request, response);
+		} else {
+			System.out.println(rol);
+			if(rol.equals(Rol.ADMINISTRADOR.toString())) {
+				homepage = "admin/";
+			} else if(rol.equals(Rol.SUPERVISOR.toString())) {
+				homepage = "supervisor/";
+			} else if(rol.equals(Rol.CIUDADANO.toString())) {
+				homepage = "inicio/";
+			} else if(rol.equals(Rol.PROFESIONAL.toString())) {
+				homepage = "profesional/";
+			}
+			response.sendRedirect(homepage);
+			//RequestDispatcher dispatcher2 = request.getRequestDispatcher(homepage);
+			//dispatcher2.(request, response);
+		}
 	}
 }

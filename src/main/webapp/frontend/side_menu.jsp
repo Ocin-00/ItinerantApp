@@ -10,8 +10,8 @@
 
  -->
  
-<nav id="side-menu" class="bg-white border-right border-dark d-none d-lg-block">
-        <div class="sidebar-header">
+<nav id="side-menu" class="bg-white d-none d-lg-block">
+        <div class="side-menu-title m-2">
             <c:if test="${sessionScope.rol == 'ADMINISTRADOR'}">
 				 <h3>Administración</h3>
 			</c:if>

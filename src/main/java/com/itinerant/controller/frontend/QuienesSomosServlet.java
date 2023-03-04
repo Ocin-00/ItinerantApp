@@ -12,11 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.itinerant.controller.BaseServlet;
 import com.itinerant.entity.Alerta;
 import com.itinerant.enums.Rol;
+import com.itinerant.service.UsuarioInternoServicios;
 
 @WebServlet({"/profesional/quienes_somos", "/inicio/quienes_somos", "/admin/quienes_somos", "/supervisor/quienes_somos", "/quienes_somos"})
-public class QuienesSomosServlet extends HttpServlet {
+public class QuienesSomosServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
      
     public QuienesSomosServlet() {
@@ -38,7 +40,23 @@ public class QuienesSomosServlet extends HttpServlet {
 		}	
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);
+		if(dispatcher != null) {
+			dispatcher.forward(request, response);
+		} else {
+			System.out.println(rol);
+			if(rol.equals(Rol.ADMINISTRADOR.toString())) {
+				homepage = "admin/";
+			} else if(rol.equals(Rol.SUPERVISOR.toString())) {
+				homepage = "supervisor/";
+			} else if(rol.equals(Rol.CIUDADANO.toString())) {
+				homepage = "inicio/";
+			} else if(rol.equals(Rol.PROFESIONAL.toString())) {
+				homepage = "profesional/";
+			}
+			response.sendRedirect(homepage);
+			//RequestDispatcher dispatcher2 = request.getRequestDispatcher(homepage);
+			//dispatcher2.(request, response);
+		}
 	}
 
 }

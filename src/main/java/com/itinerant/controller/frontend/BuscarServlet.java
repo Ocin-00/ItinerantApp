@@ -1,7 +1,9 @@
 package com.itinerant.controller.frontend;
 
 import com.itinerant.controller.BaseServlet;
+import com.itinerant.enums.Rol;
 import com.itinerant.service.ProfesionalServicios;
+import com.itinerant.service.UsuarioInternoServicios;
 import com.itinerant.service.VisitaServicios;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -37,7 +39,24 @@ public class BuscarServlet extends BaseServlet {
 		}
 		request.setAttribute("keyword", keyword);
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
-		dispatcher.forward(request, response);
+		if(dispatcher != null) {
+			dispatcher.forward(request, response);
+		} else {
+			String rol = (String) request.getSession().getAttribute("rol");
+			//System.out.println(rol);
+			if(rol.equals(Rol.ADMINISTRADOR.toString())) {
+				homepage = "admin/";
+			} else if(rol.equals(Rol.SUPERVISOR.toString())) {
+				homepage = "supervisor/";
+			} else if(rol.equals(Rol.CIUDADANO.toString())) {
+				homepage = "inicio/";
+			} else if(rol.equals(Rol.PROFESIONAL.toString())) {
+				homepage = "profesional/";
+			}
+			response.sendRedirect(homepage);
+			//RequestDispatcher dispatcher2 = request.getRequestDispatcher(homepage);
+			//dispatcher2.(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

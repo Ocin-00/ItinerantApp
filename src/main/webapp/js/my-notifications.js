@@ -62,10 +62,10 @@ $(document).ready(function(){
 					
 					mensajesNoVistos = aux[0].numeroMensajes
 					if(mensajesNoVistos == 0) {
-						$("#chat-icon-badge").hide();
+						$(".chat-icon-badge").hide();
 					} else {
-						$("#chat-icon-badge").show();
-						$("#chat-icon-badge").text(mensajesNoVistos);
+						$(".chat-icon-badge").show();
+						$(".chat-icon-badge").text(mensajesNoVistos);
 					}
 		  		},
 		  		error: function(result){

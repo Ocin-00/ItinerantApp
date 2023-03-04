@@ -6,6 +6,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
@@ -14,22 +15,28 @@
     <script type="text/javascript" src="../js/my-notifications.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+	
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+	
+	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
 <title>Itinerant - Visitas</title>
 </head>
 <style>
-	#side-menu a:nth-child(3){ background-color: #e0e0e0 }
+	#side-menu ul li:nth-child(2){ background-color: #e0e0e0 }
 </style>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
-	<div id="main">
-		<jsp:directive.include file="side_menu.jsp"/>
-		<div id="main-content-items">
+	<div class="wrapper">
+		<jsp:directive.include file="../side_menu.jsp"/>
+		<div class="container-fluid d-lg-flex flex-row mt-3 justify-content-evenly pb-3" style="min-height: 75vh">
 			<div>
 				<h2>Detalles de la Cita</h2>
 				<table>
 					<tr>
 						<td rowspan="5">
-							<img src="${visita.imagenRuta}" id="thumbnail" alt="No hay imagen disponible" width="200"/>
+							<img src="${cita.visita.imagenRuta}" id="thumbnail" alt="No hay imagen disponible" class="img-fluid" style="max-height: 250px;max-width: 250px"/>
 						</td>
 						<td>Cliente: ${cita.ciudadano}</td>
 					</tr>
@@ -37,7 +44,7 @@
 						<td>Dirección: ${cita.direccion}</td>
 					</tr>
 					<tr>
-						<td>Fecha: ${visita.fecha}</td>
+						<td>Fecha: <fmt:formatDate value="${visita.fecha}" pattern="dd-MM-yyyy" /></td>
 					</tr>
 					<tr>
 						<td>Hora: <c:set var="hora" value="${cita.horaInicio}"></c:set>
@@ -47,12 +54,21 @@
 										%></td>
 					</tr>
 				</table>
-			</div>
-			<div>
-				<div>
-					<label>Anotaciones:</label>
+				<div class="d-flex justify-content-around m-3">
+					<button  onclick="location.href='contactar?id=${cita.ciudadano.login}';">Contactar</button>
+					<c:if test="${esFutura == false}">
+						<button href="javascript:void(0);" class="ausenciaLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Informar de ausencia</button>
+					</c:if>
+					<c:if test="${esFutura == true}">
+						<button href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular Cita</button>
+					</c:if>
 				</div>
-				<textarea rows="5" cols="50" name="anotaciones" id="anotaciones" readonly="readonly">${cita.anotaciones}</textarea>
+			</div>
+			<div class="main-content-split-items">
+				<h4>Anotaciones:</h4>
+				<div class="d-none d-md-block mt-4">
+					<textarea rows="5" cols="50" name="anotaciones" id="anotaciones" readonly="readonly"  class="form-control border-dark-subtle">${cita.anotaciones}</textarea>
+				</div>
 			</div>
 			<div>
 				<c:if test="${message != null}">
@@ -65,22 +81,14 @@
 						<div>
 							<label>Describa la urgencia:</label>
 						</div>
-						<textarea rows="5" cols="50" name="urgencia" id="urgencia"></textarea>
+						<textarea rows="5" cols="50" name="urgencia" id="urgencia" maxlength="150"></textarea>
 					</div>
 					<div>
 						<button type="submit">Anular Cita</button>
 					</div>
 				</form>
 			</c:if>
-			<div>
-				<button  onclick="location.href='contactar?id=${cita.ciudadano.login}';">Contactar</button>
-				<c:if test="${esFutura == false}">
-					<button href="javascript:void(0);" class="ausenciaLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Informar de ausencia</button>
-				</c:if>
-				<c:if test="${esFutura == true}">
-					<button href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${visita.idVisita}">Anular Cita</button>
-				</c:if>
-			</div>
+			
 		</div>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>

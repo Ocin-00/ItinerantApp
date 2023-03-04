@@ -2,10 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>Itinerant - Profesionales</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<link rel="stylesheet" href="../css/side-bar-style.css">
@@ -16,30 +18,49 @@
     <script type="text/javascript" src="../js/my-notifications.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+	
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+	
+	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
 </head>
 <style>
-	#side-menu a:nth-child(3){ background-color: #e0e0e0 }
+	#side-menu ul li:nth-child(2){ background-color: #e0e0e0 }
 </style>
-<body>
+
+<body class="d-flex flex-column min-vh-100">
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
-	<div id="main">
-		<jsp:directive.include file="side_menu.jsp"/>
-		<div id="main-content">
-			<h4>Bienvenido, <c:out value="${sessionScope.userLogin}"></c:out></h4>
+	<div class="wrapper">	
+		<jsp:directive.include file="/frontend/side_menu.jsp"/>
+		
+		<div class="container-fluid mt-3" style="min-height: 75vh">
 			<h3>Mis citas</h3>
 		
 			<c:if test="${message != null}">
 				<div><h4>${message}</h4></div>
 			</c:if>
-			<div class="tab-parent">
-				<ul class="tabs">
-					<li id="citasPendientes" class="option option-active"><a href="#contenidoCitasPendientes">Citas Pendientes</a></li>
-					<li id="historicoCitas" class="option"><a href="#contenidoHistorialCitas">Histórico de Citas</a></li>
-				</ul>
+			<div class="">
+				<ul class="nav nav-tabs"  id="myTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button  class="nav-link active"
+								id="citasPendientes" data-bs-toggle="tab" data-bs-target="#contenidoCitasPendientes" type="button" role="tab" aria-controls="contenidoCitasPendientes" aria-selected="true"
+							>Visitas Pendientes</button>
+						</li>
+						<li id="historicoCitas" class=" nav-item" role="presentation">
+							<button  class="nav-link" id="historialVisitas" data-bs-toggle="tab" data-bs-target="#contenidoHistorialCitas" type="button" role="tab" aria-controls="contenidoHistorialCitas" aria-selected="false">
+							Histórico de Visitas</button>
+						</li>
+					</ul>
 				
-				<div class="tab-container">
-					<div id="contenidoCitasPendientes" class="tab_content">
-						<table border="1">
+				<div class="tab-content">
+					<div id="contenidoCitasPendientes" class="tab-pane fade show active" role="tabpanel" aria-labelledby="contenidoCitasPendientes" tabindex="0">
+						<c:if test="${empty citasPendientes}">
+								<h5 class="m-3">No tiene citas pendientes.</h5>
+							</c:if>								
+							<c:if test="${not empty citasPendientes}">
+								
+							<table border="1" class="container-fluid table table-responsive border table-hover text-center align-middle">
 							<tr>
 								<th>Índice</th>
 								<th>Cliente</th>
@@ -53,7 +74,7 @@
 									<td>${status.index + 1}</td>
 									<td>${cita.ciudadano}</td>
 									<td>${cita.visita.nombre}</td>
-									<td>${cita.visita.fecha}</td>
+									<td><fmt:formatDate value="${cita.visita.fecha}" pattern="dd-MM-yyyy" /></td>
 									<td><c:set var="hora" value="${cita.horaInicio}"></c:set>
 										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 										String hora = format.format(pageContext.getAttribute("hora"));
@@ -61,15 +82,26 @@
 										%>
 									</td>
 									<td align="center">
-										<a href="ver_cita?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a> |
-										<a href="javascript:void(0);" class="deleteLink" id="${cita.id.idCiudadano}" visita="${cita.id.idVisita}">Anular</a>
+										<a href="ver_cita?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}" class="btn btn-primary table-icon"
+											data-bs-toggle="tooltip" data-bs-placement="top" title="Ver cita">
+												<i class="fa-solid fa-eye"></i>
+											</a>
+											<a href="javascript:void(0);" class="btn btn-danger table-icon deleteLink" id="${cita.id.idCiudadano}" visita="${cita.id.idVisita}"
+											data-bs-toggle="tooltip" data-bs-placement="top" title="Anular cita">
+												<i class="fa-solid fa-xmark"></i>
+											</a>
 									</td>
 								</tr>
 							</c:forEach>
 						</table>
+						</c:if>
 					</div>
-					<div id="contenidoHistorialCitas"  class="tab_content">
-						<table border="1">
+					<div id="contenidoHistorialCitas" class="tab-pane fade" role="tabpanel" aria-labelledby="contenidoHistorialCitas" tabindex="0">
+						<c:if test="${empty historialCitas}">
+								<h5 class="m-3">Aún no hay ninguna cita en su historial.</h5>
+							</c:if>
+							<c:if test="${not empty historialCitas}">
+							<table border="1" class="container-fluid table table-responsive border table-hover text-center align-middle">
 							<tr>
 								<th>Índice</th>
 								<th>Cliente</th>
@@ -83,7 +115,7 @@
 									<td>${status.index + 1}</td>
 									<td>${cita.ciudadano}</td>
 									<td>${cita.visita.nombre}</td>
-									<td>${cita.visita.fecha}</td>
+									<td><fmt:formatDate value="${cita.visita.fecha}" pattern="dd-MM-yyyy" /></td>
 									<td><c:set var="hora" value="${cita.horaInicio}"></c:set>
 										<%SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 										String hora = format.format(pageContext.getAttribute("hora"));
@@ -91,11 +123,15 @@
 										%>
 									</td>
 									<td align="center">
-										<a href="ver_cita?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}">Detalles</a>
+										<a href="ver_cita?id=${cita.visita.idVisita}&login=${cita.id.idCiudadano}" class="btn btn-primary table-icon"
+											data-bs-toggle="tooltip" data-bs-placement="top" title="Ver cita">
+												<i class="fa-solid fa-eye"></i>
+											</a>
 									</td>
 								</tr>
 							</c:forEach>
 						</table>
+						</c:if>
 					</div>
 				</div>
 			</div>
@@ -114,7 +150,7 @@
 					}
 				});
 			});
-
+/*
 			$(".tab_content").hide(); //Hide all content
 			$("ul.tabs li:first").addClass("active").show(); //Activate first tab
 			$(".tab_content:first").show(); //Show first tab content
@@ -130,6 +166,7 @@
 				$(activeTab).fadeIn(); //Fade in the active ID content
 				return false;
 			});
+			*/
 		});
 	</script>
 </html>

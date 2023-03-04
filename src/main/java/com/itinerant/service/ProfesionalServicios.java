@@ -103,7 +103,7 @@ public class ProfesionalServicios {
 		request.setAttribute("profesional", profesional);
 		
 		List<Visita> visitas = visitaDAO.listAllByLogin(profesionalId);
-		Date ahora = new Date();
+		//Date ahora = new Date();
 		System.out.println(visitas);
 		int suma = 0;
 		int numero = 0;
@@ -116,6 +116,8 @@ public class ProfesionalServicios {
 						if(cita.getPuntuacion() != null) {
 							suma += cita.getPuntuacion();
 							numero++;
+						}
+						if(cita.getReview() != null && !cita.getReview().isBlank() && !cita.getReview().isEmpty()) {
 							reviews.add(cita.getReview());
 						}
 					//}
@@ -131,6 +133,7 @@ public class ProfesionalServicios {
 			DecimalFormat df = new DecimalFormat("#.#");
 			request.setAttribute("noReviews", df.format(avg));
 			request.setAttribute("averageReview", avg);
+			request.setAttribute("numReviews", numero);
 			request.setAttribute("reviews", reviews);
 		}
 	

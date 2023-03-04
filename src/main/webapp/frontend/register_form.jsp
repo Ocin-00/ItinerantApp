@@ -5,6 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>
 		<c:if test="${usuario == null}">
 			Registrarse
@@ -13,10 +14,20 @@
 			Modificar cuenta
 		</c:if>
 	</title>
+	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
+
+	
+
 	<c:if test="${usuario == null}">
 		<link rel="stylesheet" href="css/layout.css">
 		<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
 		<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap-select.css">
+		<script type="text/javascript" src="js/bootstrap-select.js"></script>
+		<script type="text/javascript" src="js/defaults-es_ES.js"></script>
 		</c:if>	
 	<c:if test="${usuario != null}">
 		<link rel="stylesheet" href="../css/layout.css">
@@ -29,9 +40,15 @@
 	    <script type="text/javascript" src="js/general.js"></script>
 	    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 		<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+		<link rel="stylesheet" href="../css/bootstrap-select.css">
+		<script type="text/javascript" src="../js/bootstrap-select.js"></script>
+		<script type="text/javascript" src="../js/defaults-es_ES.js"></script>
 	</c:if>
 </head>
-<body>
+<!-- IMPORTANTE La class de body para las páginas que se pasan de altura -->
+<body class="d-flex flex-column min-vh-100">
 	<c:if test="${usuario == null}">
 			<jsp:directive.include file="/frontend/header.jsp"/>
 	</c:if>	
@@ -39,35 +56,35 @@
 		<jsp:directive.include file="../frontend/header_user.jsp"/>
 	</c:if>
 
-	<div id="main-centered">
+	<div class="container-fluid ov" style="min-height: 75vh">
 		<c:if test="${usuario == null}">
 			<form action="nuevo_usuario" method="post" id="usuarioForm">
 		</c:if>	
 		<c:if test="${usuario != null}">
 			<form action="actualizar_usuario" method="post" id="usuarioForm"  enctype="multipart/form-data">
 		</c:if>
-		<div class="main-centered-register">
+		<div class="container-fluid d-lg-flex flex-row align-items-center justify-content-center">
 			<div class="main-centered-register-items">
 				<h2>Datos personales:</h2>
 				<table>
 					<tr>
-						<td>Nombre:</td>
-						<td>Apellidos:</td>
+						<td><label for="nombre" class="form-label">Nombre:</label></td>
+						<td><label for="apellidos" class="form-label">Apellidos:</label></td>
 					</tr>
 					<tr>
-						<td><input type="text" name="nombre" id="nombre" size="20" value="${usuario.nombre}" /></td>
-						<td><input type="text" name="apellidos" id="apellidos" size="20" value="${usuario.apellidos}" /></td>
+						<td><input type="text" name="nombre" id="nombre" value="${usuario.nombre}" class="form-control border-dark-subtle" maxlength="30"/></td>
+						<td><input type="text" name="apellidos" id="apellidos" value="${usuario.apellidos}" class="form-control border-dark-subtle" maxlength="70"/></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="right">Teléfono:</td>
+						<td align="right"><label for="telefono" class="form-label">Teléfono:</label></td>
 						<c:if test="${usuario.telefono != 'null'}">
-							<td><input type="tel" name="telefono" id="telefono" size="20" value="${usuario.telefono}"/></td>
+							<td><input type="tel" name="telefono" id="telefono" value="${usuario.telefono}" class="form-control border-dark-subtle"/></td>
 						</c:if>
 						<c:if test="${usuario.telefono == 'null'}">
-							<td><input type="tel" name="telefono" id="telefono" size="20"/></td>
+							<td><input type="tel" name="telefono" id="telefono" class="form-control border-dark-subtle"/></td>
 						</c:if>
 					</tr>
 					<c:if test="${rol != 'ADMINISTRADOR' || 'SUPERVISOR'}">	
@@ -75,12 +92,12 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="right">Dirección:</td>
+						<td align="right"><label for="direccion" class="form-label">Dirección:</label></td>
 						<c:if test="${usuario.localizacion != 'null'}">
-							<td><input type="text" name="direccion" id="direccion" size="20" value="${usuario.localizacion}"/></td>
+							<td><input type="text" name="direccion" id="direccion" value="${usuario.localizacion}" class="form-control border-dark-subtle" maxlength="50"/></td>
 						</c:if>
 						<c:if test="${usuario.localizacion == 'null'}">
-							<td><input type="text" name="direccion" id="direccion" size="20"/></td>
+							<td><input type="text" name="direccion" id="direccion" class="form-control border-dark-subtle" maxlength="50"/></td>
 						</c:if>
 					</tr>
 					
@@ -89,9 +106,9 @@
 					</tr>
 					<c:if test="${usuario == null}">
 					<tr>
-						<td align="right">Municipio: </td>
+						<td align="right"><label for="codPostal" class="form-label">Municipio:</label> </td>
 						<td>
-							<select name="codPostal" id="codPostal">
+							<select name="codPostal" id="codPostal" class="selectpicker myselect" data-live-search="true" >
 								<c:forEach items="${listaLocalidades}" var="localidad">
 									<option value="${localidad.codigoPostal}">
 										${localidad.nombre}
@@ -111,23 +128,23 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="right">Organismo coordinador:</td>
-						<td><input type="text" name="organismoCoordinador" id="organismoCoordinador" size="20" value="${usuario.organismoCoordinador}"/></td>
+						<td align="right"><label for="organismoCoordinador" class="form-label">Organismo coordinador:</label></td>
+						<td><input type="text" name="organismoCoordinador" id="organismoCoordinador" value="${usuario.organismoCoordinador}" class="form-control border-dark-subtle" maxlength="70"/></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="right">Número de la seguridad social: </td>
-						<td><input type="text" name="nss" id="nss" size="20" value="${usuario.nss}"/></td>
+						<td align="right"><label for="nss" class="form-label">Número de la seguridad social:</label> </td>
+						<td><input type="text" name="nss" id="nss" value="${usuario.nss}" class="form-control border-dark-subtle" maxlength="15"/></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
 					</c:if>
 					<tr>
-						<td align="right">Fecha de nacimiento:</td>
-						<td><input type="date" name="fechaNac" id="fechaNac" size="20" value="${usuario.fechaNac}"/></td>
+						<td align="right"><label for="fechaNac" class="form-label">Fecha de nacimiento:</label></td>
+						<td><input type="date" name="fechaNac" id="fechaNac" value="${usuario.fechaNac}" class="form-control border-dark-subtle"/></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
@@ -135,36 +152,38 @@
 				</table>
 			</div>
 
-			<div class="main-centered-register-items"class="main-centered-register-items">
+			<div class="main-centered-register-items">
 				<h2>Datos de cuenta: </h2>
-				<table>
-					<c:if test="${usuario != null}">
+				<c:if test="${usuario != null}">
+					<div class="m-2">
 						<tr>
 							<td rowspan="8">
-								<img id="thumbnail" alt="" height="250" src="${usuario.imagenRuta}"/>
-								<label for="imagenPerfil">
-									<img src="../images/pencil.png"/>
+								<img id="thumbnail" alt="" height="250" src="${usuario.imagenRuta}" class="rounded-circle"/>
+								<label for="imagenPerfil" class="img-pencil">
+									<i class="fa-solid fa-pen"></i>
 								</label>
 							</td>
 						</tr>
-					</c:if>
+					</div>
+				</c:if>
+				<table>
 					<tr>
-						<td>Email:</td>
-						<td>Nombre de usuario:</td>
+						<td><label for="email" class="form-label">Email:</label></td>
+						<td><label for="login" class="form-label">Nombre de usuario:</label></td>
 					</tr>
 					<tr>
 					<c:if test="${usuario == null}">
-						<td><input type="text" name="email" id="email" size="20"/></td>
-						<td><input type="text" name="login" id="login" size="20"/></td>
+						<td><input type="text" name="email" id="email" class="form-control border-dark-subtle" maxlength="40"/></td>
+						<td><input type="text" name="login" id="login" class="form-control border-dark-subtle" maxlength="20"/></td>
 					</c:if>
 					<c:if test="${usuario != null}">
 						<td>
-							<input type="text" name="email" id="showemail" size="20" value="${usuario.email}" disabled/>
-							<input type="hidden" name="email" id="mail" size="20" value="${usuario.email}"/>
+							<input type="text" name="email" id="showemail" class="form-control border-dark-subtle" value="${usuario.email}" disabled/>
+							<input type="hidden" name="email" id="mail" class="form-control border-dark-subtle" value="${usuario.email}"/>
 						</td>
 						<td>
-							<input type="text" name="login" id="showlogin" size="20" value="${usuario.login}" disabled/>
-							<input type="hidden" name="login" id="login" size="20" value="${usuario.login}"/>
+							<input type="text" name="login" id="showlogin" class="form-control border-dark-subtle" value="${usuario.login}" disabled/>
+							<input type="hidden" name="login" id="login" class="form-control border-dark-subtle" value="${usuario.login}"/>
 						</td>
 					</c:if>
 					</tr>
@@ -172,20 +191,20 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td>Contraseña:</td>
+						<td><label for="password" class="form-label">Contraseña:</label></td>
 					</tr>
 					<tr>
 						<c:if test="${usuario == null}">
-						<td><input type="password" name="password" id="password" size="25" value="${usuario.password}"/></td>
+						<td><input type="password" name="password" id="password" class="form-control border-dark-subtle" value="${usuario.password}" maxlength="30"/></td>
 						</c:if>
 						<c:if test="${usuario != null}">
 						<td>
-							<input type="password" name="password" id="showpassword" size="25" value="${usuario.password}" disabled/>
+							<input type="password" name="password" id="showpassword" class="form-control border-dark-subtle" value="${usuario.password}" disabled/>
 							<input type="hidden" name="password" id="password" size="25" value="${usuario.password}"/>
 							<input type="hidden" name="comfirmPassword" id="comfirmPassword" size="25" value="${usuario.password}" />
 						</td>
 						<td>
-							<button id="changePassword" type="button">Cambiar contraseña</button>
+							<button id="changePassword" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Cambiar contraseña</button>
 						</td>
 						</c:if>
 					</tr>
@@ -194,10 +213,10 @@
 					</tr>
 					<c:if test="${usuario == null}">
 					<tr>
-						<td>Confirme la contraseña:</td>
+						<td><label for="comfirmPassword" class="form-label">Confirme la contraseña:</label></td>
 					</tr>
 					<tr>
-						<td><input type="password" name="comfirmPassword" id="comfirmPassword" size="25" /></td>			
+						<td><input type="password" name="comfirmPassword" id="comfirmPassword" class="form-control border-dark-subtle" maxlength="30"/></td>			
 					</tr>
 					</c:if>
 					<tr>
@@ -207,15 +226,18 @@
 	
 				<c:if test="${usuario == null}">
 					<table>
-					<tr>
-						<td>Por favor, elija el tipo de cuenta:</td>
-					</tr>
+
 					<tr align="left">
 						<td align="left">
-							<input type="radio" id="ciudadano" name="tipoCuenta" value="CIUDADANO">
-							<label for="ciudadano">Usuario</label><br>
-							<input type="radio" id="profesional" name="tipoCuenta" value="PROFESIONAL">
-							<label for="profesional">Profesional</label><br>
+							<div>
+								<label for="tipoCuenta" class="form-label">Por favor, elija el tipo de cuenta:</label>
+							</div>	
+							<div>
+								<input type="radio" id="ciudadano" name="tipoCuenta" value="CIUDADANO" class="form-check-input border-dark-subtle ">
+								<label for="ciudadano">Usuario</label><br>
+								<input type="radio" id="profesional" name="tipoCuenta" value="PROFESIONAL" class="form-check-input border-dark-subtle">
+								<label for="profesional">Profesional</label><br>
+							</div>		
 						</tr>
 					</table>
 				</c:if>
@@ -226,9 +248,9 @@
 				<h2>Ayúdanos a conocerte mejor:</h2>
 				<table>
 					<tr>
-						<td align="right">Sexo:</td>
+						<td align="right"><label for="sexo" class="form-label">Sexo:</label></td>
 						<td>
-							<select name="sexo" id="sexo">
+							<select name="sexo" id="sexo" class="selectpicker myselect">
 								<c:forEach items="${listaSexo}" var="sexo">
 								<c:if test="${usuario.sexo == sexo}">
 									<option value="${sexo}" selected="selected">
@@ -245,9 +267,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td align="right">Estado civil:</td>
+						<td align="right"><label for="estadoCivil" class="form-label">Estado civil:</label></td>
 						<td>
-							<select name="estadoCivil" id="estadoCivil">
+							<select name="estadoCivil" id="estadoCivil" class="selectpicker myselect">
 								<c:forEach items="${listaEstadosCiviles}" var="estadoCivil">
 									<c:if test="${usuario.estadoCivil == estadoCivil}">
 										<option value="${estadoCivil}" selected="selected">
@@ -266,17 +288,17 @@
 					</table>
 					<table>
 					<tr>
-						<td>Formación:</td>
+						<td><label for="formacion" class="form-label">Formación:</label></td>
 					</tr>
 					<tr>
 						<c:if test="${usuario.formacion == 'null'}">
 							<td>
-								<textarea rows="5" cols="50" name="formacion" id="formacion"></textarea>
+								<textarea rows="5" cols="50" name="formacion" id="formacion" class="form-control border-dark-subtle" maxlength="150"></textarea>
 							</td>
 						</c:if>
 						<c:if test="${usuario.formacion != 'null'}">
 							<td>
-								<textarea rows="5" cols="50" name="formacion" id="formacion">${usuario.formacion}</textarea>
+								<textarea rows="5" cols="50" name="formacion" id="formacion" class="form-control border-dark-subtle" maxlength="150">${usuario.formacion}</textarea>
 							</td>
 						</c:if>
 					</tr>
@@ -284,17 +306,17 @@
 				<c:if test="${rol == 'PROFESIONAL'}">
 					<table>
 						<tr>
-							<td>Descripcion:</td>
+							<td><label for="descripcion" class="form-label">Descripcion:</label></td>
 						</tr>
 						<tr>
 							<c:if test="${usuario.descripcion == 'null'}">
 								<td>
-									<textarea rows="5" cols="50" name="descripcion" id="descripcion"></textarea>
+									<textarea rows="5" cols="50" name="descripcion" id="descripcion" class="form-control border-dark-subtle" maxlength="150"></textarea>
 								</td>
 							</c:if>
 							<c:if test="${usuario.descripcion != 'null'}">
 								<td>
-									<textarea rows="5" cols="50" name="descripcion" id="descripcion">${usuario.descripcion}</textarea>
+									<textarea rows="5" cols="50" name="descripcion" id="descripcion"  class="form-control border-dark-subtle" maxlength="150">${usuario.descripcion}</textarea>
 								</td>
 							</c:if>
 						</tr>
@@ -311,7 +333,7 @@
 					<button type="submit">Modificar cuenta</button>	
 					&nbsp;&nbsp;
 					<button id="buttonCancel" type="button">Cancelar</button>
-					<div>
+					<div class="m-3">
 						<button type="button" id="eliminarCuenta">Eliminar cuenta</button>
 					</div>
 				</c:if>	
@@ -325,29 +347,51 @@
 			<input type="hidden" value="${rol}" id="rol">
 		</form>
 	</div>
-				<dialog id="newDialog" class="dialog">
-				  <form method="dialog" id="newDialogForm">
-				    <p align="right">
-				      <label>Nueva contraseña:
-				        <input id="newPassword" name="newPassword" type="password">
-				      </label>
-				     </p>
-				     <p align="right">
-				      <label>Confirmar contraseña:
-				        <input id="comfirmNewPassword" name=comfirmNewPassword type="password">
-				      </label>
-				    </p>
-				    <div align="center">
-				    	<button id="newConfirmar" type="button">Confirmar</button>
-				      	<button class="cancelBtn"  type="button">Cancelar</button>
-				    </div>
-				  </form>
-				</dialog>
+	
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar contraseña</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	       <div class="form-container">
+			  <form method="dialog" id="newDialogForm">
+			  	<table>
+					<tr>
+						<td align="right">  <label for="newPassword" class="form-label">Nueva contraseña:</label></td>
+						<td><input id="newPassword" name="newPassword" type="password" class="form-control border-dark-subtle newPasswordInputs" maxlength="30"><br/></td>
+					</tr>
+					<tr>
+						<td align="right"> <label for="confirmNewPassword" class="form-label">Confirmar contraseña:</label></td>
+						<td> <input id="confirmNewPassword" name="confirmNewPassword" type="password" class="form-control border-dark-subtle newPasswordInputs" maxlength="30"></td>
+					</tr>
+				</table>
+			    <div class="modal-footer">
+			        <button id="newConfirmar" type="button" class="btn btn-secondary">Confirmar</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+			  	</div>      
+			  </form>
+			</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<jsp:directive.include file="/frontend/footer.jsp" />
 </body>
 <script type="text/javascript">
 
 	$(document).ready(function(){
+
+		/*var radios = document.forms["usuarioForm"].elements["tipoCuenta"];
+		  for(radio in radios) {
+		    radio.onclick = function() {
+		       alert(radio.value);
+		    }
+		}*/
+		$('.selectpicker').selectpicker();
 		
 		$("#usuarioForm").validate({
 				rules: {
@@ -360,14 +404,14 @@
 					telefono: {
 						required: {
 							depends: function(element) {
-								return $("#rol").val() != 'CIUDADANO';
+								return $("#profesional").is(":checked") || ($("#rol").val() != 'CIUDADANO' && $("#rol").val() != '');
 							}
 						}				
 					},
 					formacion: {
 						required: {
 							depends: function(element) {
-								return $("#rol").val() == 'PROFESIONAL';
+								return $("#rol").val() == 'PROFESIONAL' || $("#profesional").is(":checked");;
 							}
 						}	
 					},
@@ -396,6 +440,14 @@
 							}
 						}				
 					},
+					
+					tipoCuenta: {
+						required: {
+							depends: function(element) {
+								return $("#rol").val() == '';
+							}
+						}
+					},
 				},
 				
 				messages: {
@@ -421,7 +473,11 @@
 					},
 					organismoCoordinador: "Por favor introduzca su organismo coordinador.",
 					nss: "Por favor introduzca su número de la seguridad social",
-				}
+					tipoCuenta: "Por favor, seleccione un tipo de cuenta.",
+				},
+				 errorPlacement: function(error, element) {
+			            error.appendTo(element.parent());
+			        }
 			});
 
 		$("#imagenPerfil").change(function() {
@@ -438,7 +494,7 @@
 		            required: true,
 		            minlength: 5
 		        },
-		        comfirmNewPassword: {
+		        confirmNewPassword: {
 		            required: true,
 		            minlength: 5,
 		            equalTo: "#newPassword"
@@ -449,14 +505,17 @@
 					required: "Por favor introduzca la contraseña.",
 					minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres.")
 				},
-				comfirmNewPassword: {
+				confirmNewPassword: {
 					required: "Por favor repita la contraseña.",
 					minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres."),
 					equalTo: "Los campos no coinciden."
 				},
-			}
+			},
+			 errorPlacement: function(error, element) {
+		            error.appendTo(element.parent());
+		        }
 		});
-
+/*
 		$("#changePassword").on("click", function(){
 			$("#newDialog").show();
 		});
@@ -464,12 +523,27 @@
 		$(".cancelBtn").on("click", function(){
 			$(this).parent().parent().parent().hide();
 		});
+	*/
 
 		$("#newConfirmar").on("click", function() {
 			$("#password").val($("#newPassword").val());
 			$("#confirmPassword").val($("#confirmNewPassword").val());
-			$(this).parent().parent().parent().hide();
+			
+			if($("#newDialogForm").valid() == true) {
+				$('#exampleModal').modal('hide');
+				$("#usuarioForm").submit();
+			}
+			
+			
+			//$(this).parent().parent().parent().hide();
 		});
+
+		$('.newPasswordInputs').keydown(function(event) {
+	    	if (event.which == 13) {
+	    		$("#newConfirmar").click();
+	            event.preventDefault();
+	         }
+	    });
 
 		$("#eliminarCuenta").on("click", function() {
 			if(confirm("¿Desea eliminar su cuenta?")) {

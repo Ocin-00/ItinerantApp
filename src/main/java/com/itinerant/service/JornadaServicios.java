@@ -354,7 +354,9 @@ public class JornadaServicios {
 		}
 		
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-		request.setAttribute("fecha", format.format(fecha));
+		String fmtFecha = format.format(fecha);
+		System.out.println(fmtFecha);
+		request.setAttribute("fecha", fmtFecha);
 		request.setAttribute("visitas", listaVisitasJornada);
 		request.setAttribute("numVisitas", listaVisitasJornada.size());
 		request.setAttribute("fecha", dateformat.format(fecha));

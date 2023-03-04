@@ -101,6 +101,7 @@ public class UsuarioInternoServicios {
 		HttpSession session = request.getSession();
 		String login = (String) session.getAttribute("userLogin");
 		session.removeAttribute("userLogin");
+		session.removeAttribute("fotoPerfil");
 		session.removeAttribute("rol");
 		session.removeAttribute("misAlertas");
 		session.removeAttribute("misChats");
@@ -129,6 +130,7 @@ public class UsuarioInternoServicios {
 			UsuarioInterno usuario = usuarioInternoDAO.get(login);
 			String rol = usuario.getRol();
 			request.getSession().setAttribute("rol", rol);
+			request.getSession().setAttribute("fotoPerfil", usuario.getImagenRuta());
 			
 			HashMap<String, Stack<Alerta>> pilasUsuarios = (HashMap<String, Stack<Alerta>>) request.getSession().getServletContext().getAttribute("PilasUsuarios");
 			

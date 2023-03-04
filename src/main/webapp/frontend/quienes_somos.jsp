@@ -5,12 +5,18 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>Itinerant - ¿Quiénes somos?</title>
+	
+	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
 	<c:if test="${hayRol == false }">
 		<link href="/ItinerantApp/css/layout.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
 		<script type="text/javascript" src="js/jquery.validate.min.js"></script>
 		<script type="text/javascript" src="js/general.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
 	</c:if>
 	<c:if test="${hayRol == true }">
 		<link rel="stylesheet" href="../css/layout.css">
@@ -20,12 +26,15 @@
 		<script type="text/javascript" src="../js/notify.js"></script>
 	    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
 	    <script type="text/javascript" src="../js/my-notifications.js"></script>
-	    <script type="text/javascript" src="js/general.js"></script>
+	    <script type="text/javascript" src="../js/general.js"></script>
 	    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 		<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+		
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
 	</c:if>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<c:if test="${hayRol == false }">
 		<jsp:directive.include file="header.jsp"/>
 	</c:if>
@@ -33,17 +42,17 @@
 		<jsp:directive.include file="header_user.jsp"/>
 	</c:if>
 	
-	<div id="main-centered">
+	<div class = "container-fluid" style="min-height: 75vh;">
 		<div>
 			<h1 align="center">Programa Itinerant</h1>
 		</div>
-		<div class="main-centered-items" style="align-content: center;">
+		<div class="container-fluid d-lg-flex d-m-inline-block align-items-center">
 			<div>
 				<img src="<%String imgpath = request.getContextPath();
 						  out.println(imgpath + "/"); 
-						%>images/Itinerant-mapa.jpg" height="500"/>
+						%>images/Itinerant-mapa.jpg" class="img-fluid img-somos"/>
 			</div>
-			<div class="main-centered-text">
+			<div class="container main-centered-text">
 				<div>
 					<h4>¿Qué es Itinerant?</h4>
 					<label>Es un programa de servicios, promovido por la DG de la Agenda AVANT y la Federación Valenciana de Municipios y Provincias, con la colaboración de las Mancomunidades y municipios AVANT. El objetivo de este programa, es la investigación y movilización de profesionales itinerantes para prestar servicios básicos necesarios en los diferentes municipios.</label>

@@ -1,4 +1,4 @@
-<div id="side-menu">
+<div id="side-menu" class="d-none d-lg-block">
 	<h3>Administración</h3>
 	<a href="lista_profesionales">Profesionales</a> 
 	<a href="lista_certificados" class="active">Certificados</a> 

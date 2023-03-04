@@ -5,6 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>Itinerant - Generalitat Valenciana</title>
 	<c:if test="${hayRol == false }">
 		<link href="/ItinerantApp/css/layout.css" rel="stylesheet" type="text/css"/>
@@ -41,33 +42,23 @@
 		<jsp:directive.include file="header_user.jsp"/>
 	</c:if>
 	
-	<div id = "main">
-		<c:if test="${sessionScope.rol == 'ADMINISTRADOR'}">
-			<jsp:directive.include file="/../admin/side_menu.jsp"/>
-		</c:if>
-		<c:if test="${sessionScope.rol == 'PROFESIONAL'}">
-			<jsp:directive.include file="../frontend/profesional/side_menu.jsp"/>
-		</c:if>
-		<c:if test="${sessionScope.rol == 'CIUDADANO'}">
-			<jsp:directive.include file="../frontend/inicio/side_menu.jsp"/>
-		</c:if>
-		<c:if test="${sessionScope.rol == 'SUPERVISOR'}">
-			<jsp:directive.include file="../supervisor/side_menu.jsp"/>
-		</c:if>
+	<div class = "wrapper">
 		
 		<c:if test="${hayRol == false }">
 			<div id="main-plain">
 		</c:if>
 		<c:if test="${hayRol == true }">
+			<jsp:directive.include file="side_menu.jsp"/>
+			
 			<div id="main-content">
 		</c:if>
 		<div id = "main-home">
 			<h1 style="margin-bottom: 20px;">
 				Servicios más ofertados: 
 			</h1>
-			<div class="main-scroll-div">
+			<div class="main-scroll-div d-flex d-none d-lg-flex align-items-center">
 				<div>
-					<button id="left-button" class="scroll-icon" type="button"><i class="fa-solid fa-angles-left"></i></i></button>
+					<button id="left-button" class="scroll-icon" type="button"><i class="fa-solid fa-angles-left"></i></button>
 				</div>
 				<div class="cover">
 					<div class="scroll-images">
@@ -90,9 +81,52 @@
 					</div>
 				</div>
 				<div>
-					<button id="right-button" class="scroll-icon" type="button"><i class="fa-solid fa-angles-right"></i></i></button>
+					<button id="right-button" class="scroll-icon" type="button"><i class="fa-solid fa-angles-right"></i></button>
 				</div>
 			</div>
+			<!-- AQUI PARA MOVIL -->
+			<div id="carousel" class="carousel slide position-relative d-lg-block d-lg-flex align-items-center d-block d-lg-none pointer-event" data-ride="carousel" data-bs-interval="5000" data-bs-touch="true" data-bs-ride="carousel">
+
+			    <div class="carousel-inner">
+			        <c:forEach var="categoria" items="${categorias}" varStatus="status">
+			            <c:if test="${status.index == 0 }">
+			                <div class="carousel-item active">
+			            </c:if>
+			            <c:if test="${status.index != 0 }">
+			                <div class="carousel-item">
+			            </c:if>
+			                <div class="card">
+			                    <a href="buscar?keyword=${categoria.nombre}">
+			                        <c:set var="imagenRuta" value="${categoria.imagenRuta}"></c:set>
+			                            <img class="child-img" alt="" src="<%String imgpath = request.getContextPath();
+			                                               Object imagenRuta = pageContext.getAttribute("imagenRuta");
+			                                               if(imagenRuta != null) {
+			                                                   out.println(imgpath + imagenRuta.toString().substring(2)); 
+			                                               }
+			                                            %>">
+			                        <div class="card-body">
+			                          <h5 class="card-title">${categoria.nombre}</h5>
+			
+			                        </div>
+			                    </a>
+			                </div>
+			            </div>
+			        </c:forEach>
+			    </div>
+			    
+			    <div class="position-absolute d-flex align-items-center" style="left: 0; top: 50%; transform: translateY(-50%)">
+			        <button class="left carousel-control  carousel-button" data-slide="prev" onclick="$('#carousel').carousel('prev')"><i class="fa-solid fa-angles-left"></i></button>
+			    </div>
+			
+			    <div class="position-absolute d-flex align-items-center" style="right: 0; top: 50%; transform: translateY(-50%)">
+			        <button class="right carousel-control  carousel-button" data-slide="next" onclick="$('#carousel').carousel('next')"><i class="fa-solid fa-angles-right"></i></button>
+			    </div>
+			    
+			</div>
+			
+
+
+			
 		</div>
 		</div>
 	</div>
@@ -114,6 +148,9 @@ $(document).ready(function() {
 			scrollLeft: "-=470px"
 		}, "fast");
 	});
+
+	
 });
+
 </script>
 </html>

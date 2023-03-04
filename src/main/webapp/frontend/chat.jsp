@@ -5,6 +5,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>Itinerant - Resultado de búsqueda</title>
 	<link rel="stylesheet" href="../css/layout.css">
 	<script type="text/javascript" src="../js/jquery-3.6.0.min.js"></script>
@@ -14,13 +15,19 @@
     <script type="text/javascript" src="../js/my-notifications.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+	
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+	
+	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<jsp:directive.include file="/frontend/header_user.jsp"/>
 	
-	<div id = "main-chat">
+	<div class="wrapper"  style="min-height: 75vh; max-height: 75vh">
 		
-		<div id="discussions">
+		<div id="discussions" class="bg-white">
 			<div class="header-discussions">
 				<div class="header-discussions-title">
 					<h3>Mis chats</h3>
@@ -32,22 +39,19 @@
 				</div>
 			</div>
 		</div>
-		<div class="chat">
+		<input type="hidden" value="${recipient}" id="recipient">
+		<div class="chat overflow-auto" id="chat">
 		    <c:if test="${recipient != null}">
-		    	<div class="header-chat">	    	
+		    	<div class="header-chat">	   
+		    		<button class="d-block d-lg-none mr-1 chats-button"><i class="fa-solid fa-arrow-left"></i></button> 	
 		    		<img class="photo" src="${recipient.imagenRuta}" alt="foto">
 		    		 
 		    		<h2 class="name">${recipient.nombre} ${recipient.apellidos}</h2>
 		    	</div>
-				<hr>
 			    <div id="messages-chat"></div>
-			    <div class="footer-chat">
-			    	 <input type="text" class="write-message">
-			    	 <div class="send-button">
-			    	 	<button type="button" class="send-icon">
-			   		 		<img alt="" src="../images/send_icon.png" height="45" class="send-icon" id="send-icon" name="send-icon">
-			   		 	</button>
-			    	 </div>
+			    <div class="input-group flex-nowrap footer-chat mb-2">
+			    	 <input type="text" class="write-message" class="form-control border-dark-subtle" maxlength="400">
+			    	 <button type="submit" class="btn btn-outline-dark send-button"><i class="fa-solid fa-paper-plane"></i></button>
 			    </div>
 		    </c:if>
 		</div>
@@ -246,6 +250,17 @@ $(document).ready(function() {
 	    }
 	    return htmlText;
      }
+/*
+    $('discussion-message').on('click', function () {
+    	 $("#chat").removeClass("d-none d-lg-block");
+    	 $("#discussions").addClass("d-none d-lg-block");
+    });*/
+
+    $('.chats-button').on('click', function () {
+	   	 //$("#chat").addClass("d-none d-lg-block");
+	   	 //$("#discussions").removeClass("d-none d-lg-block");
+    	window.location = "chat";
+   });
 });
 
 $(document).on("click", ".discussion-message", function(){
@@ -268,5 +283,16 @@ $(document).on("click", "#home-button", function(){
 		alert("Error");
 	}
 });
+
+$(window).on('load', function() {
+	//alert($('#recipient').val())
+	 if($('#recipient').val() == "") {
+		// alert("cargando")
+		 $("#chat").addClass("d-none d-lg-block");
+	} else {
+		$("#discussions").addClass("d-none d-lg-block");
+	}
+});
+
 </script>
 </html>
