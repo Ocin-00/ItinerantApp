@@ -85,12 +85,13 @@ public class VisitaServicios {
 		List<Visita> visitasPendientes = new ArrayList<Visita>();
 		List<Visita> historialVisitas = new ArrayList<Visita>();
 		Date ahora = new Date();
-		
-		for(Visita visita : visitas) {
-			if(ahora.before(visita.getHoraInicio())) {
-				visitasPendientes.add(visita);
-			} else {
-				historialVisitas.add(visita);
+		if(visitas != null) {
+			for(Visita visita : visitas) {
+				if(ahora.before(visita.getHoraInicio())) {
+					visitasPendientes.add(visita);
+				} else {
+					historialVisitas.add(visita);
+				}
 			}
 		}
 		
@@ -326,6 +327,7 @@ public class VisitaServicios {
 		String descripcion = StringEscapeUtils.escapeHtml4(request.getParameter("descripcion"));
 		double desplazamiento = Double.parseDouble(request.getParameter("desplazamiento"));
 		double precio = Double.parseDouble(request.getParameter("precio"));
+		boolean imagenCambia = Boolean.parseBoolean(request.getParameter("imagenCambia"));
 				
 		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
 		Localidad localidad = localidadDAO.get(codPostal);
@@ -355,26 +357,28 @@ public class VisitaServicios {
 		Profesional profesional = profesionalDAO.get(login);
 		
 		Visita visita = new Visita(localidad, profesional, fecha, horaInicio, horaFin, descripcion, tiempo, desplazamiento, precio, nombre);
+		if(imagenCambia) {
+			Part part = request.getPart("imagenVisita");
+			if(part != null && part.getSize() > 0) {
+				long size = part.getSize();
+				byte[] imageBytes = new byte[(int) size];
+				
+				InputStream inputStream = part.getInputStream();
+				String nombreImagen = nombrarImagen();
+				String src = request.getServletContext().getRealPath("/") + "/img/" + nombreImagen;
+				OutputStream outputStream = new FileOutputStream(src);
+				int length; 
+				
+				while ((length = inputStream.read(imageBytes)) != -1) {
+					outputStream.write(imageBytes, 0, length);
+				}
 
-		Part part = request.getPart("imagenVisita");
-		if(part != null && part.getSize() > 0) {
-			long size = part.getSize();
-			byte[] imageBytes = new byte[(int) size];
-			
-			InputStream inputStream = part.getInputStream();
-			String nombreImagen = nombrarImagen();
-			String src = request.getServletContext().getRealPath("/") + "/img/" + nombreImagen;
-			OutputStream outputStream = new FileOutputStream(src);
-			int length; 
-			
-			while ((length = inputStream.read(imageBytes)) != -1) {
-				outputStream.write(imageBytes, 0, length);
+				inputStream.close();
+				outputStream.close();
+				visita.setImagenRuta("../img/" + nombreImagen);
 			}
-
-			inputStream.close();
-			outputStream.close();
-			visita.setImagenRuta("../img/" + nombreImagen);
 		}
+		
 		
 		String[] categoriasId = request.getParameterValues("categorias");
 		if (categoriasId != null) {
@@ -451,6 +455,7 @@ public class VisitaServicios {
 		Visita visitaOriginal = visitaDAO.get(idVisita);
 		visita.setIdVisita(idVisita);
 		String message = hayIncompatibilidades(visita);
+		boolean imagenCambia = Boolean.parseBoolean(request.getParameter("imagenCambia"));
 		if(message.isBlank()) {
 			List<Cita> citas = new ArrayList<>(visita.getCitas());
 			
@@ -485,8 +490,10 @@ public class VisitaServicios {
 					alertaServicios.mandarNotificacion(alerta);
 					
 				}
-				if(visitaOriginal.getImagenRuta() != null) {
+				if(visitaOriginal.getImagenRuta() != null && imagenCambia) {
 					borrarImagen(visitaOriginal.getImagenRuta());
+				} else {
+					visita.setImagenRuta(visitaOriginal.getImagenRuta());
 				}
 				visitaDAO.update(visita);
 				listarVisitas("La visita ha sido modificada con éxito");
@@ -499,12 +506,12 @@ public class VisitaServicios {
 		}
 	}
 
-	public void buscar(String keyword) {
+	public void buscar(String keyword, String keywordMal) {
 		List<Visita> listaVisitas = null;
 		if(keyword.equals("")) {
 			listaVisitas = visitaDAO.searchAll();
 		} else {
-			listaVisitas = visitaDAO.search(keyword);
+			listaVisitas = visitaDAO.search(keyword, keywordMal);
 		}
 		request.setAttribute("listaVisitas", listaVisitas);
 	}

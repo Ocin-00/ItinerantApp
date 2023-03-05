@@ -326,25 +326,27 @@
 			</c:if>
 			</div>
 			<div align="center">
+				<c:if test="${message != null}">
+				<div class="m-3">
+					<h5>${message}</h5>
+				</div>
+				</c:if>
 				<c:if test="${usuario == null}">
 					<button type="submit">Crear cuenta</button>
 				</c:if>
 				<c:if test="${usuario != null}">
 					<button type="submit">Modificar cuenta</button>	
 					&nbsp;&nbsp;
-					<button id="buttonCancel" type="button">Cancelar</button>
+					<button id="buttonCancel" type="button">Volver</button>
 					<div class="m-3">
 						<button type="button" id="eliminarCuenta">Eliminar cuenta</button>
 					</div>
 				</c:if>	
 			</div>
-			<c:if test="${message != null}">
-				<div align = "center">
-					${message}
-				</div>
-			</c:if>
-			<div class="image-input"><input type="file" id="imagenPerfil" name="imagenPerfil"/></div>
-			<input type="hidden" value="${rol}" id="rol">
+			
+			<div class="image-input"><input type="file" id="imagenPerfil" name="imagenPerfil" src="${usuario.imagenRuta}"/></div>
+			<input type="hidden" value="false" id="imagenCambia" name="imagenCambia">
+			<input type="hidden" value="${rol}" id="rol" name="rol">
 		</form>
 	</div>
 	
@@ -357,7 +359,7 @@
 	      </div>
 	      <div class="modal-body">
 	       <div class="form-container">
-			  <form method="dialog" id="newDialogForm">
+			  <form action="change_password" method="post"id="newDialogForm">
 			  	<table>
 					<tr>
 						<td align="right">  <label for="newPassword" class="form-label">Nueva contraseña:</label></td>
@@ -481,6 +483,7 @@
 			});
 
 		$("#imagenPerfil").change(function() {
+			$("#imagenCambia").val("true");
 			showImageThumbnail(this);
 		});
 
@@ -531,17 +534,15 @@
 			
 			if($("#newDialogForm").valid() == true) {
 				$('#exampleModal').modal('hide');
-				$("#usuarioForm").submit();
+				$("#newDialogForm").submit();
 			}
 			
-			
-			//$(this).parent().parent().parent().hide();
 		});
-
+	
 		$('.newPasswordInputs').keydown(function(event) {
 	    	if (event.which == 13) {
 	    		$("#newConfirmar").click();
-	            event.preventDefault();
+	           // event.preventDefault();
 	         }
 	    });
 

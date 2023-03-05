@@ -56,7 +56,13 @@
 						<input type="date" name="fecha" id="fecha" value="${fecha}" class="form-control border-dark-subtle" style="max-width: 200px"/>
 					</div>
 					<div class= " container-fluid mt-3 mb-3">
+					<c:if test="${empty series}">
+						<button id="addToSerie" data-bs-toggle="modal" data-bs-target="#nuevaSerieModal">Añadir a serie</button>
+					</c:if>
+					<c:if test="${not empty series}">
 						<button id="addToSerie" data-bs-toggle="modal" data-bs-target="#selectSerieModal">Añadir a serie</button>
+					</c:if>
+						
 						<button id="replicarJornada" data-bs-toggle="modal" data-bs-target="#replicarJornadaModal">Replicar</button>
 						<button id="verInforme"  onclick="location.href='ver_informe?fecha=${fecha}';">Ver informe</button>
 					</div>
@@ -108,7 +114,7 @@
 								    </div>
 								    <div class="modal-footer">
 								    	<button id="newConfirmar" type="button" class="btn btn-secondary">Confirmar</button>
-								      	<button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								      	<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
 								    </div>
 								  </form>
 								</div>
@@ -134,7 +140,7 @@
 							    </div>
 							    <div class="modal-footer">
 							    	<button id="changeConfirmar" type="button" class="btn btn-secondary">Confirmar</button>
-								     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								     <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
 							    </div>
 							  </form>
 							  	</div>
@@ -158,7 +164,7 @@
 						    </div>
 						    <div class="modal-footer">
 						    	<button id="replicarConfirmar" type="button" class="btn btn-secondary">Confirmar</button>
-						      	<button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+						      	<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
 						    </div>
 						  </form>
 						</div>
@@ -182,7 +188,7 @@
 						    </p>
 						    <div class="modal-footer">
 						    	<button id="replicarSerieConfirmar"  type="button" class="btn btn-secondary">Confirmar</button>
-						      	<button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+						      	<button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
 						    </div>
 						  </form>
 						</div>

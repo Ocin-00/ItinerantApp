@@ -56,6 +56,9 @@ import com.itinerant.enums.Sexo;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.security.NoSuchAlgorithmException;  
+import java.security.MessageDigest;  
+
 public class UsuarioInternoServicios {
 	
 	private UsuarioInternoDAO usuarioInternoDAO;
@@ -97,6 +100,43 @@ public class UsuarioInternoServicios {
 		return usuarioInternoDAO.get(login) != null;		
 	}
 	
+	 public String hashPassword(String password) {  
+	        /* Plain-text password initialization. */  
+		 	//String password = "myPassword";  
+	        String encryptedpassword = null;  
+	        try   
+	        {  
+	            /* MessageDigest instance for MD5. */  
+	            MessageDigest m = MessageDigest.getInstance("MD5");  
+	              
+	            /* Add plain-text password bytes to digest using MD5 update() method. */  
+	            m.update(password.getBytes());  
+	              
+	            /* Convert the hash value into bytes */   
+	            byte[] bytes = m.digest();  
+	              
+	            /* The bytes array has bytes in decimal form. Converting it into hexadecimal format. */  
+	            StringBuilder s = new StringBuilder();  
+	            for(int i=0; i< bytes.length ;i++)  
+	            {  
+	                s.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));  
+	            }  
+	              
+	            /* Complete hashed password in hexadecimal format */  
+	            encryptedpassword = s.toString();  
+	        }   
+	        catch (NoSuchAlgorithmException e)   
+	        {  
+	            e.printStackTrace();  
+	        }  
+	          
+	        /* Display the unencrypted and encrypted passwords. */  /*
+	        System.out.println("Plain-text password: " + password);  
+	        System.out.println("Encrypted password using MD5: " + encryptedpassword);  */
+	        
+	        return encryptedpassword;
+	    }  
+	
 	public void removeSessionAttributes() {
 		HttpSession session = request.getSession();
 		String login = (String) session.getAttribute("userLogin");
@@ -119,7 +159,9 @@ public class UsuarioInternoServicios {
 			login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 			password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
 		}
-		boolean loginResult = usuarioInternoDAO.checkLogin(login, password);
+		String encpass = hashPassword(password);
+		//String encpass = password;
+		boolean loginResult = usuarioInternoDAO.checkLogin(login, encpass);
 		
 		if(loginResult) {
 			String homepage = null;
@@ -207,6 +249,7 @@ public class UsuarioInternoServicios {
 		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
 		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
+		String encpass = hashPassword(password);
 		String rol = StringEscapeUtils.escapeHtml4(request.getParameter("tipoCuenta"));
 		String sexo = StringEscapeUtils.escapeHtml4(request.getParameter("sexo"));
 		String estadoCivil = StringEscapeUtils.escapeHtml4(request.getParameter("estadoCivil"));
@@ -235,7 +278,7 @@ public class UsuarioInternoServicios {
 			request.setAttribute("message", message);
 			registerView();
 		} else if(rol.equals(Rol.PROFESIONAL.toString())) {
-			Profesional profesional = new Profesional(login, password, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, false, fechaRegistro);
+			Profesional profesional = new Profesional(login, encpass, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, false, fechaRegistro);
 			profesional.setEstadoCivil(estadoCivil);
 			profesional.setSexo(sexo);
 			profesional.setImagenRuta(DEFAULT_IMAGE);
@@ -255,7 +298,7 @@ public class UsuarioInternoServicios {
 				alertaDAO.create(alerta);
 			}
 		} else {
-			Ciudadano ciudadano = new Ciudadano(login, password, email, nombre, apellidos, fechaNac, localizacion, false);
+			Ciudadano ciudadano = new Ciudadano(login, encpass, email, nombre, apellidos, fechaNac, localizacion, false);
 			ciudadano.setTelefono(telefono);
 			ciudadano.setEstadoCivil(estadoCivil);
 			ciudadano.setFormacion(formacion);
@@ -296,6 +339,10 @@ public class UsuarioInternoServicios {
 	}
 
 	public void modificarCuentaView() throws ServletException, IOException {
+		modificarCuentaView(null);
+	}
+	
+	public void modificarCuentaView(String message) throws ServletException, IOException {
 		inicializarUsuarioForm();
 		String login = (String) request.getSession().getAttribute("userLogin");
 		String rol = (String) request.getSession().getAttribute("rol");
@@ -320,6 +367,9 @@ public class UsuarioInternoServicios {
 			System.out.println(usuario);
 		}
 		
+		if(message != null) {
+			request.setAttribute("message", message);
+		}
 		
 		String homepage = "../frontend/register_form.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
@@ -393,8 +443,8 @@ public class UsuarioInternoServicios {
 		String fechaNacTexto = request.getParameter("fechaNac");
 		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
 		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
-		String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
 		String rol = (String) request.getSession().getAttribute("rol");
+		boolean imagenCambia = Boolean.parseBoolean(request.getParameter("imagenCambia"));
 		Part part = request.getPart("imagenPerfil");
 		
 		
@@ -424,8 +474,11 @@ public class UsuarioInternoServicios {
 			profesional.setEstadoCivil(estadoCivil);
 			profesional.setFechaNac(fechaNac);
 			profesional.setFormacion(formacion);
-			String imagenRuta = setImagen(part, profesional.getImagenRuta());
-			profesional.setImagenRuta(imagenRuta);
+			if(imagenCambia) {
+				String imagenRuta = setImagen(part, profesional.getImagenRuta());
+				profesional.setImagenRuta(imagenRuta);
+			}
+			
 			profesional.setLocalizacion(localizacion);
 			profesional.setNombre(nombre);
 			profesional.setRol(rol);
@@ -460,11 +513,12 @@ public class UsuarioInternoServicios {
 			ciudadano.setEstadoCivil(estadoCivil);
 			ciudadano.setFechaNac(fechaNac);
 			ciudadano.setFormacion(formacion);
-			String imagenRuta = setImagen(part, ciudadano.getImagenRuta());
-			ciudadano.setImagenRuta(imagenRuta);
+			if(imagenCambia) {
+				String imagenRuta = setImagen(part, ciudadano.getImagenRuta());
+				ciudadano.setImagenRuta(imagenRuta);
+			}
 			ciudadano.setLocalizacion(localizacion);
 			ciudadano.setNombre(nombre);
-			ciudadano.setPassword(password);
 			ciudadano.setRol(rol);
 			ciudadano.setSexo(sexo);
 			ciudadano.setTelefono(telefono);
@@ -475,14 +529,15 @@ public class UsuarioInternoServicios {
 			admin.setApellidos(apellidos);
 			admin.setEmail(email);
 			admin.setFechaNac(fechaNac);
-			String imagenRuta = setImagen(part, admin.getImagenRuta());
-			admin.setImagenRuta(imagenRuta);
+			if(imagenCambia) {
+				String imagenRuta = setImagen(part, admin.getImagenRuta());
+				admin.setImagenRuta(imagenRuta);
+			}
 			admin.setNombre(nombre);
 			String nss = StringEscapeUtils.escapeHtml4(request.getParameter("nss"));
 			String organismoCoordinador = StringEscapeUtils.escapeHtml4(request.getParameter("organismoCoordinador"));
 			admin.setNss(nss);
 			admin.setOrganismoCoordinador(organismoCoordinador);
-			admin.setPassword(password);
 			admin.setRol(rol);
 			admin.setTelefono(telefono);
 			
@@ -492,21 +547,39 @@ public class UsuarioInternoServicios {
 			supervisor.setApellidos(apellidos);
 			supervisor.setEmail(email);
 			supervisor.setFechaNac(fechaNac);
-			String imagenRuta = setImagen(part, supervisor.getImagenRuta());
-			supervisor.setImagenRuta(imagenRuta);
+			if(imagenCambia) {
+				String imagenRuta = setImagen(part, supervisor.getImagenRuta());
+				supervisor.setImagenRuta(imagenRuta);
+			}
 			supervisor.setNombre(nombre);
 			String nss = StringEscapeUtils.escapeHtml4(request.getParameter("nss"));
 			String organismoCoordinador = StringEscapeUtils.escapeHtml4(request.getParameter("organismoCoordinador"));
 			supervisor.setNss(nss);
 			supervisor.setOrganismoCoordinador(organismoCoordinador);
-			supervisor.setPassword(password);
 			supervisor.setRol(rol);
 			supervisor.setTelefono(telefono);
 			
 			supervisorDAO.update(supervisor);
 		}
 		
-		login(login, password);
+		//login(login, password);
+		
+		modificarCuentaView("Su información ha sido modificada con éxito.");
+	}
+	
+	
+	public  void changePassword() throws ServletException, IOException { 
+		String login = (String) request.getSession().getAttribute("userLogin");
+		//String rol = (String) request.getSession().getAttribute("rol");
+		UsuarioInterno usuario = usuarioInternoDAO.get(login);
+		String password = StringEscapeUtils.escapeHtml4(request.getParameter("newPassword"));
+		System.out.println(password);
+		String encpass = hashPassword(password);
+		
+		usuario.setPassword(encpass);
+		usuarioInternoDAO.update(usuario);
+		
+		modificarCuentaView("La contraseña ha sido cambiada con éxito.");
 	}
 	
 	private String setImagen(Part part, String imagenActual) throws IOException, ServletException {

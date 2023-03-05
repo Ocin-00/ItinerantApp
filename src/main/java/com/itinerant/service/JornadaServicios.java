@@ -82,9 +82,11 @@ public class JornadaServicios {
 		String login = (String) request.getSession().getAttribute("userLogin");
 		List<Visita> listaVisitas = visitaDAO.listAllByLogin(login);
 		List<Visita> listaVisitasJornada = new ArrayList<>();
-		for(Visita visita: listaVisitas) {
-			if(dateformat.format(fecha).equals(dateformat.format(visita.getFecha()))) {
-				listaVisitasJornada.add(visita);
+		if(listaVisitas != null) {
+			for(Visita visita: listaVisitas) {
+				if(dateformat.format(fecha).equals(dateformat.format(visita.getFecha()))) {
+					listaVisitasJornada.add(visita);
+				}
 			}
 		}
 		request.setAttribute("visitas", listaVisitasJornada);
@@ -177,24 +179,26 @@ public class JornadaServicios {
 		List<Visita> listaVisitas = visitaDAO.listAllByLogin(login);
 		JSONArray jsArray = new JSONArray();
 		LocalidadServicios localidadServicios = new LocalidadServicios(entityManager, request, response);
-		for(Visita visita: listaVisitas) {
-			if(dateformat.format(fecha).equals(dateformat.format(visita.getFecha()))) {
-				//Esto es para usar el geocoder de nominatim
-				JSONObject jobj = new JSONObject();
-				jobj.put("codPostal", visita.getLocalidad().getCodigoPostal());
-				jobj.put("nombre", visita.getLocalidad().getNombre());
-				jobj.put("comarca", visita.getLocalidad().getComarca());
-				jobj.put("provincia", visita.getLocalidad().getProvincia());
-				jobj.toString();
-			    jsArray.put(jobj);
-				
-				/*	//Esto es para usar el geocoder de OpenRouteService
-				double[] coords = localidadServicios.getCoordenadas(visita.getLocalidad());
-				JSONObject jobj = new JSONObject();
-				jobj.put("lat", coords[1]);
-				jobj.put("lng", coords[0]);
-				jobj.toString();
-			    jsArray.put(jobj);*/
+		if(listaVisitas != null) {
+			for(Visita visita: listaVisitas) {
+				if(dateformat.format(fecha).equals(dateformat.format(visita.getFecha()))) {
+					//Esto es para usar el geocoder de nominatim
+					JSONObject jobj = new JSONObject();
+					jobj.put("codPostal", visita.getLocalidad().getCodigoPostal());
+					jobj.put("nombre", visita.getLocalidad().getNombre());
+					jobj.put("comarca", visita.getLocalidad().getComarca());
+					jobj.put("provincia", visita.getLocalidad().getProvincia());
+					jobj.toString();
+				    jsArray.put(jobj);
+					
+					/*	//Esto es para usar el geocoder de OpenRouteService
+					double[] coords = localidadServicios.getCoordenadas(visita.getLocalidad());
+					JSONObject jobj = new JSONObject();
+					jobj.put("lat", coords[1]);
+					jobj.put("lng", coords[0]);
+					jobj.toString();
+				    jsArray.put(jobj);*/
+				}
 			}
 		}
 		response.getWriter().write(jsArray.toString());

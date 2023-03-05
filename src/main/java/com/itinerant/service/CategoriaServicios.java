@@ -97,10 +97,13 @@ public class CategoriaServicios {
 		
 		String nombre = StringEscapeUtils.escapeHtml4( request.getParameter("nombre"));
 		Part part = request.getPart("imagenCategoria");
-		String imagenRuta = setImagen(part, categoria.getImagenRuta());
+		boolean imagenCambia = Boolean.parseBoolean(request.getParameter("imagenCambia"));
+		if(imagenCambia) {
+			String imagenRuta = setImagen(part, categoria.getImagenRuta());
+			categoria.setImagenRuta(imagenRuta);
+		}
 		String nombreMal = nombreMal(nombre);
 		
-		categoria.setImagenRuta(imagenRuta);
 		categoria.setNombre(nombre);
 		categoria.setNombreMal(nombreMal);
 		
@@ -156,8 +159,8 @@ public class CategoriaServicios {
 		return a;
 	}
 	
-	private String nombreMal(String nombre) {
-		return Normalizer.normalize(StringEscapeUtils.unescapeHtml4(nombre).replaceAll(" ", "").toLowerCase(), Normalizer.Form.NFC).replaceAll("[^\\p{ASCII}]", "");
+	public String nombreMal(String nombre) {
+		return org.apache.commons.lang3.StringUtils.stripAccents(Normalizer.normalize(StringEscapeUtils.unescapeHtml4(nombre).replaceAll(" ", "").toLowerCase(), Normalizer.Form.NFKC).replaceAll("\\p{M}", ""));
 	}
 
 	public void editarCategoria() throws ServletException, IOException {

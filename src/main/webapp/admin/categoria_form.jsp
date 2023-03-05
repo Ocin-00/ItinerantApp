@@ -62,6 +62,7 @@
 				</div>
 				
 				<div class="image-input"><input type="file" id="imagenCategoria" name="imagenCategoria"/></div>
+				<input type="hidden" value="false" id="imagenCambia" name="imagenCambia">
 			</form>
 	</div>
 	
@@ -83,6 +84,7 @@
 		});
 		
 		$("#imagenCategoria").change(function() {
+			$("#imagenCambia").val("true");
 			showImageThumbnail(this);
 		});
 

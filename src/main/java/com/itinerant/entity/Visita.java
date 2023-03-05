@@ -39,6 +39,12 @@ import javax.persistence.TemporalType;
 	 											+ "OR lower(v.profesional.nombre) LIKE '%' || :keyword || '%'"
 	 											+ "OR lower(v.profesional.apellidos) LIKE '%' || :keyword || '%'"
 	 											+ "OR lower(c.nombre) LIKE '%' || :keyword || '%'"
+	 											+ "OR lower(v.nombre) LIKE '%' || :keywordMal || '%'"
+	 											+ "OR lower(v.descripcion) LIKE '%' || :keywordMal || '%'"
+	 											+ "OR lower(v.localidad.nombre) LIKE '%' || :keywordMal || '%'"
+	 											+ "OR lower(v.profesional.nombre) LIKE '%' || :keywordMal || '%'"
+	 											+ "OR lower(v.profesional.apellidos) LIKE '%' || :keywordMal || '%'"
+	 											+ "OR lower(c.nombreMal) LIKE '%' || :keywordMal || '%'"
 	 											+ "ORDER BY v.fecha DESC, v.horaInicio DESC"),
 })
 @Table(name = "visita", catalog = "itinerant_db")

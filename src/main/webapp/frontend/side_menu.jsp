@@ -38,7 +38,7 @@
 		        	<a href="lista_supervisores">Supervisores</a>  
 		        </li>
 		        <li class="nav-menu-item">
-	         		<a href="lista_categorias">Categorias</a> 
+	         		<a href="lista_categorias">Categorías</a> 
 		        </li>
 		        <li class="nav-menu-item">
 		        	<a href="lista_sanciones">Sanciones</a> 

@@ -2,6 +2,7 @@ package com.itinerant.controller.frontend;
 
 import com.itinerant.controller.BaseServlet;
 import com.itinerant.enums.Rol;
+import com.itinerant.service.CategoriaServicios;
 import com.itinerant.service.ProfesionalServicios;
 import com.itinerant.service.UsuarioInternoServicios;
 import com.itinerant.service.VisitaServicios;
@@ -28,9 +29,11 @@ public class BuscarServlet extends BaseServlet {
 		
 		VisitaServicios visitaServicios = new VisitaServicios(entityManager, request, response);
 		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
+		CategoriaServicios categoriaServicios = new CategoriaServicios(entityManager, request, response);
 		String keywordOriginal = request.getParameter("keyword");
 		String keyword =StringEscapeUtils.escapeHtml4(keywordOriginal);
-		visitaServicios.buscar(keyword.toLowerCase());
+		String keywordMal = categoriaServicios.nombreMal(keyword);
+		visitaServicios.buscar(keyword.toLowerCase(), keywordMal);
 		profesionalServicios.buscar(keyword.toLowerCase());
 		
 		String homepage = "/frontend/busqueda_externa.jsp";

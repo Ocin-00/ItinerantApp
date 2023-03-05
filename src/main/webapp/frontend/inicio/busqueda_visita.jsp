@@ -132,7 +132,7 @@
 						</div>
 						<div>
 							<div>
-								<label for="direccion" class="form-label">Dirección: ${horaCita.hours}:${horaCita.minutes}</label>
+								<label for="direccion" class="form-label">Dirección:</label>
 							</div>
 								<input type="text" name="direccion" id="direccion" class="form-control border-dark-subtle">
 							<div>

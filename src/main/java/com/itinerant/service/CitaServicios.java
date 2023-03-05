@@ -142,9 +142,11 @@ public class CitaServicios {
 		Date ahora = new Date();
 		List<Cita> citasPendientes = new ArrayList<>();
 		
-		for(int i = 0; i < citas.size(); i++) {
-			if(ahora.before(citas.get(i).getHoraInicio())) {
-				citasPendientes.add(citas.get(i));
+		if(citas != null ) {
+			for(int i = 0; i < citas.size(); i++) {
+				if(ahora.before(citas.get(i).getHoraInicio())) {
+					citasPendientes.add(citas.get(i));
+				}
 			}
 		}
 		

@@ -180,7 +180,8 @@
 					&nbsp;&nbsp;
 					<button id="buttonCancel" type="button">Cancelar</button>				
 				</div>
-				<div class="image-input"><input type="file" id="imagenVisita" name="imagenVisita"/></div>
+				<div class="image-input"><input type="file" id="imagenVisita" name="imagenVisita" src="${visita.imagenRuta}"/></div>
+				<input type="hidden" value="false" id="imagenCambia" name="imagenCambia">
 			</form>
 	</div>
 	
@@ -251,6 +252,7 @@
 	      });
 		
 		$("#imagenVisita").change(function() {
+			$("#imagenCambia").val("true");
 			showImageThumbnail(this);
 		});
 

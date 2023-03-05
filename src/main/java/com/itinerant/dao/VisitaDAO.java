@@ -3,7 +3,9 @@ package com.itinerant.dao;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -57,11 +59,15 @@ public class VisitaDAO extends JpaDAO<Visita> implements GenericDAO<Visita> {
 		return super.countWithNamedQuery("Visita.countAll");
 	}
 	
-	public List<Visita> search(String keyword) {
-		List<Visita> visitas = super.findWithNamedQuery("Visita.search", "keyword", keyword);
+	public List<Visita> search(String keyword, String keywordMal) {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("keyword", keyword);
+		parameters.put("keywordMal", keywordMal);
+		
+		
+		List<Visita> visitas = super.findWithNamedQuery("Visita.search", parameters);
 		
 		if(visitas != null && visitas.size() > 0) {
-			//Collections.sort(visitas, Comparator.comparing(Visita::getHoraInicio).reversed());
 			return visitas;
 		}
 		

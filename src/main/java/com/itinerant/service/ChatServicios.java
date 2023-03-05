@@ -141,6 +141,9 @@ public class ChatServicios {
 			List<Chat> misChats = chats.get(login);
 			List<Chat> susChats = chats.get(idRecipient);
 			
+			if(misChats == null) {
+				misChats = new ArrayList<>();
+			}
 			misChats.add(chat);
 			if(susChats == null) {
 				susChats = new ArrayList<>();
