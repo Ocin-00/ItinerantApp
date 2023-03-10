@@ -32,8 +32,8 @@ public class BuscarServlet extends BaseServlet {
 		CategoriaServicios categoriaServicios = new CategoriaServicios(entityManager, request, response);
 		String keywordOriginal = request.getParameter("keyword");
 		String keyword =StringEscapeUtils.escapeHtml4(keywordOriginal);
-		String keywordMal = categoriaServicios.nombreMal(keyword);
-		visitaServicios.buscar(keyword.toLowerCase(), keywordMal);
+		//String keywordMal = categoriaServicios.nombreMal(keyword);
+		visitaServicios.buscar(keyword.toLowerCase());
 		profesionalServicios.buscar(keyword.toLowerCase());
 		
 		String homepage = "/frontend/busqueda_externa.jsp";

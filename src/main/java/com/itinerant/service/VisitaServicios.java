@@ -506,12 +506,12 @@ public class VisitaServicios {
 		}
 	}
 
-	public void buscar(String keyword, String keywordMal) {
+	public void buscar(String keyword) {
 		List<Visita> listaVisitas = null;
 		if(keyword.equals("")) {
 			listaVisitas = visitaDAO.searchAll();
 		} else {
-			listaVisitas = visitaDAO.search(keyword, keywordMal);
+			listaVisitas = visitaDAO.search(keyword);
 		}
 		request.setAttribute("listaVisitas", listaVisitas);
 	}

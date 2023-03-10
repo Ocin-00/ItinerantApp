@@ -56,8 +56,10 @@ import com.itinerant.enums.Sexo;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-import java.security.NoSuchAlgorithmException;  
+import java.math.BigInteger;  
+import java.nio.charset.StandardCharsets;  
 import java.security.MessageDigest;  
+import java.security.NoSuchAlgorithmException;   
 
 public class UsuarioInternoServicios {
 	
@@ -100,46 +102,43 @@ public class UsuarioInternoServicios {
 		return usuarioInternoDAO.get(login) != null;		
 	}
 	
-	 public String hashPassword(String password) {  
-	        /* Plain-text password initialization. */  
-		 	//String password = "myPassword";  
-	        String encryptedpassword = null;  
-	        try   
-	        {  
-	            /* MessageDigest instance for MD5. */  
-	            MessageDigest m = MessageDigest.getInstance("MD5");  
-	              
-	            /* Add plain-text password bytes to digest using MD5 update() method. */  
-	            m.update(password.getBytes());  
-	              
-	            /* Convert the hash value into bytes */   
-	            byte[] bytes = m.digest();  
-	              
-	            /* The bytes array has bytes in decimal form. Converting it into hexadecimal format. */  
-	            StringBuilder s = new StringBuilder();  
-	            for(int i=0; i< bytes.length ;i++)  
-	            {  
-	                s.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));  
-	            }  
-	              
-	            /* Complete hashed password in hexadecimal format */  
-	            encryptedpassword = s.toString();  
-	        }   
-	        catch (NoSuchAlgorithmException e)   
-	        {  
-	            e.printStackTrace();  
-	        }  
-	          
-	        /* Display the unencrypted and encrypted passwords. */  /*
-	        System.out.println("Plain-text password: " + password);  
-	        System.out.println("Encrypted password using MD5: " + encryptedpassword);  */
+	private byte[] getSHA(String input) throws NoSuchAlgorithmException  
+    {  
+        /* MessageDigest instance for hashing using SHA256 */  
+        MessageDigest md = MessageDigest.getInstance("SHA-256");  
+  
+        /* digest() method called to calculate message digest of an input and return array of byte */  
+        return md.digest(input.getBytes(StandardCharsets.UTF_8));  
+    }  
+      
+    private String toHexString(byte[] hash)  
+    {  
+        /* Convert byte array of hash into digest */  
+        BigInteger number = new BigInteger(1, hash);  
+  
+        /* Convert the digest into hex value */  
+        StringBuilder hexString = new StringBuilder(number.toString(16));  
+  
+        /* Pad with leading zeros */  
+        while (hexString.length() < 32)  
+        {  
+            hexString.insert(0, '0');  
+        }  
+  
+        return hexString.toString();  
+    }  
+	
+	
+	/*SHA-256 Hashing Technique*/
+	 public String hashPassword(String password) throws NoSuchAlgorithmException {  
+		 	String encryptedpassword  = toHexString(getSHA(password));  
 	        
 	        return encryptedpassword;
-	    }  
+	 }  
 	
 	public void removeSessionAttributes() {
 		HttpSession session = request.getSession();
-		String login = (String) session.getAttribute("userLogin");
+		//String login = (String) session.getAttribute("userLogin");
 		session.removeAttribute("userLogin");
 		session.removeAttribute("fotoPerfil");
 		session.removeAttribute("rol");
@@ -154,7 +153,7 @@ public class UsuarioInternoServicios {
 		
 	}
 	
-	public void login(String login, String password) throws ServletException, IOException {
+	public void login(String login, String password) throws ServletException, IOException, NoSuchAlgorithmException {
 		if(login == null || password == null) {
 			login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
 			password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
@@ -230,7 +229,7 @@ public class UsuarioInternoServicios {
 		}
 	}
 	
-	public void login() throws ServletException, IOException {
+	public void login() throws ServletException, IOException, NoSuchAlgorithmException {
 		login(null, null);
 	}
 
@@ -239,7 +238,7 @@ public class UsuarioInternoServicios {
 		return usuario.getRol();
 	}
 
-	public void register() throws ServletException, IOException {
+	public void register() throws ServletException, IOException, NoSuchAlgorithmException {
 		String nombre = StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));
 		String apellidos = StringEscapeUtils.escapeHtml4(request.getParameter("apellidos"));
 		String telefono = StringEscapeUtils.escapeHtml4(request.getParameter("telefono"));
@@ -568,7 +567,7 @@ public class UsuarioInternoServicios {
 	}
 	
 	
-	public  void changePassword() throws ServletException, IOException { 
+	public  void changePassword() throws ServletException, IOException, NoSuchAlgorithmException { 
 		String login = (String) request.getSession().getAttribute("userLogin");
 		//String rol = (String) request.getSession().getAttribute("rol");
 		UsuarioInterno usuario = usuarioInternoDAO.get(login);

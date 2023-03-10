@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -123,7 +124,7 @@
 			</c:if>
 			<c:if test="${noReviews == false}">
 				<div class="main-content-split-items">
-					<h3>Puntuación: </h3>
+					<h3>Puntuación:  <fmt:formatNumber type = "number" maxFractionDigits = "2" value = "${averageReview}"/>/5</h3>
 					<i data-star="${averageReview}" style="font-size: 90px;"></i>
 					<p>Media de <c:out value="${numReviews}"></c:out> reseñas</p>
 					<div>

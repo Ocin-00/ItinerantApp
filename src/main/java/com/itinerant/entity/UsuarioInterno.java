@@ -93,7 +93,7 @@ public class UsuarioInterno implements java.io.Serializable {
 		this.login = login;
 	}
 
-	@Column(name = "password", nullable = false, length = 50)
+	@Column(name = "password", nullable = false, length = 64)
 	public String getPassword() {
 		return this.password;
 	}

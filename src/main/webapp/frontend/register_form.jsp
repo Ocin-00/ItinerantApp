@@ -506,11 +506,11 @@
 			messages: {	
 				newPassword: {
 					required: "Por favor introduzca la contraseña.",
-					minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres.")
+					//minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres.")
 				},
 				confirmNewPassword: {
 					required: "Por favor repita la contraseña.",
-					minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres."),
+					//minlength: jQuery.validator.format("Se requieren por lo menos {0} caracteres."),
 					equalTo: "Los campos no coinciden."
 				},
 			},

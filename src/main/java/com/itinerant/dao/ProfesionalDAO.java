@@ -1,11 +1,19 @@
 package com.itinerant.dao;
 
+import java.text.Normalizer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.itinerant.entity.Profesional;
 import com.itinerant.entity.Visita;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 public class ProfesionalDAO extends JpaDAO<Profesional> implements GenericDAO<Profesional> {
 
@@ -63,12 +71,67 @@ public class ProfesionalDAO extends JpaDAO<Profesional> implements GenericDAO<Pr
 	}
 
 	public List<Profesional> search(String keyword) {
-		List<Profesional> profesionales = super.findWithNamedQuery("Profesional.search", "keyword", keyword);
+		
+		/*List<Profesional> profesionales = super.findWithNamedQuery("Profesional.search", "keyword", keyword);
 		
 		if(profesionales != null && profesionales.size() > 0) {
 			return profesionales;
 		}
 		
+		return null;*/
+		
+		String[] splitStr = keyword.split("\\s+");
+		
+		String queryText = "SELECT p FROM Profesional p ";
+		
+		boolean first = true;
+		boolean last = false;
+		Map<String, Object> parameters = new HashMap<>();
+		
+		if(splitStr != null) {
+			for(int i = 0; i < splitStr.length; i++) {
+				last = (i == (splitStr.length - 1));
+				if(!splitStr[i].isBlank()) {
+					parameters.put("param" + i, splitStr[i]);
+					String where = "";
+					//String mal = org.apache.commons.lang3.StringUtils.stripAccents(Normalizer.normalize(StringEscapeUtils.unescapeHtml4(splitStr[i]).replaceAll(" ", "").toLowerCase(), Normalizer.Form.NFKC).replaceAll("\\p{M}", ""));
+					//parameters.put(mal, mal);
+					if(first && last) {
+						first = false;
+						where += "WHERE (p.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR p.apellidos LIKE '%' || :" + "param" + i + " || '%')"
+								+ "AND p.validez is true ORDER BY p.apellidos";
+						
+					} else if (first && !last){
+						first = false;
+						where += "WHERE (p.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR p.apellidos LIKE '%' || :" + "param" + i + " || '%')";
+						
+					} else if(!first && last) {
+						where +="AND (p.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR p.apellidos LIKE '%' || :" + "param" + i + " || '%')"
+								+ "AND p.validez is true ORDER BY p.apellidos";
+					} else if(!first && !last) {
+						where += "AND (p.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR p.apellidos LIKE '%' || :" + "param" + i + " || '%')";
+					}
+					queryText += where;
+				}
+			}
+			System.out.println(queryText);
+			 Query query = entityManager.createQuery(queryText);
+			 
+			 Set<Entry<String, Object>> setParameters = parameters.entrySet();
+			 for (Entry<String, Object> entry : setParameters) {
+				query.setParameter(entry.getKey(), entry.getValue());
+			 }
+			 
+			 List<Profesional> profesionales =  query.getResultList();
+				
+			 if(profesionales != null && profesionales.size() > 0) {
+				return profesionales;
+			 }
+		}
 		return null;
 	}
 }
