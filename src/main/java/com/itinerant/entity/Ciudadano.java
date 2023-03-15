@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -30,6 +32,7 @@ import com.itinerant.enums.Rol;
 public class Ciudadano extends UsuarioInterno {
 
 	private String localizacion;
+	private Localidad localidad;
 	private boolean propuestoSancion;
 	private String sexo;
 	private String estadoCivil;
@@ -42,15 +45,16 @@ public class Ciudadano extends UsuarioInterno {
 	public Ciudadano() {
 	}
 
-	public Ciudadano(String login, String password, String email, String nombre, 
-			String apellidos, Date fechaNac, String localizacion, boolean propuestoSancion) {
+	public Ciudadano(String login, String password, String email, String nombre,
+			String apellidos, Date fechaNac, String localizacion, boolean propuestoSancion, Localidad localidad) {
 		super(login, password, email, nombre, apellidos, Rol.CIUDADANO.toString(), fechaNac);
 		this.localizacion = localizacion;
 		this.propuestoSancion = propuestoSancion;
+		this.localidad = localidad;
 	}
 
-	public Ciudadano(String login, String password, String email, String nombre, 
-			String apellidos, Date fechaNac,String localizacion, boolean propuestoSancion, String sexo,
+	public Ciudadano(String login, String password, String email, String nombre,
+			String apellidos, Date fechaNac,String localizacion, boolean propuestoSancion, Localidad localidad, String sexo,
 			String estadoCivil, String formacion, String telefono, String imagenRuta, Date finSancion, 
 			Set<Cita> citas, Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
 			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender) {
@@ -64,8 +68,19 @@ public class Ciudadano extends UsuarioInterno {
 		this.telefono = telefono;
 		this.finSancion = finSancion;
 		this.citas = citas;
+		this.localidad = localidad;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "localidad", nullable = false)
+	public Localidad getLocalidad() {
+		return this.localidad;
+	}
+
+	public void setLocalidad(Localidad localidad) {
+		this.localidad = localidad;
+	}
+	
 	@Column(name = "localizacion", nullable = false, length = 100)
 	public String getLocalizacion() {
 		return this.localizacion;

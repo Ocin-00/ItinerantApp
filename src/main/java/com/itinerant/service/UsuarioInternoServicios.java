@@ -256,7 +256,12 @@ public class UsuarioInternoServicios {
 		
 		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
 		Localidad municipio = localidadDAO.get(codPostal);
-		String localizacion = direccion + " " + municipio.getNombre();
+		String localizacion = direccion;
+		if(!direccion.contains(municipio.getNombre())) {
+			localizacion += " " + municipio.getNombre();
+		}
+		
+		
 		
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");	
 		Date fechaNac = null;
@@ -277,7 +282,7 @@ public class UsuarioInternoServicios {
 			request.setAttribute("message", message);
 			registerView();
 		} else if(rol.equals(Rol.PROFESIONAL.toString())) {
-			Profesional profesional = new Profesional(login, encpass, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, false, fechaRegistro);
+			Profesional profesional = new Profesional(login, encpass, email, nombre, apellidos, fechaNac, localizacion, formacion, telefono, false, fechaRegistro, municipio);
 			profesional.setEstadoCivil(estadoCivil);
 			profesional.setSexo(sexo);
 			profesional.setImagenRuta(DEFAULT_IMAGE);
@@ -297,7 +302,7 @@ public class UsuarioInternoServicios {
 				alertaDAO.create(alerta);
 			}
 		} else {
-			Ciudadano ciudadano = new Ciudadano(login, encpass, email, nombre, apellidos, fechaNac, localizacion, false);
+			Ciudadano ciudadano = new Ciudadano(login, encpass, email, nombre, apellidos, fechaNac, localizacion, false, municipio);
 			ciudadano.setTelefono(telefono);
 			ciudadano.setEstadoCivil(estadoCivil);
 			ciudadano.setFormacion(formacion);
@@ -307,10 +312,6 @@ public class UsuarioInternoServicios {
 			ciudadanoDAO.create(ciudadano);
 		}
 		login(login, password);
-	}
-
-	private Administrador elegirAdmin() {
-		return null;
 	}
 	
 	private void inicializarUsuarioForm() {
@@ -437,8 +438,8 @@ public class UsuarioInternoServicios {
 		String nombre = StringEscapeUtils.escapeHtml4(request.getParameter("nombre"));
 		String apellidos = StringEscapeUtils.escapeHtml4(request.getParameter("apellidos"));
 		String telefono = StringEscapeUtils.escapeHtml4(request.getParameter("telefono"));
-		String localizacion = StringEscapeUtils.escapeHtml4(request.getParameter("direccion"));
-		//int codPostal = Integer.parseInt(request.getParameter("codPostal"));
+		String direccion = StringEscapeUtils.escapeHtml4(request.getParameter("direccion"));
+		
 		String fechaNacTexto = request.getParameter("fechaNac");
 		String email = StringEscapeUtils.escapeHtml4(request.getParameter("email"));
 		String login = StringEscapeUtils.escapeHtml4(request.getParameter("login"));
@@ -446,9 +447,9 @@ public class UsuarioInternoServicios {
 		boolean imagenCambia = Boolean.parseBoolean(request.getParameter("imagenCambia"));
 		Part part = request.getPart("imagenPerfil");
 		
-		
+		int codPostal = Integer.parseInt(request.getParameter("codPostal"));
 		LocalidadDAO localidadDAO = new LocalidadDAO(entityManager);
-		//Localidad municipio = localidadDAO.get(codPostal);
+		Localidad municipio = localidadDAO.get(codPostal);
 		//String localizacion = direccion;
 		
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");	
@@ -477,8 +478,12 @@ public class UsuarioInternoServicios {
 				String imagenRuta = setImagen(part, profesional.getImagenRuta());
 				profesional.setImagenRuta(imagenRuta);
 			}
-			
+			String localizacion = direccion;
+			if(!direccion.contains(municipio.getNombre())) {
+				localizacion += " " + municipio.getNombre();
+			}
 			profesional.setLocalizacion(localizacion);
+			profesional.setLocalidad(municipio);
 			profesional.setNombre(nombre);
 			profesional.setRol(rol);
 			profesional.setSexo(sexo);
@@ -516,7 +521,12 @@ public class UsuarioInternoServicios {
 				String imagenRuta = setImagen(part, ciudadano.getImagenRuta());
 				ciudadano.setImagenRuta(imagenRuta);
 			}
+			String localizacion = direccion;
+			if(!direccion.contains(municipio.getNombre())) {
+				localizacion += " " + municipio.getNombre();
+			}
 			ciudadano.setLocalizacion(localizacion);
+			ciudadano.setLocalidad(municipio);
 			ciudadano.setNombre(nombre);
 			ciudadano.setRol(rol);
 			ciudadano.setSexo(sexo);

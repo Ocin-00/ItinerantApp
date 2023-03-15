@@ -18,7 +18,10 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 	 @NamedQuery(name = "Localidad.findAll", query = "SELECT l FROM Localidad l ORDER BY l.nombre"),
-	 @NamedQuery(name = "Localidad.countAll", query = "SELECT count(*) FROM Localidad l")
+	 @NamedQuery(name = "Localidad.countAll", query = "SELECT count(*) FROM Localidad l"),
+	 @NamedQuery(name = "Localidad.findMancomunidades", query = "SELECT DISTINCT l.mancomunidad FROM Localidad l where l.mancomunidad is not null ORDER BY l.mancomunidad"),
+	 @NamedQuery(name = "Localidad.findLocalidadesByMancomunidad", query = "SELECT l FROM Localidad l WHERE l.mancomunidad = :mancomunidad ORDER BY l.nombre"),
+	 @NamedQuery(name = "Localidad.findByName", query = "SELECT l FROM Localidad l WHERE l.nombre = :nombre"),
 })
 @Table(name = "localidad", catalog = "itinerant_db")
 public class Localidad implements java.io.Serializable {

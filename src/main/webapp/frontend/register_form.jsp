@@ -87,7 +87,7 @@
 							<td><input type="tel" name="telefono" id="telefono" class="form-control border-dark-subtle"/></td>
 						</c:if>
 					</tr>
-					<c:if test="${rol != 'ADMINISTRADOR' || 'SUPERVISOR'}">	
+					<c:if test="${rol != 'ADMINISTRADOR' && rol != 'SUPERVISOR'}">	
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
@@ -104,15 +104,23 @@
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
-					<c:if test="${usuario == null}">
+					<c:if test="${rol != 'ADMINISTRADOR' || rol != 'SUPERVISOR'}">
 					<tr>
 						<td align="right"><label for="codPostal" class="form-label">Municipio:</label> </td>
 						<td>
 							<select name="codPostal" id="codPostal" class="selectpicker myselect" data-live-search="true" >
 								<c:forEach items="${listaLocalidades}" var="localidad">
-									<option value="${localidad.codigoPostal}">
-										${localidad.nombre}
-									</option>
+									<c:if test="${localidad.codigoPostal == usuario.localidad.codigoPostal}">
+										<option value="${localidad.codigoPostal}" selected="selected">
+											${localidad.nombre}
+										</option>
+									</c:if>
+									<c:if test="${localidad.codigoPostal != usuario.localidad.codigoPostal}">
+										<option value="${localidad.codigoPostal}">
+											${localidad.nombre}
+										</option>
+									</c:if>
+									
 								</c:forEach>
 							</select> 
 						</td>
@@ -123,20 +131,22 @@
 					</c:if>	
 					</c:if>	
 					
-					<c:if test="${rol == 'ADMINISTRADOR' || 'SUPERVISOR'}">	
+					<c:if test="${rol == 'ADMINISTRADOR' || rol == 'SUPERVISOR'}">	
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
 						<td align="right"><label for="organismoCoordinador" class="form-label">Organismo coordinador:</label></td>
-						<td><input type="text" name="organismoCoordinador" id="organismoCoordinador" value="${usuario.organismoCoordinador}" class="form-control border-dark-subtle" maxlength="70"/></td>
+						<td><input type="text" name="organismoCoordinador" id="organismoCoordinadorhidden " value="${usuario.organismoCoordinador}" class="form-control border-dark-subtle" maxlength="70" disabled="disabled"/>
+							<input type="hidden" name="organismoCoordinador" id="organismoCoordinador" value="${usuario.organismoCoordinador}" class="form-control border-dark-subtle" maxlength="70"  /></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
 						<td align="right"><label for="nss" class="form-label">Número de la seguridad social:</label> </td>
-						<td><input type="text" name="nss" id="nss" value="${usuario.nss}" class="form-control border-dark-subtle" maxlength="15"/></td>
+						<td><input type="text" name="nss" id="nsshidden" value="${usuario.nss}" class="form-control border-dark-subtle" maxlength="15" disabled="disabled"/>
+						<input type="hidden" name="nss" id="nss" value="${usuario.nss}" class="form-control border-dark-subtle" maxlength="15"/></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
@@ -243,7 +253,7 @@
 				</c:if>
 			</div>
 			
-			<c:if test="${rol != 'ADMINISTRADOR' || 'SUPERVISOR'}">	
+			<c:if test="${rol != 'ADMINISTRADOR' && rol != 'SUPERVISOR'}">	
 			<div class="main-centered-register-items">
 				<h2>Ayúdanos a conocerte mejor:</h2>
 				<table>

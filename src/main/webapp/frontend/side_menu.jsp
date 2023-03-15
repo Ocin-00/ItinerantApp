@@ -22,7 +22,7 @@
 				 <h3>Tus citas</h3>
 			</c:if>
 			<c:if test="${sessionScope.rol == 'SUPERVISOR'}">
-				 <h3>Bootstrap Sidebar</h3>
+				 <h3>Estadísticas</h3>
 			</c:if>
         </div>
 
@@ -68,10 +68,13 @@
 			</c:if>
 			<c:if test="${sessionScope.rol == 'SUPERVISOR'}">
 				<li class="nav-menu-item">
-	         		<a href="citas_pendientes">Citas pendientes</a> 
+	         		<a href="estadisticas_generales">Generales</a> 
 		        </li>
 		        <li class="nav-menu-item">
-		        	<a href="historial_citas">Historial de citas</a>  
+		        	<a href="estadisticas_mancomunales">Mancomunales</a>  
+		        </li>
+		        <li class="nav-menu-item">
+		        	<a href="estadisticas_municipales">Municipales</a>  
 		        </li>
 			</c:if>
         </ul>

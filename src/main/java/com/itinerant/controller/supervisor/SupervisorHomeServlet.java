@@ -1,4 +1,4 @@
-package com.itinerant.controller.admin;
+package com.itinerant.controller.supervisor;
 
 import java.io.IOException;
 
@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class SupervisorHomeServlet
  */
-@WebServlet("/admin/")
-public class AdminHomeServlet extends HttpServlet {
+@WebServlet("/supervisor/")
+public class SupervisorHomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public AdminHomeServlet() {
+    public SupervisorHomeServlet() {
         super();
     }
 

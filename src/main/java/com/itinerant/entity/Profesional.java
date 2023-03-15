@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -34,6 +36,7 @@ import com.itinerant.enums.Rol;
 public class Profesional extends UsuarioInterno {
 
 	private String localizacion;
+	private Localidad localidad;
 	private String formacion;
 	private String telefono;
 	private String sexo;
@@ -49,19 +52,21 @@ public class Profesional extends UsuarioInterno {
 	}
 
 	public Profesional(String login, String password, String email, String nombre, String apellidos, Date fechaNac,
-			String localizacion, String formacion, String telefono, boolean validez, Date fechaRegistro) {
+			String localizacion, String formacion, String telefono, boolean validez, Date fechaRegistro, Localidad localidad) {
 		super(login, password, email, nombre, apellidos, Rol.PROFESIONAL.toString(), fechaNac);
 		this.localizacion = localizacion;
 		this.formacion = formacion;
 		this.telefono = telefono;
 		this.validez = validez;
 		this.fechaRegistro = fechaRegistro;
+		this.localidad = localidad;
 	}
 
 	public Profesional(String login, String password, String email, String nombre, String apellidos, Date fechaNac,
 			String localizacion, String formacion, String telefono, String sexo, String estadoCivil, String descripcion,
-			boolean validez, Date fechaRegistro, String imagenRuta, Set<Visita> visitas, Set<Certificado> certificados,Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas,
-			  Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, Set<ChatMensaje> chatMensajesForIdSender, Set<Serie> series) {
+			boolean validez, Date fechaRegistro, Localidad localidad, String imagenRuta, Set<Visita> visitas, Set<Certificado> certificados,
+			Set<ChatMensaje> chatMensajesForIdRecipient, Set<Alerta> alertas, Set<Chat> chatsForIdRecipient, Set<Chat> chatsForIdSender, 
+			Set<ChatMensaje> chatMensajesForIdSender, Set<Serie> series) {
 		super(login, password, email, nombre, apellidos, Rol.PROFESIONAL.toString(), fechaNac, imagenRuta, chatMensajesForIdRecipient, alertas, 
 				chatsForIdRecipient, chatsForIdSender, chatMensajesForIdSender);
 		this.localizacion = localizacion;
@@ -75,6 +80,17 @@ public class Profesional extends UsuarioInterno {
 		this.visitas = visitas;
 		this.certificados = certificados;
 		this.series = series;
+		this.localidad = localidad;
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "localidad", nullable = false)
+	public Localidad getLocalidad() {
+		return this.localidad;
+	}
+
+	public void setLocalidad(Localidad localidad) {
+		this.localidad = localidad;
 	}
 
 	@Column(name = "localizacion", nullable = false, length = 100)

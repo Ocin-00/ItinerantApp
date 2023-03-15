@@ -99,6 +99,9 @@
 					<tr>
 						<td>${visita.descripcion}</td>
 					</tr>
+					<tr>
+						<td>Profesional: ${visita.profesional.nombre} ${visita.profesional.apellidos}</td>
+					</tr>
 				</table>
 			</div>
 			<c:if test="${esCiudadano == true}">

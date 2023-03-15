@@ -66,24 +66,6 @@ public class VisitaDAO extends JpaDAO<Visita> implements GenericDAO<Visita> {
 	}
 	
 	public List<Visita> search(String keyword) {
-		/*
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("keyword", keyword);
-		parameters.put("keywordMal", keywordMal);
-		
-		
-		List<Visita> visitas = super.findWithNamedQuery("Visita.search", parameters);
-		
-		if(visitas != null && visitas.size() > 0) {
-			return visitas;
-		}
-		
-		return null;*/
-		
-		/*String cust_name = (String)entityManager.createQuery("SELECT c.cust_name FROM Customer c WHERE c.cust_id=:cust_id")
-				 .setParameter("cust_id", null)
-				 .getSingleResult(); */
-		
 		String[] splitStr = keyword.split("\\s+");
 		
 		String queryText = "SELECT DISTINCT v FROM Visita v JOIN v.categorias c ";

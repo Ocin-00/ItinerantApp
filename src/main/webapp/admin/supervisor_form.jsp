@@ -139,29 +139,29 @@
 					<tr >
 						<td  class="form-check m-2">
 							<div>
-							<c:if test="${supervisor.nivelAcceso == 'General'}">
-								<input type="radio" id="general" name="nivelAcceso" value="General" checked="checked" class="form-check-input border-dark-subtle ">
+							<c:if test="${supervisor.nivelAcceso == 'GENERAL'}">
+								<input type="radio" id="general" name="nivelAcceso" value="GENERAL" checked="checked" class="form-check-input border-dark-subtle ">
 							</c:if>
-							<c:if test="${supervisor.nivelAcceso != 'General'}">
-								<input type="radio" id="general" name="nivelAcceso" value="General" class="form-check-input border-dark-subtle ">
+							<c:if test="${supervisor.nivelAcceso != 'GENERAL'}">
+								<input type="radio" id="general" name="nivelAcceso" value="GENERAL" class="form-check-input border-dark-subtle ">
 							</c:if>
 							<label for="general">General</label>
 							</div>
 							<div>
-							<c:if test="${supervisor.nivelAcceso == 'Mancomunal'}">
-								<input type="radio" id="mancomunal" name="nivelAcceso" value="Mancomunal" checked="checked" class="form-check-input border-dark-subtle ">
+							<c:if test="${supervisor.nivelAcceso == 'MANCOMUNAL'}">
+								<input type="radio" id="mancomunal" name="nivelAcceso" value="MANCOMUNAL" checked="checked" class="form-check-input border-dark-subtle ">
 							</c:if>
-							<c:if test="${supervisor.nivelAcceso != 'Mancomunal'}">
-								<input type="radio" id="mancomunal" name="nivelAcceso" value="Mancomunal" class="form-check-input border-dark-subtle "> 
+							<c:if test="${supervisor.nivelAcceso != 'MANCOMUNAL'}">
+								<input type="radio" id="mancomunal" name="nivelAcceso" value="MANCOMUNAL" class="form-check-input border-dark-subtle "> 
 							</c:if> 
 							<label for="mancomunal">Mancomunal</label>
 							</div>
 							<div>
-							<c:if test="${supervisor.nivelAcceso == 'Municipal'}">
-								<input type="radio" id="municipal" name="nivelAcceso" value="Municipal" checked="checked" class="form-check-input border-dark-subtle ">
+							<c:if test="${supervisor.nivelAcceso == 'MUNICIPAL'}">
+								<input type="radio" id="municipal" name="nivelAcceso" value="MUNICIPAL" checked="checked" class="form-check-input border-dark-subtle ">
 							</c:if>
-							<c:if test="${supervisor.nivelAcceso != 'Municipal'}">
-								<input type="radio" id="municipal" name="nivelAcceso" value="Municipal" class="form-check-input border-dark-subtle "> 
+							<c:if test="${supervisor.nivelAcceso != 'MUNICIPAL'}">
+								<input type="radio" id="municipal" name="nivelAcceso" value="MUNICIPAL" class="form-check-input border-dark-subtle "> 
 							</c:if> 
 							<label for="municipal">Municipal</label>
 							</div>
