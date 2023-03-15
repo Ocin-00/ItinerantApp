@@ -17,7 +17,47 @@
 			var lugar = $("#lugar").val();
 			initCharts(ambito, lugar, tipo);
 		});
+		
+		$('#exportarPerfil').click(function() {
+			var tipo = $( 'input[name="tipo"]:checked' ).val();
+			var ambito = $("#ambito").val();
+			var lugar = $("#lugar").val();
+			exportData(ambito, lugar, tipo, 0);
+		});
+		$('#exportarTrafico').click(function() {
+			var tipo = $( 'input[name="tipo"]:checked' ).val();
+			var ambito = $("#ambito").val();
+			var lugar = $("#lugar").val();
+			exportData(ambito, lugar, tipo, 1);
+		});
 	});
+
+function exportData(ambito, lugar, tipo, data) {
+	$.ajax({
+				type:"GET",
+				data:  { ambito:ambito, id:lugar, tipo:tipo, data:data},
+				//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				url:'exportar_datos',	
+				xhrFields:{
+            	responseType: 'blob'
+		        },
+		        success: function(data){
+		            var anchor = document.createElement('a');
+		            var url = window.URL || window.webkitURL;
+		            anchor.href = url.createObjectURL(data);
+		            anchor.download = 'export.zip';
+		            document.body.append(anchor);
+		            anchor.click();
+		            setTimeout(function(){  
+		                document.body.removeChild(anchor);
+		                url.revokeObjectURL(anchor.href);
+		            }, 1);
+		        },
+				error: function(result){
+					alert("error con los datos");
+				}
+			});
+}
 	
 function initCharts(ambito, lugar, tipo) {
 	$.ajax({

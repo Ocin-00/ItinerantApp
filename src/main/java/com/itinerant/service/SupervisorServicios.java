@@ -1,8 +1,19 @@
 package com.itinerant.service;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -12,15 +23,20 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder.Case;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.HttpHeaders;
 
 import com.itinerant.dao.AdministradorDAO;
 import com.itinerant.dao.AlertaDAO;
@@ -39,7 +55,9 @@ import com.itinerant.entity.Visita;
 import com.itinerant.enums.EstadoCivil;
 import com.itinerant.enums.NivelAcceso;
 import com.itinerant.enums.Sexo;
+import com.opencsv.CSVWriter;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -292,7 +310,7 @@ public class SupervisorServicios {
 			    int edadMinima = Integer.parseInt(rangoEdad[0]);
 			    int edadMaxima = Integer.parseInt(rangoEdad[1]);
 			    for (long edad : edades) {
-			        if (edad >= edadMinima && edad <= edadMaxima) {
+			        if (edad > edadMinima && edad <= edadMaxima) {
 			            frecuencias[i]++;
 			        }
 			    }
@@ -328,7 +346,7 @@ public class SupervisorServicios {
 			
 			JSONArray localidadesJSON = new JSONArray();
 			for (int i = 0; i < todasLocalidades.size(); i++) {
-				if(frecuencias != null) {
+				if(frecuencias != null && frecuenciasLocalidades[i] > 0) {
 					JSONObject jobj = new JSONObject();
 					jobj.put("y", frecuenciasLocalidades[i]);
 					jobj.put("label",URLEncoder.encode(StringEscapeUtils.unescapeHtml4(todasLocalidades.get(i).getNombre()), "UTF-8"));
@@ -413,6 +431,168 @@ public class SupervisorServicios {
 		
 		response.sendRedirect("../supervisor");
 	}
-
 	
+	public static void createZipFile(Map<String, List<List<String>>> csvData, String zipFileName) throws IOException {
+	    FileOutputStream fos = new FileOutputStream(zipFileName);
+	    ZipOutputStream zipOut = new ZipOutputStream(fos);
+
+	    for (String csvFileName : csvData.keySet()) {
+	        List<List<String>> csvRows = csvData.get(csvFileName);
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        writeCSVToStream(csvRows, baos);
+	        ZipEntry zipEntry = new ZipEntry(csvFileName);
+	        zipOut.putNextEntry(zipEntry);
+	        zipOut.write(baos.toByteArray());
+	        zipOut.closeEntry();
+	    }
+
+	    zipOut.close();
+	    fos.close();
+	}
+
+	public static void writeCSVToStream(List<List<String>> data, OutputStream outputStream) throws IOException {
+	    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+	    for (List<String> rowData : data) {
+	        writer.write(String.join(",", rowData));
+	        writer.newLine();
+	    }
+	    writer.flush();
+	}
+	
+	
+	public void exportData() throws IOException {
+	    String ambito = request.getParameter("ambito");
+		String lugar = request.getParameter("id");
+	    int tipoDatos = Integer.parseInt(request.getParameter("data"));	//0 es perfiles y 1 tráfico
+	    Map<String, List<List<String>>> csvData = new HashMap<>();
+	    
+	    if(tipoDatos == 0) { //PERFILES
+	    	int tipoUsuarios = Integer.parseInt(request.getParameter("tipo"));
+	    	Map<String, Long> genero = usuarioInternoDAO.getGenderStatistics(ambito, lugar, tipoUsuarios);
+	    	List<List<String>> datosGenero = new ArrayList<>();
+	    	List<String> header = new ArrayList<>();
+	    	header.add("Nombre");
+	    	header.add("Frecuencia");
+	    	datosGenero.add(header);
+	    	for(Map.Entry<String, Long> entry : genero.entrySet()) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.getKey());
+	    		row.add( entry.getValue().toString());
+	    		datosGenero.add(row);
+	    	}
+	    	Map<String, Long> estadoCivil = usuarioInternoDAO.getMaritalStatusStatistics(ambito, lugar, tipoUsuarios);
+	    	List<List<String>> datosEC = new ArrayList<>();
+	    	datosEC.add(header);
+	    	for(Map.Entry<String, Long> entry : estadoCivil.entrySet()) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.getKey());
+	    		row.add( entry.getValue().toString());
+	    		datosEC.add(row);
+	    	}
+	    	Map<String, Long> roles = usuarioInternoDAO.getRoleStatistics(ambito, lugar, tipoUsuarios);
+	    	List<List<String>> datosRoles = new ArrayList<>();
+	    	datosRoles.add(header);
+	    	for(Map.Entry<String, Long> entry : roles.entrySet()) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.getKey());
+	    		row.add( entry.getValue().toString());
+	    		datosRoles.add(row);
+	    	}
+	    	
+	    	List<Long> edades = usuarioInternoDAO.getAgeStatistics(ambito, lugar, tipoUsuarios);
+	    	List<List<String>> datosEdades = new ArrayList<>();
+	    	List<String> headerEdad = new ArrayList<>();
+	    	headerEdad.add("Edades");
+	    	datosEdades.add(headerEdad);
+	    	for(Long entry : edades) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.toString());
+	    		datosEdades.add(row);
+	    	}
+	    	
+	    	List<Localidad> localidades = usuarioInternoDAO.getLocationStatistics(ambito, lugar, tipoUsuarios);
+	    	List<List<String>> datosLocalidades = new ArrayList<>();
+	    	List<String> headerLocalidad = new ArrayList<>();
+	    	headerLocalidad.add("Nombre");
+	    	headerLocalidad.add("Mancomunidad");
+	    	headerLocalidad.add("Comarca");
+	    	headerLocalidad.add("CodPostal");
+	    	datosLocalidades.add(headerLocalidad);
+	    	for(Localidad entry : localidades) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.getNombre());
+	    		row.add(entry.getMancomunidad());
+	    		row.add(entry.getComarca());
+	    		row.add(Integer.toString(entry.getCodigoPostal()));
+	    		datosLocalidades.add(row);
+	    	}	
+	    	
+	        csvData.put("genero.csv",datosGenero);
+	        csvData.put("estadoCivil.csv",datosEC );
+	        csvData.put("roles.csv",datosRoles );
+	        csvData.put("edades.csv",datosEdades );
+	        csvData.put("localidades.csv",datosLocalidades );
+	
+	    } else {//TRAFICO
+	    	
+	    	Map<Categoria, Long> categoriasOferta = categoriaDAO.StatisticsSupply(ambito, lugar);
+	    	List<List<String>> datosOferta = new ArrayList<>();
+	    	List<String> header = new ArrayList<>();
+	    	header.add("Nombre");
+	    	header.add("Frecuencia");
+	    	datosOferta.add(header);
+	    	for(Map.Entry<Categoria, Long> entry : categoriasOferta.entrySet()) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.getKey().getNombre());
+	    		row.add(entry.getValue().toString());
+	    		datosOferta.add(row);
+	    	}
+	    	
+	    	Map<Categoria, Long> categoriasDemanda = categoriaDAO.StatisticsDemand(ambito, lugar);
+	    	List<List<String>> datosDemanda = new ArrayList<>();
+	    	datosDemanda.add(header);
+	    	for(Map.Entry<Categoria, Long> entry : categoriasDemanda.entrySet()) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.getKey().getNombre());
+	    		row.add(entry.getValue().toString());
+	    		datosDemanda.add(row);
+	    	}
+	    	
+	    	Map<Localidad, Long> localidadCitas = localidadDAO.StatisticsCitas(ambito, lugar);
+	    	List<List<String>> datosLocalidades = new ArrayList<>();
+	    	List<String> headerLocalidades = new ArrayList<>();
+	    	headerLocalidades.add("Nombre");
+	    	headerLocalidades.add("Mancomunidad");
+	    	headerLocalidades.add("Comarca");
+	    	headerLocalidades.add("CodPostal");
+	    	headerLocalidades.add("Frecuencia");
+	    	datosLocalidades.add(headerLocalidades);
+	    	for(Map.Entry<Localidad, Long> entry : localidadCitas.entrySet()) {
+	    		List<String> row = new ArrayList<>();
+	    		row.add(entry.getKey().getNombre());
+	    		row.add(entry.getKey().getMancomunidad());
+	    		row.add(entry.getKey().getComarca());
+	    		row.add(Integer.toString(entry.getKey().getCodigoPostal()));
+	    		row.add(entry.getValue().toString());
+	    		datosLocalidades.add(row);
+	    	}
+	    	
+	    	
+	        csvData.put("oferta.csv", datosOferta);
+	        csvData.put("demanda.csv", datosDemanda);
+	        csvData.put("localidadesCitas.csv", datosLocalidades);
+
+	        
+	    }	 
+	    
+	    String zipFileName = "export.zip";
+        createZipFile(csvData, zipFileName);
+
+        response.setContentType("application/zip");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + zipFileName + "\"");
+
+        InputStream inputStream = new FileInputStream(new File(zipFileName));
+        IOUtils.copy(inputStream, response.getOutputStream());
+        response.flushBuffer();
+	}	
 }

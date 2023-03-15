@@ -89,6 +89,9 @@
 					<div id="chartEdad" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 					<div id="chartLocalidad" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 				</div>
+				<div class="d-flex justify-content-end mb-5">
+					<button id="exportarPerfil" class="btn btn-secondary">Exportar</button>
+				</div>
 				<div class="mb-5">
 					<h3 class="mb-2">Tráfico de información: </h3>
 				</div>
@@ -96,6 +99,9 @@
 					<div id="chartOferta" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 					<div id="chartDemanda" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 					<div id="chartCitas" class="mb-5" style="min-height: 370px; width: 100%;"></div>
+				</div>
+				<div class="d-flex justify-content-end">
+					<button  id="exportarTrafico" class="btn btn-secondary">Exportar</button>
 				</div>
 			</c:if>
 			<input type="hidden" id="ambito" value="MANCOMUNAL">

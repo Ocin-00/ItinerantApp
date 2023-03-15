@@ -58,6 +58,9 @@
 					<div id="chartEdad" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 					<div id="chartLocalidad" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 				</div>
+				<div class="d-flex justify-content-end mb-5">
+					<button id="exportarPerfil" class="btn btn-secondary">Exportar</button>
+				</div>
 				<div class="mb-5">
 					<h3 class="mb-2">Tráfico de información: </h3>
 				</div>
@@ -66,7 +69,9 @@
 					<div id="chartDemanda" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 					<div id="chartCitas" class="mb-5" style="min-height: 370px; width: 100%;"></div>
 				</div>
-			
+				<div class="d-flex justify-content-end">
+					<button  id="exportarTrafico" class="btn btn-secondary">Exportar</button>
+				</div>
 			<input type="hidden" id="ambito" value="GENERAL">
 			<input type="hidden" id="lugar" value="">
 			<input type="hidden" id="tieneAcceso" value="true">
@@ -82,117 +87,6 @@
 				window.location = "pedir_permisos?id=GENERAL";
 			}
 		});
-
-// 		$.ajax({
-// 			type:"POST",
-// 			data:  { ambito:'GENERAL' },
-// 			url:'get_datos',	
-// 			success: function(result){
-// 				let datos = JSON.parse(result);
-// 				let datosGenero = datos[0];
-// 				let datosEstadoCivil = datos[1];
-// 				let datosRoles = datos[2];
-// 				let datosEdades = datos[3];
-// 				//alert(datosRoles);
-// 				var optionsGender = {
-// 						title: {
-// 							text: "Género"
-// 						},
-// 						subtitles: [{
-// 							text: ""
-// 						}],
-// 						/*legend:{
-// 							horizontalAlign: "right",
-// 							verticalAlign: "center"
-// 						},*/
-// 						animationEnabled: true,
-// 						data: [{
-// 							type: "pie",
-// 							//startAngle: 40,
-// 							toolTipContent: "<b>{label}</b>: {y} (#percent%)",
-// 							showInLegend: "true",
-// 							legendText: "{label}",
-// 							indexLabelFontSize: 16,
-// 							indexLabel: "{label}",
-// 							indexLabelPlacement: "inside",
-// 							dataPoints: datosGenero
-// 						}]
-// 				};
-// 				$("#chartGender").CanvasJSChart(optionsGender);
-
-// 				var optionsEstadoCivil = {
-// 						title: {
-// 							text: "Estado civil"
-// 						},
-// 						subtitles: [{
-// 							text: ""
-// 						}],
-// 						/*legend:{
-// 							horizontalAlign: "right",
-// 							verticalAlign: "center"
-// 						},*/
-// 						animationEnabled: true,
-// 						data: [{
-// 							type: "pie",
-// 							//startAngle: 40,
-// 							toolTipContent: "<b>{label}</b>: {y} (#percent%)",
-// 							showInLegend: "true",
-// 							legendText: "{label}",
-// 							indexLabelFontSize: 16,
-// 							indexLabel: "{label}",
-// 							indexLabelPlacement: "inside",
-// 							dataPoints: datosEstadoCivil
-// 						}]
-// 				};
-// 				$("#chartEstadoCivil").CanvasJSChart(optionsEstadoCivil);
-
-// 				var optionsRoles = {
-// 						title: {
-// 							text: "Rol"
-// 						},
-// 						subtitles: [{
-// 							text: ""
-// 						}],
-// 						/*legend:{
-// 							horizontalAlign: "right",
-// 							verticalAlign: "center"
-// 						},*/
-// 						animationEnabled: true,
-// 						data: [{
-// 							type: "pie",
-// 							//startAngle: 40,
-// 							toolTipContent: "<b>{label}</b>: {y} (#percent%)",
-// 							showInLegend: "true",
-// 							legendText: "{label}",
-// 							indexLabelFontSize: 16,
-// 							indexLabel: "{label}",
-// 							indexLabelPlacement: "inside",
-// 							dataPoints: datosRoles
-// 						}]
-// 				};
-// 				$("#chartRoles").CanvasJSChart(optionsRoles);
-
-// 				var optionsEdad = {
-// 						title: {
-// 							text: "Edades"              
-// 						},
-// 						animationEnabled: true,
-// 						data: [              
-// 						{
-// 							// Change type to "doughnut", "line", "splineArea", etc.
-// 							type: "column",
-// 							dataPoints: datosEdades
-// 						}
-// 						]
-// 					};
-
-// 					$("#chartEdad").CanvasJSChart(optionsEdad);
-					
-// 			},
-// 			error: function(result){
-// 				alert("error con los datos");
-// 			}
-// 		});
 	});
 </script>
 </html>
