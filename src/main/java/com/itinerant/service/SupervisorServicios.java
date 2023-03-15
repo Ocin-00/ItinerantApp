@@ -140,25 +140,33 @@ public class SupervisorServicios {
 		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, request, response);
 		Supervisor supervisor = inicializarDatos();
 		if(usuarioInternoServicios.emailRepetido(supervisor.getEmail())) {
-			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el email " + supervisor.getEmail() + ".";
-			request.setAttribute("message", message);
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("message.jsp");
-			requestDispatcher.forward(request, response);
+			nuevoSupervisorView("El supervisor no pudo ser creado. Ya existe otro usuario con el email " + supervisor.getEmail() + ".");
 		} else if (usuarioInternoServicios.loginRepetido(supervisor.getLogin())) {
-			String message = "El supervisor no pudo ser creado. Ya existe otro usuario con el nombre de usuario " + supervisor.getLogin() + ".";
-			request.setAttribute("message", message);
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("message.jsp");
-			requestDispatcher.forward(request, response);
+			nuevoSupervisorView("El supervisor no pudo ser creado. Ya existe otro usuario con el nombre de usuario " + supervisor.getLogin() + ".");
 		} else {
-			supervisorDAO.create(supervisor);
+			try {
+				supervisorDAO.create(supervisor);
+			} catch (Exception e) {
+				nuevoSupervisorView("El supervisor no pudo ser creado. Revise los campos.");
+				return;
+			}
+			
 			listarSupervisores("El supervisor ha sido creado con éxito");
 		}
 		
 	}
 
 	public void editarSupervisor() throws ServletException, IOException {
+		editarSupervisor(null);
+	}
+	
+	public void editarSupervisor(String message) throws ServletException, IOException {
 		String supervisorId = StringEscapeUtils.escapeHtml4(request.getParameter("id"));
 		Supervisor supervisor = supervisorDAO.get(supervisorId);
+		
+		if(message != null) {
+			request.setAttribute("message", message);
+		}
 		
 		String editpage = "supervisor_form.jsp";
 		request.setAttribute("supervisor", supervisor);
@@ -170,7 +178,13 @@ public class SupervisorServicios {
 		String adminId = (String) request.getSession().getAttribute("userLogin");
 		Administrador admin = administradorDAO.get(adminId);
 		Supervisor supervisor = inicializarDatos();
-		supervisorDAO.update(supervisor);
+		try {
+			supervisorDAO.update(supervisor);
+		} catch (Exception e) {
+			listarSupervisores("Los datos no pudieron ser modificados. Revise los campos.");
+			return;
+		}
+		
 		
 		String cuerpoAlerta = "El administrador " + StringEscapeUtils.unescapeHtml4(admin.toString()) + ", cuyo organismo coordinador es  " 
 				+ StringEscapeUtils.unescapeHtml4(admin.getOrganismoCoordinador()) + " y de login: " + StringEscapeUtils.unescapeHtml4(admin.getLogin())
@@ -594,5 +608,19 @@ public class SupervisorServicios {
         InputStream inputStream = new FileInputStream(new File(zipFileName));
         IOUtils.copy(inputStream, response.getOutputStream());
         response.flushBuffer();
+	}
+
+	public void nuevoSupervisorView() throws ServletException, IOException {
+		nuevoSupervisorView(null);
+	}
+	
+	public void nuevoSupervisorView(String message) throws ServletException, IOException {
+		if(message != null) {
+			request.setAttribute("message", message);
+		}
+		
+		String homepage = "supervisor_form.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		dispatcher.forward(request, response);
 	}	
 }

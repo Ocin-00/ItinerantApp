@@ -61,7 +61,7 @@
 					</div>
 				</div>
 				
-				<div class="image-input"><input type="file" id="imagenCategoria" name="imagenCategoria"/></div>
+				<input type="file" id="imagenCategoria" name="imagenCategoria" style="display: none;"/>
 				<input type="hidden" value="false" id="imagenCambia" name="imagenCambia">
 			</form>
 	</div>
@@ -70,7 +70,8 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#certificadoForm").validate({
+	
+		$("#categoriaForm").validate({
 			rules: {
 				nombre: "required",
 				imagenCategoria: "required",

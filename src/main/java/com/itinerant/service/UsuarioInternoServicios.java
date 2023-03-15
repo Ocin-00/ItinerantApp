@@ -286,8 +286,15 @@ public class UsuarioInternoServicios {
 			profesional.setEstadoCivil(estadoCivil);
 			profesional.setSexo(sexo);
 			profesional.setImagenRuta(DEFAULT_IMAGE);
+			try {
+				profesionalDAO.create(profesional);
+			} catch (Exception e) {
+				String message = "No se pudo crear la cuenta.";
+				request.setAttribute("message", message);
+				registerView();
+				return;
+			}
 			
-			profesionalDAO.create(profesional);
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
 			String cuerpoAlerta = "Un nuevo usuario profesional se registró el día " + dateFormat.format(fechaRegistro) 
@@ -309,7 +316,15 @@ public class UsuarioInternoServicios {
 			ciudadano.setSexo(sexo);
 			ciudadano.setImagenRuta(DEFAULT_IMAGE);
 			
-			ciudadanoDAO.create(ciudadano);
+			try {
+				ciudadanoDAO.create(ciudadano);
+			} catch (Exception e) {
+				String message = "No se pudo crear la cuenta.";
+				request.setAttribute("message", message);
+				registerView();
+				return;
+			}
+			
 		}
 		login(login, password);
 	}
@@ -490,7 +505,13 @@ public class UsuarioInternoServicios {
 			profesional.setTelefono(telefono);
 			profesional.setDescripcion(descripcion);
 			
-			profesionalDAO.update(profesional);
+			try {
+				profesionalDAO.update(profesional);
+			} catch (Exception e) {
+				modificarCuentaView("Su información no ha podido ser modificada.");
+				return;
+			}
+			
 			/*
 			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
@@ -531,8 +552,13 @@ public class UsuarioInternoServicios {
 			ciudadano.setRol(rol);
 			ciudadano.setSexo(sexo);
 			ciudadano.setTelefono(telefono);
+			try {
+				ciudadanoDAO.update(ciudadano);
+			} catch (Exception e) {
+				modificarCuentaView("Su información no ha podido ser modificada.");
+				return;
+			}
 			
-			ciudadanoDAO.update(ciudadano);
 		} else if(rol.equals(Rol.ADMINISTRADOR.toString())) {
 			Administrador admin = administradorDAO.get(login);
 			admin.setApellidos(apellidos);
@@ -550,7 +576,12 @@ public class UsuarioInternoServicios {
 			admin.setRol(rol);
 			admin.setTelefono(telefono);
 			
-			administradorDAO.update(admin);
+			try {
+				administradorDAO.update(admin);
+			} catch (Exception e) {
+				modificarCuentaView("Su información no ha podido ser modificada.");
+				return;
+			}
 		} else if(rol.equals(Rol.SUPERVISOR.toString())) {
 			Supervisor supervisor = supervisorDAO.get(login);
 			supervisor.setApellidos(apellidos);
@@ -566,9 +597,14 @@ public class UsuarioInternoServicios {
 			supervisor.setNss(nss);
 			supervisor.setOrganismoCoordinador(organismoCoordinador);
 			supervisor.setRol(rol);
-			supervisor.setTelefono(telefono);
+			supervisor.setTelefono(telefono);		
 			
-			supervisorDAO.update(supervisor);
+			try {
+				supervisorDAO.update(supervisor);
+			} catch (Exception e) {
+				modificarCuentaView("Su información no ha podido ser modificada.");
+				return;
+			}
 		}
 		
 		//login(login, password);

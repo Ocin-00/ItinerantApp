@@ -86,7 +86,9 @@ public class CategoriaServicios {
 			categoriaDAO.create(categoria);
 			listarCategoriasAdmin("La categoria ha sido creada con éxito");
 		} catch (Exception e) {
-			throw e;
+			listarCategoriasAdmin("La categoría no pudo ser creada con éxito. Comprueba que el nombre no coincida con ninguno existente.");
+			return;
+			//throw e;
 		}
 		
 	}
@@ -107,9 +109,15 @@ public class CategoriaServicios {
 		categoria.setNombre(nombre);
 		categoria.setNombreMal(nombreMal);
 		
-		categoriaDAO.update(categoria);
+		try {
+			categoriaDAO.update(categoria);
+		} catch (Exception e) {
+			listarCategoriasAdmin("La categoría no pudo ser modificada con éxito. Comprueba que el nombre no coincida con ninguno existente.");
+			return;
+		}
 		
-		listarCategoriasAdmin("La categoria ha sido modificada con éxito");
+		
+		listarCategoriasAdmin("La categoria ha sido modificada con éxito.");
 	}
 	
 	private String setImagen(Part part, String imagenActual) throws IOException, ServletException {

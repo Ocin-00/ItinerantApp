@@ -171,6 +171,11 @@
 			</div>
 			</div>
 			<div align="center" class="mb-3">
+				<c:if test="${message != null}">
+					<div class="m-3">
+						<h5>${message}</h5>
+					</div>
+				</c:if>
 				<button type="submit">Guardar</button>
 				&nbsp;&nbsp;
 				<button id="buttonCancel" type="button">Cancelar</button>
