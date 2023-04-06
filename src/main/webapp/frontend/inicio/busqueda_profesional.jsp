@@ -59,7 +59,7 @@
 								   if(imagenRuta != null) {
 									   out.println(imgPath + imagenRuta.toString().substring(2)); 
 								   }
-								%>" id="thumbnail" alt="No hay imagen disponible" width="200"/>
+								%>" id="thumbnail" alt="No hay imagen disponible" width="200" class="rounded-circle"/>
 						</td>
 					<tr>
 					</table>

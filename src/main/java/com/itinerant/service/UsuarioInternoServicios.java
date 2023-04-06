@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -672,5 +673,27 @@ public class UsuarioInternoServicios {
 		boolean a = file.delete();
 		System.out.println(a);
 		return a;
+	}
+
+	public void buscar(String keyword) {
+		List<UsuarioInterno> listaUsuarios = null;
+		if(keyword.equals("")) {
+			listaUsuarios = usuarioInternoDAO.listAll();
+		} else {
+			listaUsuarios = usuarioInternoDAO.search(keyword);
+		}
+		request.setAttribute("listaUsuarios", listaUsuarios);
+		
+	}
+
+	public void VerUsuarioBusqueda() throws ServletException, IOException {
+		String usuarioId = (String) request.getParameter("id");
+		String login = (String) request.getSession().getAttribute("userLogin");
+		UsuarioInterno usuario = usuarioInternoDAO.get(usuarioId);
+		request.setAttribute("usuario", usuario);
+
+		String homepage = "busqueda_usuario.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(homepage);
+		dispatcher.forward(request, response);	
 	}
 }

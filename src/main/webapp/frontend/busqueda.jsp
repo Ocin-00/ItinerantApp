@@ -42,7 +42,7 @@
 		<c:set var="imagenProfesional" value="${profesional.imagenRuta}"></c:set>
 			<table>			
 				<tr>
-					<td rowspan="4"><img alt="No hay imagen" class="img-thumbnail img-search"
+					<td rowspan="4"><img alt="No hay imagen" class="img-thumbnail img-search rounded-circle"
 						src="<%String path = request.getContextPath();
 								Object imagenProf = pageContext.getAttribute("imagenProfesional");
 								   if(imagenProf != null) {
@@ -53,6 +53,29 @@
 				</tr>
 				<tr class="d-none d-lg-block">
 					<td>${profesional.descripcion}</td>
+				</tr>		
+			</table>
+		</a>
+	</div>
+	</c:forEach>
+	
+	<c:forEach var="usuario" items="${listaUsuarios}" varStatus="status">
+	<div class="search-results">
+		<a href="ver_usuario?id=${usuario.login}">
+		<c:set var="imagenUsuario" value="${usuario.imagenRuta}"></c:set>
+			<table>			
+				<tr>
+					<td rowspan="4"><img alt="No hay imagen" class="img-thumbnail img-search rounded-circle"
+						src="<%String path = request.getContextPath();
+								Object imagenProf = pageContext.getAttribute("imagenUsuario");
+								   if(imagenProf != null) {
+									   out.println(path + imagenProf.toString().substring(2)); 
+								   }
+								%>" /></td>
+					<td>${usuario.nombre} ${usuario.apellidos}</td>
+				</tr>
+				<tr class="d-none d-lg-block">
+					<td>${usuario.rol}</td>
 				</tr>		
 			</table>
 		</a>

@@ -29,12 +29,20 @@ public class BuscarServlet extends BaseServlet {
 		
 		VisitaServicios visitaServicios = new VisitaServicios(entityManager, request, response);
 		ProfesionalServicios profesionalServicios = new ProfesionalServicios(entityManager, request, response);
-		CategoriaServicios categoriaServicios = new CategoriaServicios(entityManager, request, response);
+		//CategoriaServicios categoriaServicios = new CategoriaServicios(entityManager, request, response);
+		UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, request, response);
 		String keywordOriginal = request.getParameter("keyword");
 		String keyword =StringEscapeUtils.escapeHtml4(keywordOriginal);
+		String rol = (String) request.getSession().getAttribute("rol");
 		//String keywordMal = categoriaServicios.nombreMal(keyword);
 		visitaServicios.buscar(keyword.toLowerCase());
-		profesionalServicios.buscar(keyword.toLowerCase());
+		boolean esAdmin = rol != null && rol.equals(Rol.ADMINISTRADOR.toString());
+		
+		if(esAdmin) {
+			usuarioInternoServicios.buscar(keyword.toLowerCase());
+		} else {
+			profesionalServicios.buscar(keyword.toLowerCase());
+		}
 		
 		String homepage = "/frontend/busqueda_externa.jsp";
 		if(request.getSession().getAttribute("userLogin") != null) {
@@ -45,9 +53,9 @@ public class BuscarServlet extends BaseServlet {
 		if(dispatcher != null) {
 			dispatcher.forward(request, response);
 		} else {
-			String rol = (String) request.getSession().getAttribute("rol");
+			
 			//System.out.println(rol);
-			if(rol.equals(Rol.ADMINISTRADOR.toString())) {
+			if(esAdmin) {
 				homepage = "admin/";
 			} else if(rol.equals(Rol.SUPERVISOR.toString())) {
 				homepage = "supervisor/";

@@ -7,12 +7,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.itinerant.entity.Categoria;
 import com.itinerant.entity.Localidad;
+import com.itinerant.entity.Profesional;
 import com.itinerant.entity.UsuarioInterno;
 import com.itinerant.enums.NivelAcceso;
 
@@ -472,5 +476,60 @@ public class UsuarioInternoDAO extends JpaDAO<UsuarioInterno> implements Generic
 			return null;
 		}
 		
+	}
+
+	public List<UsuarioInterno> search(String keyword) {
+String[] splitStr = keyword.split("\\s+");
+		
+		String queryText = "SELECT u FROM UsuarioInterno u ";
+		
+		boolean first = true;
+		boolean last = false;
+		Map<String, Object> parameters = new HashMap<>();
+		
+		if(splitStr != null) {
+			for(int i = 0; i < splitStr.length; i++) {
+				last = (i == (splitStr.length - 1));
+				if(!splitStr[i].isBlank()) {
+					parameters.put("param" + i, splitStr[i]);
+					String where = "";
+					//String mal = org.apache.commons.lang3.StringUtils.stripAccents(Normalizer.normalize(StringEscapeUtils.unescapeHtml4(splitStr[i]).replaceAll(" ", "").toLowerCase(), Normalizer.Form.NFKC).replaceAll("\\p{M}", ""));
+					//parameters.put(mal, mal);
+					if(first && last) {
+						first = false;
+						where += "WHERE (u.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR u.apellidos LIKE '%' || :" + "param" + i + " || '%')"
+								+ "ORDER BY u.apellidos";
+						
+					} else if (first && !last){
+						first = false;
+						where += "WHERE (u.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR u.apellidos LIKE '%' || :" + "param" + i + " || '%')";
+						
+					} else if(!first && last) {
+						where +="AND (u.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR u.apellidos LIKE '%' || :" + "param" + i + " || '%')"
+								+ "ORDER BY u.apellidos";
+					} else if(!first && !last) {
+						where += "AND (u.nombre LIKE '%' || :" + "param" + i + " || '%'"
+								+ "OR u.apellidos LIKE '%' || :" + "param" + i + " || '%')";
+					}
+					queryText += where;
+				}
+			}
+			 Query query = entityManager.createQuery(queryText);
+			 
+			 Set<Entry<String, Object>> setParameters = parameters.entrySet();
+			 for (Entry<String, Object> entry : setParameters) {
+				query.setParameter(entry.getKey(), entry.getValue());
+			 }
+			 
+			 List<UsuarioInterno> usuarios =  query.getResultList();
+				
+			 if(usuarios != null && usuarios.size() > 0) {
+				return usuarios;
+			 }
+		}
+		return null;
 	}
 }
