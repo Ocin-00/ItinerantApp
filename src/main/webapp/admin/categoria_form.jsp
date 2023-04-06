@@ -61,7 +61,7 @@
 					</div>
 				</div>
 				
-				<input type="file" id="imagenCategoria" name="imagenCategoria" style="display: none;"/>
+				<input type="file" id="imagenCategoria" name="imagenCategoria" style="display: none;" accept="image/*"/>
 				<input type="hidden" value="false" id="imagenCambia" name="imagenCambia">
 			</form>
 	</div>

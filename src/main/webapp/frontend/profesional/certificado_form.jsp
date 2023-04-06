@@ -68,7 +68,7 @@
 								<td><label for="certificadoFile" class="form-label">Introduzca su certificado en formato PDF:</label></td>
 							</tr>
 							<tr>
-								<td><input type="file" id="certificadoFile" name="certificadoFile" class="form-control border-dark-subtle"/></td>
+								<td><input type="file" id="certificadoFile" name="certificadoFile" class="form-control border-dark-subtle" accept=".pdf"/></td>
 							</tr>
 						</c:if>
 					</table>

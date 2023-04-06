@@ -354,7 +354,7 @@
 				</c:if>	
 			</div>
 			
-			<div class="image-input"><input type="file" id="imagenPerfil" name="imagenPerfil" src="${usuario.imagenRuta}"/></div>
+			<div class="image-input"><input type="file" id="imagenPerfil" name="imagenPerfil" src="${usuario.imagenRuta}" accept="image/*"/></div>
 			<input type="hidden" value="false" id="imagenCambia" name="imagenCambia">
 			<input type="hidden" value="${rol}" id="rol" name="rol">
 		</form>
