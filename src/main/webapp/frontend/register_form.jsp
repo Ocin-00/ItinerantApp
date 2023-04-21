@@ -342,7 +342,12 @@
 				</div>
 				</c:if>
 				<c:if test="${usuario == null}">
-					<button type="submit">Crear cuenta</button>
+					<div class="m-3">
+						<input type="checkbox" id="condiciones" name="condiciones"><label>Acepto los <a href="terminos">términos y condiciones de uso</a></label>
+					</div>
+					<div>
+						<button type="submit">Crear cuenta</button>
+					</div>
 				</c:if>
 				<c:if test="${usuario != null}">
 					<button type="submit">Modificar cuenta</button>	
@@ -460,6 +465,13 @@
 							}
 						}
 					},
+					condiciones: {
+						required: {
+							depends: function(element) {
+								return $("#rol").val() == '';
+							}
+						}	
+					},
 				},
 				
 				messages: {
@@ -486,6 +498,7 @@
 					organismoCoordinador: "Por favor introduzca su organismo coordinador.",
 					nss: "Por favor introduzca su número de la seguridad social",
 					tipoCuenta: "Por favor, seleccione un tipo de cuenta.",
+					condiciones: "Por favor, acepte los términos y condiciones de uso si desea continuar.",
 				},
 				 errorPlacement: function(error, element) {
 			            error.appendTo(element.parent());
