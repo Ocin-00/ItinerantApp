@@ -124,7 +124,8 @@ public class MensajeServicios {
 			Integer idChat = Integer.parseInt(request.getParameter("id"));
 			Chat chat = chatDAO.get(idChat);
 			
-			String recipientLogin = StringEscapeUtils.escapeHtml4(request.getParameter("usuario"));
+			//String recipientLogin = StringEscapeUtils.escapeHtml4(request.getParameter("usuario"));
+			String recipientLogin = request.getParameter("usuario");
 			UsuarioInterno recipient = usuarioInternoDAO.get(recipientLogin);
 			
 			String senderLogin = (String) request.getSession().getAttribute("userLogin");

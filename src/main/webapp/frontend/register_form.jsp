@@ -343,7 +343,7 @@
 				</c:if>
 				<c:if test="${usuario == null}">
 					<div class="m-3">
-						<input type="checkbox" id="condiciones" name="condiciones"><label>Acepto los <a href="terminos">términos y condiciones de uso</a></label>
+						<input type="checkbox" id="condiciones" name="condiciones"><label for="condiciones">Acepto los <a href="terminos">términos y condiciones de uso</a></label>
 					</div>
 					<div>
 						<button type="submit">Crear cuenta</button>
