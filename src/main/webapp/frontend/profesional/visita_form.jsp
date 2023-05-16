@@ -27,6 +27,9 @@
 	
 	<link rel="stylesheet" href="../css/bootstrap-multiselect.css">
 	<script type="text/javascript" src="../js/bootstrap-multiselect.js"></script>
+	<link rel="stylesheet" href="../css/bootstrap-select.css">
+	<script type="text/javascript" src="../js/bootstrap-select.js"></script>
+	<script type="text/javascript" src="../js/defaults-es_ES.js"></script>
 	
 	<script src="https://kit.fontawesome.com/511c190d35.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://kit.fontawesome.com/511c190d35.css" crossorigin="anonymous">
@@ -75,7 +78,7 @@
 						<c:if test="${visita == null}">
 						<tr>
 							<td colspan="2">
-								<select name="codPostal" id="codPostal" class="form-select border-dark-subtle">
+								<select name="codPostal" id="codPostal" class="selectpicker myselect" data-live-search="true">
 									<c:forEach items="${listaLocalidades}" var="localidad">
 										<option value="${localidad.codigoPostal}">
 											${localidad.nombre}
