@@ -130,7 +130,7 @@
 					<div>
 						<h3>Reseñas:</h3>
 						<c:forEach var="review" items="${reviews}" varStatus="status">
-							<p>${review}</p>
+							<label>&#x2022;${review}</label><br>
 						</c:forEach>
 					</div>
 				</div>

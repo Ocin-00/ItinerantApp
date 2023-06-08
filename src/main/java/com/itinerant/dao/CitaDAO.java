@@ -1,6 +1,9 @@
 package com.itinerant.dao;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -56,6 +59,16 @@ public class CitaDAO extends JpaDAO<Cita> implements GenericDAO<Cita> {
 		}
 		
 		return null;
+	}
+	
+	public boolean checkReapted(Integer visitaId, Date hora) {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("id", visitaId);
+		parameters.put("hora", hora);
+		
+		List<Cita> citas = super.findWithNamedQuery("Cita.checkRepeated", parameters);
+		
+		return citas.size() == 1;
 	}
 	
 	@Override

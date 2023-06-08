@@ -24,6 +24,7 @@ import javax.persistence.TemporalType;
 	 @NamedQuery(name = "Cita.findAll", query = "SELECT c FROM Cita c ORDER BY c.horaInicio"),
 	 @NamedQuery(name = "Cita.findAllByLogin", query = "SELECT  c FROM Cita c WHERE c.visita.profesional.login = :login"),
 	 @NamedQuery(name = "Cita.findAllById", query = "SELECT  c FROM Cita c WHERE c.visita.idVisita = :id"),
+	 @NamedQuery(name = "Cita.checkRepeated", query = "SELECT  c FROM Cita c WHERE c.visita.idVisita = :id AND c.horaInicio = :hora"),
 	 @NamedQuery(name = "Cita.countAll", query = "SELECT count(*) FROM Cita c"),
 })
 @Table(name = "cita", catalog = "itinerant_db")

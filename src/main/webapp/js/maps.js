@@ -34,7 +34,6 @@
 					    geocoder.geocode(direccion, function(results) {
 					        let coords = results[0].center;
 					        waypoints.push(L.latLng(coords.lat, coords.lng));
-					        //orderedWaypoints.push(coords.lng + ',' + coords.lat);
 					        orderedWaypoints[index] = coords.lng + ',' + coords.lat;
 					        let marker = new L.Marker([coords.lat, coords.lng]).addTo(map);
 					        

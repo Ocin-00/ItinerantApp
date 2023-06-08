@@ -39,9 +39,8 @@
 				<div><h4>${message}</h4></div>
 			</c:if>
 			<c:if test="${empty certificados}" >
-				<h5>Todavía no tienes certificados.</h5>
+				<h5 class="m-3">Todavía no tienes certificados.</h5>
 			</c:if>
-			<c:if test="${not empty certificados}" >
 			<div class="d-none d-md-block">
 			<table border="1" class="table border table-hover text-center align-middle">
 				<tr class="text-center">
@@ -146,7 +145,6 @@
 					</tr>
 			</table>
 			</div>
-			</c:if>
 		</div>
 	</div>
 	<jsp:directive.include file="/frontend/footer.jsp"/>

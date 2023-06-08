@@ -44,7 +44,6 @@ public class AlertaServicios {
 			
 			request.getSession().setAttribute("misAlertas", alertas);
 			
-		    //for (Alerta alerta: alertas) {
 			for(int i = alertas.size() - 1; i > -1; i--) {
 				Alerta alerta = alertas.get(i);
 		    	JSONObject jobj = new JSONObject();

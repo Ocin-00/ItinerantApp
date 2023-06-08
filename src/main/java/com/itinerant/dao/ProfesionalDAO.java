@@ -1,6 +1,7 @@
 package com.itinerant.dao;
 
 import java.text.Normalizer;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.itinerant.entity.Cita;
 import com.itinerant.entity.Profesional;
 import com.itinerant.entity.Visita;
 
@@ -65,6 +67,13 @@ public class ProfesionalDAO extends JpaDAO<Profesional> implements GenericDAO<Pr
 		return super.findWithNamedQuery("Profesional.findAllValid");
 	}
 
+	public boolean checkValidez(String login) {
+		
+		List<Profesional> profesional = super.findWithNamedQuery("Profesional.checkValidez", "login", login);
+		
+		return profesional.size() == 1;
+	}
+	
 	@Override
 	public long count() {
 		return super.countWithNamedQuery("Profesional.countAll");

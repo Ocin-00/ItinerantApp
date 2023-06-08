@@ -28,6 +28,7 @@ import com.itinerant.enums.Rol;
 	 @NamedQuery(name = "Profesional.findByEmail", query = "SELECT p FROM Profesional p WHERE p.email = :email"),
 	 @NamedQuery(name = "Profesional.countAll", query = "SELECT count(*) FROM Profesional p"),
 	 @NamedQuery(name = "Profesional.checkLogin", query = "SELECT p FROM Profesional p WHERE p.login = :login AND p.password = :password"),
+	 @NamedQuery(name = "Profesional.checkValidez", query = "SELECT   p FROM Profesional p WHERE p.login = :login AND p.validez is true"),
 	 @NamedQuery(name = "Profesional.search", query = "SELECT p FROM Profesional p WHERE (p.nombre LIKE '%' || :keyword || '%'"
 													+ "OR p.apellidos LIKE '%' || :keyword || '%')"
 													+ "AND p.validez is true ORDER BY p.apellidos"),

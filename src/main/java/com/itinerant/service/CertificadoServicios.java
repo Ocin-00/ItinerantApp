@@ -81,31 +81,34 @@ public class CertificadoServicios {
 		String login = StringEscapeUtils.escapeHtml4((String) request.getSession().getAttribute("userLogin"));
 		UsuarioInterno usuario = usuarioInternoDAO.get(login);
 		Integer id =Integer.parseInt(request.getParameter("id"));
-		Certificado certificado = certificadoDAO.get(id);
-		if(borrarArchivo(certificado.getRuta())) {
-			certificadoDAO.delete(id);
-			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
-				String cuerpoAlerta = "Lo sentimos, pero el certificado de título " + StringEscapeUtils.unescapeHtml4(certificado.getTitulo())
-										+" emitido por la institución " + StringEscapeUtils.unescapeHtml4(certificado.getEntidadEmisora()) + " el año "+ certificado.getAnyo() + " no ha sido validado. ";								
-				Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado no validado", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
-				
-				alerta = alertaDAO.create(alerta);
-				
-				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
-				alertaServicios.mandarNotificacion(alerta);
-				
-				listarCertificadosNoValidados("El certificado ha sido borrado con éxito.");
-			} else {
-				listarCertificados("El certificado ha sido borrado con éxito.");
-			}
+		if(certificadoDAO.checkValidez(id) && usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
+			listarCertificadosNoValidados("Este certificado ya ha sido validado por otro adminsitrador.");
 		} else {
-			if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
-				listarCertificadosNoValidados("El certificado no ha podido ser borrado con éxito.");
+			Certificado certificado = certificadoDAO.get(id);
+			if(borrarArchivo(certificado.getRuta())) {
+				certificadoDAO.delete(id);
+				if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
+					String cuerpoAlerta = "Lo sentimos, pero el certificado de título " + StringEscapeUtils.unescapeHtml4(certificado.getTitulo())
+											+" emitido por la institución " + StringEscapeUtils.unescapeHtml4(certificado.getEntidadEmisora()) + " el año "+ certificado.getAnyo() + " no ha sido validado. ";								
+					Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado no validado", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+					
+					alerta = alertaDAO.create(alerta);
+					
+					AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+					alertaServicios.mandarNotificacion(alerta);
+					
+					listarCertificadosNoValidados("El certificado ha sido borrado con éxito.");
+				} else {
+					listarCertificados("El certificado ha sido borrado con éxito.");
+				}
 			} else {
-				listarCertificados("El certificado no ha podido ser borrado con éxito.");
+				if(usuario.getRol().equals(Rol.ADMINISTRADOR.toString())) {
+					listarCertificadosNoValidados("El certificado no ha podido ser borrado con éxito.");
+				} else {
+					listarCertificados("El certificado no ha podido ser borrado con éxito.");
+				}
 			}
 		}
-		
 	}
 
 	private boolean borrarArchivo(String ruta) {
@@ -119,19 +122,28 @@ public class CertificadoServicios {
 	
 	public void validarCertificado() throws ServletException, IOException {
 		Integer id =Integer.parseInt(request.getParameter("id"));
-		Certificado certificado = certificadoDAO.get(id);
-		certificado.setValidez(true);
-		certificadoDAO.update(certificado);
-		String cuerpoAlerta = "El certificado de título " + StringEscapeUtils.unescapeHtml4(certificado.getTitulo())
-		+" emitido por la institución " + StringEscapeUtils.unescapeHtml4(certificado.getEntidadEmisora()) + " el año "+ certificado.getAnyo() + " ha sido validado. ";								
-		Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado validado", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+		try {
+			Certificado certificado = certificadoDAO.get(id);
+			if(certificadoDAO.checkValidez(id)) {
+				listarCertificadosNoValidados("Este certificado ya ha sido validado por otro adminsitrador.");
+			} else {
+				certificado.setValidez(true);
+				certificadoDAO.update(certificado);
+				String cuerpoAlerta = "El certificado de título " + StringEscapeUtils.unescapeHtml4(certificado.getTitulo())
+				+" emitido por la institución " + StringEscapeUtils.unescapeHtml4(certificado.getEntidadEmisora()) + " el año "+ certificado.getAnyo() + " ha sido validado. ";								
+				Alerta alerta = new Alerta(certificado.getProfesional(), "Certificado validado", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+				
+				alerta = alertaDAO.create(alerta);
+				
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
+				
+				listarCertificadosNoValidados("El certificado ha sido validado con éxito.");
+			}
 		
-		alerta = alertaDAO.create(alerta);
-		
-		AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
-		alertaServicios.mandarNotificacion(alerta);
-		
-		listarCertificadosNoValidados("El certificado ha sido validado con éxito.");
+		} catch (java.lang.NullPointerException e) {
+			listarCertificadosNoValidados("El certificad ha sido borrado por otro adminsitrador.");
+		}	
 	}
 
 	public void listarCertificados() throws ServletException, IOException {

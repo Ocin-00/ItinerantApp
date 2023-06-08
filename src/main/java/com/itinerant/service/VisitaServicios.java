@@ -198,7 +198,7 @@ public class VisitaServicios {
 		} else if (visitasSolapadas(visita)) {
 			return "La visita se solapa con otras.";
 		} else if(!llegaATiempo(visita)) {
-			return "No llegarías a tiempo.";
+			return "No llegaría a tiempo.";
 		}
 		
 		return "";
@@ -208,111 +208,114 @@ public class VisitaServicios {
 		List<Visita> visitas = visitaDAO.listAllByLogin(visitaNueva.getProfesional().getLogin());
 		//Visita visitaAnt = null; 		//visitasContiguas[0]
 		//Visita visitaPost = null;		//visitasContiguas[1]
-		Visita[] visitasContiguas = new Visita[2];
-		boolean encontrado = false;
-		for(int i = 0; !encontrado && i < visitas.size(); i++) {
-			
-			Visita visita1 = visitas.get(i);
-			if(visitaNueva.getIdVisita() == null || visitaNueva.getIdVisita().intValue() != visita1.getIdVisita().intValue()) {
-				if(visita1.getHoraInicio().before(visitaNueva.getHoraInicio())) {
-					if(i == visitas.size() - 1){
-						visitasContiguas[0] = visita1;
-						visitasContiguas[1] = null;
-						encontrado = true;
-						System.out.println("IF 1");
-					} else {
-						Visita visita2 = visitas.get(i + 1);
-						if(visitaNueva.getIdVisita() == null || visitaNueva.getIdVisita().intValue() != visita2.getIdVisita().intValue()) {
-							if(visita2.getHoraInicio().after(visitaNueva.getHoraInicio())) {
-								visitasContiguas[0] = visita1;
-								visitasContiguas[1] = visita2;
-								encontrado = true;
-								System.out.println("IF 2");
+		if(visitas != null) {
+			Visita[] visitasContiguas = new Visita[2];
+			boolean encontrado = false;
+			for(int i = 0; !encontrado && i < visitas.size(); i++) {
+				
+				Visita visita1 = visitas.get(i);
+				if(visitaNueva.getIdVisita() == null || visitaNueva.getIdVisita().intValue() != visita1.getIdVisita().intValue()) {
+					if(visita1.getHoraInicio().before(visitaNueva.getHoraInicio())) {
+						if(i == visitas.size() - 1){
+							visitasContiguas[0] = visita1;
+							visitasContiguas[1] = null;
+							encontrado = true;
+							System.out.println("IF 1");
+						} else {
+							Visita visita2 = visitas.get(i + 1);
+							if(visitaNueva.getIdVisita() == null || visitaNueva.getIdVisita().intValue() != visita2.getIdVisita().intValue()) {
+								if(visita2.getHoraInicio().after(visitaNueva.getHoraInicio())) {
+									visitasContiguas[0] = visita1;
+									visitasContiguas[1] = visita2;
+									encontrado = true;
+									System.out.println("IF 2");
+								}
 							}
 						}
+					} else {
+						visitasContiguas[1] = visita1;
+						visitasContiguas[0] = null;
+						encontrado = true;
+						System.out.println("IF 3");
 					}
 				} else {
-					visitasContiguas[1] = visita1;
-					visitasContiguas[0] = null;
 					encontrado = true;
-					System.out.println("IF 3");
-				}
-			} else {
-				encontrado = true;
-				if(i == 0 && visitas.size() > 1) {
-					visitasContiguas[1] = visitas.get(i + 1);;
-					visitasContiguas[0] = null;
-					System.out.println("IF 4");
-				} else if(i == visitas.size() - 1 && visitas.size() > 1) {
-					visitasContiguas[0] = visitas.get(i - 1);;
-					visitasContiguas[1] = null;
-					System.out.println("IF 5");
-				} else if(visitas.size() > 2){
-					visitasContiguas[0] = visitas.get(i - 1);
-					visitasContiguas[1] = visitas.get(i + 1);
-					System.out.println("IF 6");
-				} else {
-					visitasContiguas[0] = null;
-					visitasContiguas[1] = null;
-					System.out.println("IF 7");
+					if(i == 0 && visitas.size() > 1) {
+						visitasContiguas[1] = visitas.get(i + 1);;
+						visitasContiguas[0] = null;
+						System.out.println("IF 4");
+					} else if(i == visitas.size() - 1 && visitas.size() > 1) {
+						visitasContiguas[0] = visitas.get(i - 1);;
+						visitasContiguas[1] = null;
+						System.out.println("IF 5");
+					} else if(visitas.size() > 2){
+						visitasContiguas[0] = visitas.get(i - 1);
+						visitasContiguas[1] = visitas.get(i + 1);
+						System.out.println("IF 6");
+					} else {
+						visitasContiguas[0] = null;
+						visitasContiguas[1] = null;
+						System.out.println("IF 7");
+					}
 				}
 			}
-		}
-		
-		LocalidadServicios localidadServicios = new LocalidadServicios(entityManager, request, response);
-		double[] coordsVisitaNueva = localidadServicios.getCoordenadas(visitaNueva.getLocalidad());
-		for(int i = 0; i < visitasContiguas.length; i++) {
-			if(visitasContiguas[i] != null) {
-				double[] coordsVisitaContigua = localidadServicios.getCoordenadas(visitasContiguas[i].getLocalidad());
-				double tiempoViaje = localidadServicios.getTiempoRuta(coordsVisitaNueva, coordsVisitaContigua);
-				if(i == 0) {
-					double diferencia = (visitaNueva.getHoraInicio().getTime() - visitasContiguas[i].getHoraFin().getTime())/1000;
-					System.out.println("Diferencia: " + diferencia);
-					if(tiempoViaje > diferencia) {
-						return false;
-					}
-				} else {
-					double diferencia = (visitasContiguas[i].getHoraInicio().getTime() - visitaNueva.getHoraFin().getTime())/1000 ;
-					System.out.println("Diferencia: " + diferencia);
-					if(tiempoViaje > diferencia) {
-						return false;
+			
+			LocalidadServicios localidadServicios = new LocalidadServicios(entityManager, request, response);
+			double[] coordsVisitaNueva = localidadServicios.getCoordenadas(visitaNueva.getLocalidad());
+			for(int i = 0; i < visitasContiguas.length; i++) {
+				if(visitasContiguas[i] != null) {
+					double[] coordsVisitaContigua = localidadServicios.getCoordenadas(visitasContiguas[i].getLocalidad());
+					double tiempoViaje = localidadServicios.getTiempoRuta(coordsVisitaNueva, coordsVisitaContigua);
+					if(i == 0) {
+						double diferencia = (visitaNueva.getHoraInicio().getTime() - visitasContiguas[i].getHoraFin().getTime())/1000;
+						System.out.println("Diferencia: " + diferencia);
+						if(tiempoViaje > diferencia) {
+							return false;
+						}
+					} else {
+						double diferencia = (visitasContiguas[i].getHoraInicio().getTime() - visitaNueva.getHoraFin().getTime())/1000 ;
+						System.out.println("Diferencia: " + diferencia);
+						if(tiempoViaje > diferencia) {
+							return false;
+						}
 					}
 				}
 			}
 		}
-		
 		return true;
 	}
 
 	private boolean visitaRepetida(Visita visitaNueva) {
 		List<Visita> visitas = visitaDAO.listAllByLogin(visitaNueva.getProfesional().getLogin());
-		for(Visita visita: visitas) {
-			if(visitaNueva.getIdVisita() != null && visita.getIdVisita().intValue() == visitaNueva.getIdVisita().intValue()) {
-				return false;
-			}
-			if(visita.getLocalidad().equals(visitaNueva.getLocalidad()) && visita.getFecha().equals(visitaNueva.getFecha())) {
-				return true;
+		if(visitas != null) {
+			for(Visita visita: visitas) {
+				if(visitaNueva.getIdVisita() != null && visita.getIdVisita().intValue() == visitaNueva.getIdVisita().intValue()) {
+					return false;
+				}
+				if(visita.getLocalidad().equals(visitaNueva.getLocalidad()) && visita.getFecha().equals(visitaNueva.getFecha())) {
+					return true;
+				}
 			}
 		}
-		
 		return false;
 	}
 	
 	private boolean visitasSolapadas(Visita visitaNueva) {
 		List<Visita> visitas = visitaDAO.listAllByLogin(visitaNueva.getProfesional().getLogin());
-		
-		for(Visita visita: visitas) {
-			if(visitaNueva.getIdVisita() == null || visita.getIdVisita().intValue() != visitaNueva.getIdVisita().intValue()) {
-				if(visita.getFecha().equals(visitaNueva.getFecha())) {
-					if(visitaNueva.getHoraInicio().after(visita.getHoraInicio()) && visitaNueva.getHoraInicio().before(visita.getHoraFin())) {
-						return true;
-					}
-					if(visitaNueva.getHoraFin().after(visita.getHoraInicio()) && visitaNueva.getHoraFin().before(visita.getHoraFin())) {
-						return true;
+		if(visitas != null) {
+			for(Visita visita: visitas) {
+				if(visitaNueva.getIdVisita() == null || visita.getIdVisita().intValue() != visitaNueva.getIdVisita().intValue()) {
+					if(visita.getFecha().equals(visitaNueva.getFecha())) {
+						if(visitaNueva.getHoraInicio().after(visita.getHoraInicio()) && visitaNueva.getHoraInicio().before(visita.getHoraFin())) {
+							return true;
+						}
+						if(visitaNueva.getHoraFin().after(visita.getHoraInicio()) && visitaNueva.getHoraFin().before(visita.getHoraFin())) {
+							return true;
+						}
 					}
 				}
-			}
-		}		
+			}		
+		}
 		return false;
 	}
 	
@@ -522,7 +525,7 @@ public class VisitaServicios {
 		Visita visita = visitaDAO.get(visitaId);
 		request.setAttribute("visita", visita);
 		Date ahora = new Date();
-		boolean visitaFutura = visita.getFecha().after(ahora);
+		boolean visitaFutura = visita.getHoraInicio().after(ahora);
 		request.setAttribute("visitaFutura", visitaFutura);
 		
 		List<Date> listaHorasPosibles = calcularHorarios(visita);

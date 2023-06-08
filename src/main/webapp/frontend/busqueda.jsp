@@ -1,9 +1,25 @@
 <div class="container-fluid m-3 overflow-auto" style="max-height: 100vh;">
 	<h3>Resultados de búsqueda: ${keyword}</h3>
+	<%
+	boolean yaPasadas = false;
+	boolean futuras = false;
+	%>
 	<c:forEach var="visita" items="${listaVisitas}" varStatus="status">
+	<c:set var="fecha" value="${visita.horaInicio}"></c:set>
+	<%
+	Date ahora = new Date();
+	Date fecha = (Date) pageContext.getAttribute("fecha");
+	if(!yaPasadas && ahora.after(fecha)) {
+		%><h4 class="m-3">Visitas pasadas:</h4> <%
+		yaPasadas = true;
+	} else if(!futuras && ahora.before(fecha)) {
+		%><h4 class="m-3">Visitas futuras:</h4> <%
+		futuras = true;
+	}
+	%>
 		<div class="search-results">
 			<a href="visita?id=${visita.idVisita}">
-			<c:set var="imagenRuta" value="${visita.imagenRuta}"></c:set>
+			<c:set var="imagenRuta" value="${visita.imagenRuta}"></c:set>	
 				<table>
 					<tr>
 						<td rowspan="4"><img alt="No hay imagen" class="img-thumbnail img-search"

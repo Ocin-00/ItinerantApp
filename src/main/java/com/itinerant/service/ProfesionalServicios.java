@@ -66,23 +66,42 @@ public class ProfesionalServicios {
 
 	public void borrarProfesional() throws ServletException, IOException {
 		String profesionalId = StringEscapeUtils.escapeHtml4(request.getParameter("id"));
-		profesionalDAO.delete(profesionalId);
-		listarProfesionalesNoValidados("El usuario ha sido borrado con éxito.");
+		if(profesionalDAO.checkValidez(profesionalId)) {
+			listarProfesionalesNoValidados("Este usuario ya ha sido validado por otro adminsitrador.");
+		} else {
+			Profesional profesional = profesionalDAO.get(profesionalId);
+			profesionalDAO.delete(profesionalId);
+			String imagenActual = profesional.getImagenRuta();
+			if(!imagenActual.equals("../img/default.jpg")) {
+				UsuarioInternoServicios usuarioInternoServicios = new UsuarioInternoServicios(entityManager, request, response);
+				usuarioInternoServicios.borrarArchivo(imagenActual);
+			}
+			listarProfesionalesNoValidados("El usuario ha sido borrado con éxito.");
+		}
 	}
 
 	public void validarProfesional() throws ServletException, IOException {
 		String profesionalId = StringEscapeUtils.escapeHtml4(request.getParameter("id"));
-		Profesional profesional = profesionalDAO.get(profesionalId);
-		profesional.setValidez(true);
-		profesionalDAO.update(profesional);
-		String cuerpoAlerta = "Enhorabuena, su cuenta ha sido sido validada.";								
-		Alerta alerta = new Alerta(profesional, "Cuenta validada", cuerpoAlerta, false);
-		
-		AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
-		alertaServicios.mandarNotificacion(alerta);
-		
-		alertaDAO.create(alerta);
-		listarProfesionalesNoValidados("La cuenta del profesional ha sido validada con éxito.");
+		try {
+			Profesional profesional = profesionalDAO.get(profesionalId);
+			if(profesionalDAO.checkValidez(profesionalId)) {
+				listarProfesionalesNoValidados("Este usuario ya ha sido validado por otro adminsitrador.");
+			} else {
+				profesional.setValidez(true);
+				profesionalDAO.update(profesional);
+				String cuerpoAlerta = "Enhorabuena, su cuenta ha sido sido validada.";								
+				Alerta alerta = new Alerta(profesional, "Cuenta validada", cuerpoAlerta, false);
+				
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
+				
+				alertaDAO.create(alerta);
+				listarProfesionalesNoValidados("La cuenta del profesional ha sido validada con éxito.");
+			}
+			
+		} catch (java.lang.NullPointerException e) {
+			listarProfesionalesNoValidados("Este usuario ha sido borrado por otro adminsitrador.");
+		}	
 	}
 
 	public void buscar(String keyword) {

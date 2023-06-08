@@ -34,29 +34,28 @@
 
 function exportData(ambito, lugar, tipo, data) {
 	$.ajax({
-				type:"GET",
-				data:  { ambito:ambito, id:lugar, tipo:tipo, data:data},
-				//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-				url:'exportar_datos',	
-				xhrFields:{
-            	responseType: 'blob'
-		        },
-		        success: function(data){
-		            var anchor = document.createElement('a');
-		            var url = window.URL || window.webkitURL;
-		            anchor.href = url.createObjectURL(data);
-		            anchor.download = 'export.zip';
-		            document.body.append(anchor);
-		            anchor.click();
-		            setTimeout(function(){  
-		                document.body.removeChild(anchor);
-		                url.revokeObjectURL(anchor.href);
-		            }, 1);
-		        },
-				error: function(result){
-					alert("error con los datos");
-				}
-			});
+		type:"GET",
+		data:  { ambito:ambito, id:lugar, tipo:tipo, data:data},
+		url:'exportar_datos',	
+		xhrFields:{
+          	responseType: 'blob'
+		},
+		success: function(data){
+			var anchor = document.createElement('a');
+		    var url = window.URL || window.webkitURL;
+		    anchor.href = url.createObjectURL(data);
+		    anchor.download = 'export.zip';
+		    document.body.append(anchor);
+		    anchor.click();
+		    setTimeout(function(){  
+		    	document.body.removeChild(anchor);
+		        url.revokeObjectURL(anchor.href);
+		    }, 1);
+		},
+			error: function(result){
+				alert("error con los datos");
+			}
+		});
 }
 	
 function initCharts(ambito, lugar, tipo) {
@@ -75,8 +74,6 @@ function initCharts(ambito, lugar, tipo) {
 					let datosOferta = decodeLabel(datos[5].sort(compareDataPointYAscend));
 					let datosDemanda = decodeLabel(datos[6].sort(compareDataPointYAscend));
 					let datosCitas = decodeLabel(datos[7].sort(compareDataPointYAscend));
-					//alert(decodeURIComponent(encodeURI("hací")));
-					//alert(decodeURIComponent(datosOferta[1].label));
 					var optionsGender = {
 							title: {
 								text: "Género"
@@ -84,14 +81,9 @@ function initCharts(ambito, lugar, tipo) {
 							subtitles: [{
 								text: ""
 							}],
-							/*legend:{
-								horizontalAlign: "right",
-								verticalAlign: "center"
-							},*/
 							animationEnabled: true,
 							data: [{
 								type: "pie",
-								//startAngle: 40,
 								toolTipContent: "<b>{label}</b>: {y} (#percent%)",
 								showInLegend: "true",
 								legendText: "{label}",

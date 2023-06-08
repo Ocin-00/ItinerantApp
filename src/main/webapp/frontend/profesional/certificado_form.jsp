@@ -55,6 +55,9 @@
 						</tr>
 						<tr>
 							<td><label for="anyo" class="form-label">Año:</label> ${certificado.anyo}</td>
+							<c:if test="${certificado != null}">
+							<input type="hidden" name="anyo" id="anyo" value="${certificado.anyo}"/>
+							</c:if>
 						</tr>
 						<tr>
 							<td colspan="2">
@@ -77,7 +80,7 @@
 				<div class="d-flex justify-content-center m-4">
 					<button type="submit">Guardar</button>
 					&nbsp;&nbsp;
-					<button id="buttonCancel" type="button">Cancelar</button>				
+					<button id="buttonCancel" type="button">Cancelar</button>			
 				</div>
 			</form>
 	</div>
@@ -102,21 +105,23 @@
 				titulo: "Por favor introduzca el título de su certificado.",
 				entidadEmisora: "Por favor introduzca la entidad que emition el certificado.",
 				anyo: {
-					required: ""Por favor introduzca el año en el que se expedió."",
+					required: "Por favor introduzca el año en el que se expedió.",
 					minlength: jQuery.validator.format("Introduzca un año válido.")
 				},
 				certificadoFile: "Por favor introduzca el certificado en formato PDF.",
 			}
 		});
+
+		$("#buttonCancel").click(function() {
+			history.go(-1);
+		});
 		/*
 		$("#imagenVisita").change(function() {
 			showImageThumbnail(this);
 		});
-*/
-		$("#buttonCancel").click(function() {
-			history.go(-1);
-		});
+	*/
 	});
+
 /*
 	function showImageThumbnail(fileInput) {
         var file = fileInput.files.item(0);

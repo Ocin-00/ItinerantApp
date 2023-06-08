@@ -114,14 +114,18 @@ public class ChatServicios {
 	}
 	
 	public void inicializarChat(String recipient, String id) throws ServletException, IOException {
+		try {
+			UsuarioInterno usuario = usuarioInternoDAO.get(recipient);
+			request.setAttribute("recipient", usuario);
+			request.setAttribute("idChat", id);
+			
+			String listpage = "../frontend/chat.jsp";
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(listpage);
+			requestDispatcher.forward(request, response);
+		} catch(Exception e) {
+			
+		}
 		
-		UsuarioInterno usuario = usuarioInternoDAO.get(recipient);
-		request.setAttribute("recipient", usuario);
-		request.setAttribute("idChat", id);
-		
-		String listpage = "../frontend/chat.jsp";
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher(listpage);
-		requestDispatcher.forward(request, response);
 	}
 
 	public void contactar() throws ServletException, IOException {

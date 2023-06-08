@@ -14,7 +14,6 @@ $(document).ready(function(){
 		        url:'../get_notifications',	
 		        success: function(result){
 					let listaAlertas = JSON.parse(result);
-					//$(".notification-bell").notify(listaAlertas[0].titulo);
 					let active = $( "#notifications-tab" ).accordion( "option", "active" );
 					let alertasNoVistas = 0;
 					let htmlText = "";
@@ -26,14 +25,12 @@ $(document).ready(function(){
 							+ "><span class='notification-title-unread' id='notification-title-unread"+alerta.idAlerta+"'>!</span>" 
 							+ alerta.titulo + "</h3><div><p>"+ alerta.cuerpo + "</p>"
 							+ "<button class='delete-button' idAlerta='"+alerta.idAlerta+"'>Borrar</button></div>";
-
 						} else {
 							htmlText += "<h3 class='notification-title' idAlerta=" + alerta.idAlerta + ">" + alerta.titulo + "</h3><div><p>"+ alerta.cuerpo + "</p>"
 							+ "<button class='delete-button' idAlerta="+alerta.idAlerta+">Borrar</button></div>";							
 						}
 						hayNuevas = hayNuevas || alerta.nuevo;
 					}
-					//htmlText += "<hr><a href='../limpiar_todo'>Limpiar todo</a>";
 					htmlText += "<hr><button id='delete-all-button'>Limpiar todo</button>";
 					if(hayNuevas || firstLoad) {
 						$("#notifications-tab").html(htmlText);

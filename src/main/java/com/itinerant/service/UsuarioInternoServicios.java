@@ -398,7 +398,7 @@ public class UsuarioInternoServicios {
 		String rol = (String) request.getSession().getAttribute("rol");
 		UsuarioInterno usuario = usuarioInternoDAO.get(login);
 		String imagenActual = usuario.getImagenRuta();
-		if(!imagenActual.equals("../default.jpg")) {
+		if(!imagenActual.equals("../img/default.jpg")) {
 			borrarArchivo(imagenActual);
 		}
 		//BORRAR COSAS DE LA BASE DE DATOS
@@ -414,17 +414,26 @@ public class UsuarioInternoServicios {
 						if(ahora.before(cita.getHoraInicio())) {
 							String cuerpoAlerta = "Su cita del día " + dateFormat.format(cita.getHoraInicio()) + " a las " 
 									+ timeFormat.format(cita.getHoraInicio()) + " ha sido cancelada.";								
-							Alerta alerta = new Alerta(visita.getProfesional(), "Cita cancelada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+							Alerta alerta = new Alerta(cita.getCiudadano(), "Cita cancelada", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
 							
 							alerta = alertaDAO.create(alerta);
 							
 							AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
 							alertaServicios.mandarNotificacion(alerta);
 						}
-						citaDAO.delete(cita);
+						citaDAO.delete(cita.getId());
 					}
-					visitaDAO.delete(visita);
+					visitaDAO.delete(visita.getIdVisita());
 				}
+			}
+			String cuerpoAlerta = "El usuario " + StringEscapeUtils.unescapeHtml4(usuario.toString()) + " ha borrado su cuenta.";		
+			List<Administrador> admins = administradorDAO.listAll();
+			for(int i = 0; i < admins.size(); i++) {
+				Alerta alerta = new Alerta(admins.get(i), "Profesiona borra su cuenta", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+				alerta = alertaDAO.create(alerta);
+				
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
 			}
 		} else if(rol.equals(Rol.CIUDADANO.toString())) {
 			List<Cita> citas = citaDAO.listAllByLogin(login);
@@ -666,7 +675,7 @@ public class UsuarioInternoServicios {
 		return "img" + number + ".jpg";
 	}
 	
-	private boolean borrarArchivo(String ruta) {
+	public boolean borrarArchivo(String ruta) {
 		String path = request.getServletContext().getRealPath("/") + ruta.substring(2);
 		System.out.println(path);
 		File file = new File(path);

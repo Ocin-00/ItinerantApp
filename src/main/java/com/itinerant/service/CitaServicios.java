@@ -208,23 +208,27 @@ public class CitaServicios {
 			cita.setAnotaciones(anotaciones);
 		}
 		try {
-			citaDAO.create(cita);	
-			visita.getCitas().add(cita);
-			message = "La cita se ha guardado con éxito.";
-			SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
-			String cuerpoAlerta = "El usuario " + StringEscapeUtils.unescapeHtml4(cita.getCiudadano().toString()) + " ha pedido cita el " 
-								+ dateFormat.format(cita.getHoraInicio()) + " a las " 
-								+ timeFormat.format(cita.getHoraInicio()) + " en el municipio " 
-								+ cita.getVisita().getLocalidad() + " con las siguientes anotaciones: " + StringEscapeUtils.unescapeHtml4(anotaciones);
-			Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Nueva cita", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
-			alertaDAO.create(alerta);
+			if(citaDAO.checkReapted(visitaId, hora)) {
+				message = "Lo sentimos, esa hora ya está ocupada. Por favor, pruebe otra.";
+			} else {
+				citaDAO.create(cita);	
+				visita.getCitas().add(cita);
+				message = "La cita se ha guardado con éxito.";
+				SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy");
+				String cuerpoAlerta = "El usuario " + StringEscapeUtils.unescapeHtml4(cita.getCiudadano().toString()) + " ha pedido cita el " 
+									+ dateFormat.format(cita.getHoraInicio()) + " a las " 
+									+ timeFormat.format(cita.getHoraInicio()) + " en el municipio " 
+									+ cita.getVisita().getLocalidad() + " con las siguientes anotaciones: " + StringEscapeUtils.unescapeHtml4(anotaciones);
+				Alerta alerta = new Alerta(cita.getVisita().getProfesional(), "Nueva cita", StringEscapeUtils.escapeHtml4(cuerpoAlerta), false);
+				alertaDAO.create(alerta);
+				
+				AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
+				alertaServicios.mandarNotificacion(alerta);
+			}
 			
-			AlertaServicios alertaServicios = new AlertaServicios(entityManager, request, response);
-			alertaServicios.mandarNotificacion(alerta);
-			
-		} catch (org.hibernate.exception.ConstraintViolationException e) {
-			message = "Lo sentimos, no puedes pedir cita dos veces";
+		} catch (javax.persistence.PersistenceException e) {
+			message = "Lo sentimos, no puedes pedir cita dos veces.";
 			e.printStackTrace();
 		} catch (Exception e){
 			message = "ERROR: Hubo problemas al pedir cita."; //Recoger cada posible excepción para personalizar el mensaje
